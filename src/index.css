@@ -1,4 +1,16 @@
 @import url('https://fonts.googleapis.com/css?family=Quicksand');
+/*@import url('https://www.wfonts.com/download/data/2016/10/21/hk-grotesk/HKGrotesk-Bold.otf');*/
+/*@import url('https://www.wfonts.com/download/data/2016/06/13/leelawadee-ui/LeelaUIb.ttf');*/
+/*@import url('https://ufonts.com/fonts/leelawadee-ui-bold.html');*/
+@font-face {
+  font-family: 'Leelawadee UI';
+  src: local('Leelawadee UI'), url(./fonts/leelawadee-ui-bold.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'HKGrotesk-Bold';
+  src: local('HKGrotesk-Bold'), url(./fonts/hkgrotesk-bold.ttf) format('truetype');
+}
+
 
 body {
   margin: 0;

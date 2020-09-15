@@ -1,255 +1,1429 @@
-import React, { Component} from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
 import { ThanosWallet } from "@thanos-wallet/dapp";
-import {Collapse,Spinner,Row,Col,UncontrolledCollapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink,InputGroup, InputGroupAddon, InputGroupText, Input,Badge,UncontrolledTooltip,Card,CardHeader, CardText, CardDeck,CardBody,Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import tz from './tez.png';
-import axios from 'axios'
-import Countdown from 'react-countdown-now';
-
+import { Link } from "react-router-dom";
+import {
+  Container,
+  Collapse,
+  Spinner,
+  Row,
+  Col,
+  Navbar,
+  NavbarBrand,
+  Nav,
+  NavItem,
+  NavLink,
+  InputGroup,
+  Input,
+  Badge,
+  Card,
+  CardHeader,
+  CardImg,
+  CardText,
+  CardBody,
+  UncontrolledPopover,
+  PopoverBody,
+  PopoverHeader,
+  UncontrolledButtonDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+} from "reactstrap";
+import stakepool from "./icons/stakepool.png";
+import bg from "./icons/background.png";
+import setting from "./icons/setting.png";
+import tz from "./icons/tz.png";
+import heart from "./icons/Heart.png";
+import tezsure from "./icons/tezsure.png";
+import youtube from "./icons/youtube.png";
+import instagram from "./icons/instagram.png";
+import google from "./icons/google.png";
+import telegram from "./icons/telegram.png";
+import linkedin from "./icons/linkedin.png";
+import twitter from "./icons/twitter.png";
+import up from "./icons/up.jpeg";
+import down from "./icons/down.jpeg";
+import det from "./icons/details.png";
+import axios from "axios";
+import Countdown from "react-countdown-now";
+import swal from "@sweetalert/with-react";
 
 export default class setseller extends React.Component {
-  constructor(props){
-    super(props)
-    this.state = { spindex:null, amount:null,currentprice:null,collapsed:true,spranges:[],tamt:null,roi:null,duration:null,cycletime:null,option:false,help:false,confirm:false}
-  };
-
-  async showNav(){
-    var setCollapsed=!this.state.collapsed
-    this.setState((state) =>{return {collapsed: setCollapsed}});
-  }
-  async showOption(){
-    var setOption=!this.state.option
-    if(this.state.amount!=null){
-    this.setState((state) =>{return {option: setOption,help:false}});
-  }else{
-    this.setState((state) =>{return {amount:1,option: setOption,help:false}});
-  }
-  }
-  async showHelp(){
-    if(this.state.amount==null){
-      this.setState((state) =>{return {amount:1}});
-    }
-    if(this.state.spindex==null){
-      var setOption=!this.state.option
-      this.setState((state) =>{return {option: setOption,help:false}});
-    }
-    else{
-      var setHelp=!this.state.help
-      this.setState((state) =>{return {help: setHelp,option:false}});
-  }
+  //tzstatsInterval;
+  coingeckoInterval;
+  bcdInterval;
+  constructor(props) {
+    super(props);
+    this.state = {
+      thanosError: false,
+      spindex: null,
+      amount: null,
+      currentprice: null,
+      error: false,
+      errMsg: "",
+      spranges: [],
+      tamt: null,
+      roi: null,
+      duration: null,
+      currentCycle: null,
+      endCycle: null,
+      cycletime: null,
+      option: false,
+      help: false,
+    };
   }
 
-  async select(id){
+  async onDismiss() {
+    this.setState((state) => {
+      return { error: false };
+    });
+  }
+
+  async showOption() {
+    var setOption = !this.state.option;
+    if (this.state.amount != null) {
+      this.setState((state) => {
+        return { option: setOption, help: false };
+      });
+    } else {
+      this.setState((state) => {
+        return { amount: 1, option: setOption, help: false };
+      });
+    }
+  }
+  async showHelp() {
+    if (this.state.amount == null) {
+      this.setState((state) => {
+        return { amount: 1 };
+      });
+    }
+    if (this.state.spindex == null) {
+      var setOption = !this.state.option;
+      this.setState((state) => {
+        return { option: setOption, help: false };
+      });
+    } else {
+      var setHelp = !this.state.help;
+      this.setState((state) => {
+        return { help: setHelp, option: false };
+      });
+    }
+  }
+
+  async select(id) {
     document.getElementById("mySelect").selectedIndex = id.toString();
-    this.setState((state) =>{return {spindex:id}});
-
+    this.setState((state) => {
+      return { spindex: id };
+    });
   }
 
-  async componentWillMount(){
-    const storagedata=await axios.get('https://you.better-call.dev/v1/contract/carthagenet/KT1UXjx2A4YrNH1tkEjDmikRD46gjJ6fc52V/rich_storage');
-    const l=storagedata.data.args[0].args[1].args[0].length;
-    const mapdata=storagedata.data.args[0].args[1].args[0][l-1].args[1].args[0].args[0];
-    const price=storagedata.data.args[0].args[1].args[0][l-1].args[1].args[1].args[0].int;
-    const ctime=parseInt(storagedata.data.args[0].args[1].args[0][l-1].args[1].args[1].args[1].int)*1000
-    const rate=parseInt(storagedata.data.args[1].args[1].args[0].int)/100
-    const tamount=parseInt(storagedata.data.args[0].args[1].args[0][l-1].args[1].args[0].args[1].int)
-    const dur=parseInt(storagedata.data.args[0].args[1].args[1].int)
-    var sp=[];
-    var i,lRange,uRange,odds;
-    for (i in mapdata) {
-      var sprange=[];
-      lRange=(parseInt(price)+ parseInt(price*mapdata[i].args[0].args[0].int/10000))/100;
-      uRange=(parseInt(price)+parseInt(price*mapdata[i].args[0].args[1].int/10000))/100;
-      sprange=[lRange,uRange,parseInt(mapdata[i].args[0].args[0].int),parseInt(mapdata[i].args[0].args[1].int),parseInt(mapdata[i].args[1].args[0].int)];
-      sp.push(sprange);
+  async componentDidMount() {
+    this.fetchContractData();
+    this.fetchPrice();
+    this.fetchCycleData();
+  }
+
+  async componentWillUnmount() {
+    clearTimeout(this.coingeckoInterval);
+    clearTimeout(this.bcdInterval);
+  }
+
+  async fetchPrice() {
+    const response = await axios.get(
+      "https://api.coingecko.com/api/v3/coins/tezos?localization=false&tickers=false&community_data=false&developer_data=false&sparkline=false"
+    );
+    if (
+      this.state.currentprice != response.data.market_data.current_price.usd
+    ) {
+      this.setState((state) => {
+        return { currentprice: response.data.market_data.current_price.usd };
+      });
     }
-    const response=await axios.get('https://api.coingecko.com/api/v3/coins/tezos?localization=false&tickers=false&community_data=false&developer_data=false&sparkline=false');
-    this.setState((state) =>{return {duration:dur,roi:rate,tamt:tamount,spranges:sp,currentprice: response.data.market_data.current_price.usd,cycletime:ctime}});
-    //document.getElementById("orders").style.display = "none";
+    this.coingeckoInterval = setTimeout(this.fetchPrice.bind(this), 240000);
   }
 
+  async fetchCycleData() {
+    const tzresponse = await axios.get(
+      "https://cors-anywhere.herokuapp.com/https://api.carthagenet.tzstats.com/explorer/cycle/head"
+    );
+    //const tzresponse=await axios.get('https://api.carthagenet.tzstats.com/explorer/cycle/head/');
+    console.log(JSON.stringify(tzresponse));
+    const ctime = new Date(tzresponse.data.end_time).valueOf();
+    const stime = new Date(tzresponse.data.start_time).valueOf();
+    const cycle = tzresponse.data.cycle;
+    const sCycle = tzresponse.data.follower_cycle.cycle + 1;
+    const dur = (sCycle - cycle - 1) * (ctime - stime);
+    this.setState((state) => {
+      return {
+        duration: dur,
+        cycletime: ctime,
+        currentCycle: cycle,
+        endCycle: sCycle,
+      };
+    });
+  }
+
+  async fetchContractData() {
+    const storagedata = await axios.get(
+      "https://api.better-call.dev/v1/contract/carthagenet/KT1QqNLspda7dLCz9DPeG5iRGm8q8kAgxDqK/storage/rich"
+    );
+    const l = storagedata.data.args[0].args[1].args[1].length;
+    const mapdata =
+      storagedata.data.args[0].args[1].args[1][l - 1].args[1].args[0];
+    const price =
+      storagedata.data.args[0].args[1].args[1][l - 1].args[1].args[1].args[1]
+        .int;
+    const rate = parseInt(storagedata.data.args[1].args[1].args[0].int) / 100;
+    const tamount = parseInt(
+      storagedata.data.args[0].args[1].args[1][l - 1].args[1].args[1].args[0]
+        .int
+    );
+    if (this.state.tamt != tamount) {
+      var sp = [];
+      var i, lRange, uRange;
+      for (i in mapdata) {
+        var sprange = [];
+        lRange =
+          (parseInt(price) +
+            parseInt((price * mapdata[i].args[0].args[0].int) / 10000)) /
+          100;
+        uRange =
+          (parseInt(price) +
+            parseInt((price * mapdata[i].args[0].args[1].int) / 10000)) /
+          100;
+        sprange = [
+          lRange.toFixed(2),
+          uRange.toFixed(2),
+          parseInt(mapdata[i].args[0].args[0].int),
+          parseInt(mapdata[i].args[0].args[1].int),
+          parseInt(mapdata[i].args[1].args[0].int),
+        ];
+        sp.push(sprange);
+      }
+      this.setState((state) => {
+        return { roi: rate, tamt: tamount, spranges: sp };
+      });
+    }
+    this.bcdInterval = setTimeout(this.fetchContractData.bind(this), 60000);
+  }
 
   async betting() {
     try {
       const available = await ThanosWallet.isAvailable();
       var amt;
       if (!available) {
-        throw new Error("Thanos Wallet not installed");
+        throw new Error("Please Install ");
       }
-      if (this.state.spindex==null) {
-        throw new Error("Please select a suitable price range");
+      if (this.state.spindex == null) {
+        throw new Error("Please select a suitable price range!");
       }
-      if (this.state.amount==null) {
-        amt=0.000001;
+      if (this.state.amount == null) {
+        amt = 1;
+      } else {
+        amt = this.state.amount;
       }
-      else{
-        amt=this.state.amount
-      }
+      const i = this.state.spindex;
+      const param1 = this.state.spranges[i][2];
+      const param2 = this.state.spranges[i][3];
+      var val;
+      await swal({
+        title: "Staking Order Review!",
+        content: (
+          <Container fluid="xs" align="left">
+            <ul
+              style={{
+                "padding-left": "1.2444444444vmax",
+                color: "#748093",
+              }}
+            >
+              <li style={{ "padding-bottom": "1vmax" }}>
+                Staked Amount: {amt} Xtz
+              </li>
+              <li style={{ "padding-bottom": "1vmax" }}>
+                Predicted Price Range:{" "}
+                {this.state.spranges[i][2] == this.state.spranges[i][3]
+                  ? this.state.spranges[i][2] > 0
+                    ? "Above  $" + this.state.spranges[i][0].toString()
+                    : "Below  $" + this.state.spranges[i][0].toString()
+                  : "Between  $" +
+                    this.state.spranges[i][0].toString() +
+                    " - $" +
+                    this.state.spranges[i][1].toString()}
+              </li>
+              <li style={{ "padding-bottom": "1vmax" }}>
+                Current Estimated ROI:{" "}
+                {this.state.tamt == this.state.spranges[i][4]
+                  ? this.state.roi
+                  : Math.round(
+                      (10000 *
+                        amt *
+                        1000000 *
+                        100 *
+                        ((this.state.roi * (this.state.tamt + amt * 1000000)) /
+                          100 -
+                          (0.02 *
+                            this.state.roi *
+                            (this.state.tamt + amt * 1000000)) /
+                            100)) /
+                        ((this.state.spranges[i][4] + amt * 1000000) *
+                          amt *
+                          1000000)
+                    ) / 10000}
+                %.
+              </li>
+              <li style={{ "padding-bottom": "1vmax" }}>
+                Staking period: cycles {this.state.currentCycle + 1}-
+                {this.state.endCycle}
+              </li>
+              <li style={{ "padding-bottom": "1vmax" }}>
+                Reward Return Cycle: Cycle {this.state.endCycle}
+              </li>
+              <li style={{ "padding-bottom": "1vmax" }}>
+                Estimated Reward Return Date:
+                {new Date(
+                  this.state.cycletime + this.state.duration
+                ).toDateString()}
+              </li>
+              <li style={{ "padding-bottom": "1vmax" }}>
+                Platform Usage Fee:2% of the winning returns
+              </li>
+            </ul>
+          </Container>
+        ),
+        icon: "info",
+        buttons: { cancel: "Cancel", confirm: "Confirm" },
+      }).then((value) => {
+        val = value;
+      });
 
-      const i=this.state.spindex;
-      const param1=this.state.spranges[i][2]
-      const param2=this.state.spranges[i][3]
-      const wallet = new ThanosWallet("My Super DApp");
-      await wallet.connect("carthagenet", { forcePermission: true });
-      const tezos = wallet.toTezos();
-      const accountPkh = await tezos.wallet.pkh();
-      const accountBalance = await tezos.tz.getBalance(accountPkh);
-      console.info(`address: ${accountPkh}, balance: ${accountBalance}`);
-      const sell = await tezos.wallet.at("KT1UXjx2A4YrNH1tkEjDmikRD46gjJ6fc52V");
-      const operation = await sell.methods.setWager(param1.toString(),param2.toString()).send({ amount: amt });
-      this.setState((state) =>{return {confirm:true}});
-      await operation.confirmation();
-      this.setState((state) =>{return {confirm:false}});
-      alert("Your transaction has been successful and will be considered for staking from the following cycle onwards");
+      if (val) {
+        const wallet = new ThanosWallet("Stakepool");
+        await wallet.connect("carthagenet", { forcePermission: true });
+        const tezos = wallet.toTezos();
+        const accountPkh = await tezos.wallet.pkh();
+        const accountBalance = await tezos.tz.getBalance(accountPkh);
+        console.info(`address: ${accountPkh}, balance: ${accountBalance}`);
+        const sell = await tezos.wallet.at(
+          "KT1QqNLspda7dLCz9DPeG5iRGm8q8kAgxDqK"
+        );
+        const operation = await sell.methods
+          .setWager(param1.toString(), param2.toString())
+          .send({ amount: amt, mutez: false });
 
-      const counterValue = await sell.storage();
-      console.info(`storage: ${counterValue}`);
+        swal({
+          closeOnClickOutside: false,
+          closeOnEsc: false,
+          button: false,
+          content: (
+            <div>
+              <Spinner
+                color="success"
+                size="xl"
+                style={{
+                  "margin-top": "1.66666667vmax",
+                  width: "5.55556vw",
+                  height: "5.555556vw",
+                }}
+              />
+              <br />
+              <br />
+              <h
+                align="center"
+                style={{
+                  "font-size": "2.2vmax",
+                  "font-family": "OpenSans-SemiBold",
+                  color: "#5A7184",
+                  "letter-spacing": "0.049vmax",
+                }}
+              >
+                <strong>Waiting for Transaction Confirmation...</strong>
+              </h>
+            </div>
+          ),
+        });
+
+        await operation.confirmation();
+        await swal({
+          title: "Stake Order Successful",
+          content: (
+            <Container fluid="xs" align="left">
+              <p
+                style={{
+                  "padding-left": "1.12rem",
+                  "line-height": "2.11rem",
+                  color: "#748093",
+                }}
+              >
+                The amount will be considered for staking from the following
+                cycle onwards.
+              </p>
+              <br />
+              <p
+                style={{
+                  "padding-left": "1.12rem",
+                  "line-height": "1rem",
+                  color: "#748093",
+                }}
+              >
+                Tx Hash:
+              </p>
+              <p
+                style={{
+                  "padding-left": "1.61rem",
+                  "font-size": "0.8rem",
+                  "line-height": "1rem",
+                  color: "#748093",
+                }}
+              >
+                {operation.opHash.toString()}
+              </p>
+            </Container>
+          ),
+          icon: "success",
+          timer: 30000,
+        });
+        const counterValue = await sell.storage();
+        console.info(`storage: ${counterValue}`);
+        window.location.reload(false);
+      }
     } catch (err) {
-      alert(err.message);
-      console.error(err)
+      if (err.message == "Please Install ") {
+        this.setState((state) => {
+          return { errMsg: err.message, error: true, thanosError: true };
+        });
+      } else {
+        this.setState((state) => {
+          return { errMsg: err.message, error: true, thanosError: false };
+        });
+      }
+      console.error(err);
     }
   }
 
-
   render() {
-    return(
-      <div style={{backgroundColor: '#FFFFFF',height : '100vh'}}>
-      <div style={{backgroundColor: '#39cb90'}}>
-      <div style={{backgroundColor: '#6b747b'}}>
-      <div style={{backgroundColor: '#39cb90'}}>
-        <Navbar color="faded" light>
-        <link href="bootstrap.min.css" rel="stylesheet"/>
-          <NavbarBrand href="/" className="mr-auto">&emsp;<img src={tz} width="180" height="60"/> </NavbarBrand>
-          <NavbarToggler onClick={()=>{this.showNav()}} className="mr-2"/>
-          <Collapse isOpen={!this.state.collapsed} navbar>
-            <Nav navbar>
+    return (
+      <Container
+        fluid="xs"
+        style={{
+          backgroundColor: "#F9FBFE",
+          "background-size": "cover",
+          height: "100%",
+          width: "100vmax",
+        }}
+      >
+        <Container
+          fluid="xs"
+          id="stake"
+          style={{
+            width: "100vmax",
+            opacity: "1",
+            "background-size": "100% 86.2%",
+            backgroundImage: `url(${bg})`,
+            backgroundClip: "padding-box",
+            backgroundRepeat: "repeat-x",
+            "box-shadow": "0px 10px 35px #00000008",
+          }}
+        >
+          <Navbar
+            color="faded"
+            light
+            style={{ "margin-left": "6.667vmax", "margin-right": "5.2vmax" }}
+          >
+            <link href="/bootstrap.min.css" type="text/css" rel="stylesheet" />
+            <NavbarBrand
+              href="/"
+              className="mr-auto"
+              styles={{ "margin-top": "0.97222222vmax" }}
+            >
+              <img
+                src={stakepool}
+                style={{ width: "13.264vmax", height: "3.056vmax" }}
+              />
+            </NavbarBrand>
+            <Nav>
               <NavItem>
-                <NavLink href="/components/" style={{"font-size": "20px"}}>&emsp;Documentation</NavLink>
+                <NavLink
+                  href="/components/"
+                  style={{
+                    "font-size": "1.1111111111vmax",
+                    "font-family": "OpenSans-SemiBold",
+                    color: "#FFFFFF",
+                    "margin-top": "1.736vmax",
+                  }}
+                >
+                  Documentation
+                </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink href="https://github.com/reactstrap/reactstrap" style={{"font-size": "20px"}}>&emsp;GitHub</NavLink>
+                <NavLink
+                  href="https://github.com/reactstrap/reactstrap"
+                  style={{
+                    "font-size": "1.1111111111vmax",
+                    "font-family": "OpenSans-SemiBold",
+                    color: "#FFFFFF",
+                    "margin-top": "1.736vmax",
+                  }}
+                >
+                  GitHub
+                </NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink
+                  href="#contact"
+                  style={{
+                    "font-size": "1.1111111111vmax",
+                    "font-family": "OpenSans-SemiBold",
+                    color: "#FFFFFF",
+                    "margin-top": "0.764vmax",
+                  }}
+                >
+                  <button
+                    style={{
+                      color: "#FFFFFF",
+                      backgroundColor: "#1565D8",
+                      "text-align": "center",
+                      "font-size": "1.1111111111vmax",
+                      border: "0.13889vmax solid #FFFFFF",
+                      "border-radius": "0.556vmax",
+                      width: "10.764vmax",
+                      padding: "0.762vmax 0vmax 0.556vmax 0vmax",
+                    }}
+                  >
+                    Get In Touch
+                  </button>
+                </NavLink>
+              </NavItem>
+              <NavItem>
+                <UncontrolledButtonDropdown
+                  direction="bottom-start"
+                  style={{ color: "#1565D8" }}
+                >
+                  <DropdownToggle
+                    caret={false}
+                    color="#1565D8"
+                    style={{ "margin-top": "0.764vmax" }}
+                  >
+                    <img
+                      src={setting}
+                      style={{
+                        width: "4vmax",
+                        height: "3.33333333vmax",
+                        "padding-right": "0.24444444vmax",
+                      }}
+                    />
+                  </DropdownToggle>
+                  <DropdownMenu>
+                    <DropdownItem header>Stakepool</DropdownItem>
+                    <DropdownItem style={{ "line-height": "0.6667vmax" }}>
+                      <NavLink
+                        href="/"
+                        style={{
+                          "font-size": "1.1111111111vmax",
+                          "font-family": "OpenSans-SemiBold",
+                          color: "#5A7184",
+                        }}
+                      >
+                        Mainnet
+                      </NavLink>
+                    </DropdownItem>
+                    <DropdownItem style={{ "line-height": "0.6667vmax" }}>
+                      <NavLink
+                        href="/"
+                        style={{
+                          "font-size": "1.1111111111vmax",
+                          "font-family": "OpenSans-SemiBold",
+                          color: "#5A7184",
+                        }}
+                      >
+                        Carthagenet
+                      </NavLink>
+                    </DropdownItem>
+                    <DropdownItem divider />
+                    <DropdownItem style={{ "line-height": "0.6667vmax" }}>
+                      <NavLink
+                        href="/Account"
+                        style={{
+                          "font-size": "1.1111111111vmax",
+                          "font-family": "OpenSans-SemiBold",
+                          color: "#5A7184",
+                        }}
+                      >
+                        Staking Orders
+                      </NavLink>
+                    </DropdownItem>
+                  </DropdownMenu>
+                </UncontrolledButtonDropdown>
               </NavItem>
             </Nav>
-          </Collapse>
-        </Navbar>
-        <h1 align="center" style={{"font-size": "80px","color":"#EBF4FA","font-family": "Quicksand-Bold"}}><strong><em>Stakepool</em></strong></h1>
-      </div>
-      <p align="right" style={{"color":"#FFFFFF","font-family": "Quicksand"}}><strong><em>~Earn a little extra on your staking rewards &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</em></strong></p>
-      </div>
-      <div align="right" style={{ "margin-right": "92px"}}>
-      <br/>
-      <label style={{"font-size": "18px"}}><strong>The Current Wager cycle will be concluded in:</strong> </label>
-      &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;
-      <label style={{"font-size": "18px"}}><strong>Current price of XTZ/USD:</strong> </label>
-      <br/>
-      <div align="right" style={{"font-size": "22px","font-family": "ui-rounded"}}>
-      <Countdown date={this.state.cycletime}/>
-      &nbsp;&nbsp;&nbsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
-      <output style={{"font-size": "22px"}}><em>${this.state.currentprice}</em></output>
-      &emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp;
-      </div>
-      </div>
-      </div>
-      <div>
-      <br/><br/><br/><br/>
-      </div>
-      <label style={{"font-size": "24px","color":"#0b281c"}}>&nbsp;&nbsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp;I want to stake: </label>
-      <label style={{"font-size": "24px","color":"#0b281c"}}>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp;I predict the price of XTZ to be: </label>
-      <br/>
-      <InputGroup>
-        &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp;<input type="number" className="inputStyle" placeholder="0.000001" min="0.000001" step="0.000001" value={this.state.amount} onChange={ (eve) => { if(Number(eve.target.value)!=0){this.setState({ amount: Math.round(Number(eve.target.value)*1000000)/1000000})}}} style={{"width":"3.9cm","text-align":"center","border-radius": "4px"}} />
-        <InputGroupAddon addonType="append">
-          <InputGroupText style={{"color":"dodgerblue"}}>XTZ</InputGroupText>
-        </InputGroupAddon>
-        &emsp;&nbsp;<button id="stakeOption" onClick={()=>{this.showOption()}} style={{"color":"#e5e5f2",'backgroundColor': '#000080',"font-size": "20px","border-radius": "8px"}}>Staking Options</button>
-        &emsp;&nbsp;
-        <InputGroupAddon addonType="prepend">
-        <Badge id="tool" onClick={()=>{this.showHelp()}} color="secondary" style={{"height":"0.32cm","align-text":"center","font-size": "12px"}}>i</Badge>
-        </InputGroupAddon>
-        <UncontrolledTooltip placement="right-start" container="tool" hideArrow={true} target="tool" style={{"border-radius": "8px","width":"50cm"}}>Please select a price range that you predict the value of XTZ to be in after the completion of your staking period on {new Date(this.state.cycletime+(8*1000*this.state.duration)).toDateString()} </UncontrolledTooltip>
-        <Input id="mySelect" type="select" name="select" value={this.state.spindex} onChange={(eve)=>{this.setState({spindex: eve.target.value })}} style={{"text-align":"center","width":"3.9cm"}}>
-        <option value={null} disabled selected>Select predicted price range in USD </option>
-        {this.state.spranges.map((inv,index) =>(<option value={index}>{inv[2]==inv[3]?inv[2]>0?"Above $"+inv[0].toString():"Below $"+inv[0].toString(): "In the range of $"+inv[0].toString()+" - $"+inv[1].toString()}</option>))}
-        </Input>
-        &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
-      </InputGroup>
-      <br/><br/>
-      <Collapse isOpen={this.state.help}>
-      <div style={{backgroundColor: '#FFFFFF'}}>
-      {(this.state.spindex!=null)?
-      <div align="center" style={{backgroundColor: '#FFFFFF',"margin-right": "440px","margin-left": "480px"}}>
-      <Card>
-      <CardHeader style={{"color":"#ebf9f3",'backgroundColor': '#000080',"font-size": "20px","border-radius": "8px"}}>{this.state.spranges[this.state.spindex][2]==this.state.spranges[this.state.spindex][3]?this.state.spranges[this.state.spindex][2]>0?"Above $"+this.state.spranges[this.state.spindex][0].toString():"Below $"+this.state.spranges[this.state.spindex][0].toString(): "Between $"+this.state.spranges[this.state.spindex][0].toString()+" - $"+this.state.spranges[this.state.spindex][1].toString()}</CardHeader>
-      <div align="left" style={{"color":"#e5e5f2",'backgroundColor': '#19198c',"border-radius": "4px"}}>
-      <CardBody>
-      <br/>
-      <CardText>
-      <ul>
-      <li>The Current ROI is {this.state.tamt==this.state.spranges[this.state.spindex][4]?this.state.roi:(this.state.amount*1000000*100*((this.state.roi*(this.state.tamt+this.state.amount*1000000)/100)-(0.02*this.state.roi*(this.state.tamt+this.state.amount*1000000)/100))/((this.state.spranges[this.state.spindex][4]+this.state.amount*1000000)*this.state.amount*1000000))}%.</li>
-      <br/>
-      <li>A fee of 2% inclusive on your winning returns is taken for the usage of the platform.</li>
-      <br/>
-      <li>If at the end of your staking period on {new Date(this.state.cycletime+(8*1000*this.state.duration)).toDateString()}, the price of Xtz is in this range, then you get back your returns along with your staking investment.Else you would lose your staking returns and only get back your staking investment. </li>
-      </ul>
-      </CardText>
-      </CardBody>
-      </div>
-      </Card>
-      </div>
-      :<br/>
-    }
-    </div>
-      </Collapse>
+          </Navbar>
+          <p
+            align="center"
+            style={{
+              "font-size": "3.888888889vmax",
+              "font-family": "Leelawadee UI",
+              "padding-top": "5vmax",
+              "padding-bottom": "1.66666667vmax",
+              "padding-left": "0.902777778vmax",
+              color: "#FFFFFF",
+              "letter-spacing": "0.049vmax",
+              "line-height": "5.056vmax",
+            }}
+          >
+            <strong>
+              Earn a little extra on your
+              <br />
+              staking rewards
+            </strong>
+          </p>
+          <Card
+            inverse={true}
+            style={{
+              "margin-left": "16.805555556vmax",
+              "margin-right": "16.52777778vmax",
+              "box-shadow": "0px 0.6944444vmax 2.430555556vmax #00000008",
+            }}
+          >
+            <Collapse isOpen={this.state.error}>
+              <CardBody
+                style={{
+                  "text-align": "center",
+                  backgroundColor: "#f8f9fa",
+                  color: "black",
+                  border: "0.06944vmax solid red",
+                  "border-radius": "0.833333vmax",
+                  "box-shadow": "0vmax 0vmax 0.902778vmax 0.06944vmax #ef9696",
+                }}
+              >
+                <button
+                  onClick={() => {
+                    this.setState({ error: false });
+                  }}
+                  style={{
+                    position: "absolute",
+                    right: "0",
+                    top: "0",
+                    padding: "0vmax 0.556vmax",
+                    border: "0.06944vmax solid red",
+                    "border-radius": "1.3888888889vmax",
+                    background: "#bd2130",
+                    color: "white",
+                  }}
+                >
+                  X
+                </button>
+                {this.state.thanosError ? (
+                  <CardText>
+                    Error: {this.state.errMsg}
+                    <a href="https://thanoswallet.com/download">
+                      Thanos Wallet Browser Plugin
+                    </a>{" "}
+                    To Utilize The Services Of Stakepool
+                  </CardText>
+                ) : (
+                  <CardText>Error: {this.state.errMsg}</CardText>
+                )}
+              </CardBody>
+            </Collapse>
+            <CardBody
+              style={{
+                "padding-top": this.state.error ? "2.292vmax" : "4.583vmax",
+                "padding-bottom": "4.583vmax",
+              }}
+            >
+              <Row
+                xs="2"
+                style={{
+                  "margin-left": "2.5vmax",
+                  "margin-right": "2.5vmax",
+                }}
+              >
+                <Col xs="6">
+                  <label
+                    style={{
+                      color: "#5A7184",
+                      "font-family": "OpenSans-SemiBold",
+                      "font-size": "1.277778vmax",
+                    }}
+                  >
+                    Current Cycle {this.state.currentCycle} will be concluded
+                    in:
+                  </label>
+                </Col>
+                <Col xs="6">
+                  <label
+                    style={{
+                      color: "#5A7184",
+                      "font-family": "OpenSans-SemiBold",
+                      "font-size": "1.277778vmax",
+                    }}
+                  >
+                    Current price of XTZ/USD:
+                  </label>
+                </Col>
+                <Col xs="6">
+                  <Badge
+                    color="light"
+                    style={{
+                      width: "100%",
+                      height: "3.8888889vmax",
+                      "line-height": "3.8888889vmax",
+                      "text-align": "left",
+                      "padding-left": "1.8888889vmax",
+                      color: "#959EAD",
+                      "font-family": "OpenSans-SemiBold",
+                      "font-size": "1.277778vmax",
+                    }}
+                  >
+                    <Countdown
+                      date={this.state.cycletime}
+                      key={this.state.cycletime}
+                      onComplete={() => {
+                        this.fetchCycleData();
+                      }}
+                    />
+                  </Badge>
+                </Col>
+                <Col xs="6">
+                  <Badge
+                    color="light"
+                    style={{
+                      width: "100%",
+                      height: "3.8888889vmax",
+                      "line-height": "3.8888889vmax",
+                      "text-align": "left",
+                      "padding-left": "1.8888889vmax",
+                      color: "#183B56",
+                      "font-family": "OpenSans-SemiBold",
+                      "font-size": "1.277778vmax",
+                    }}
+                  >
+                    ${this.state.currentprice}
+                  </Badge>
+                </Col>
 
-      <Collapse isOpen={this.state.option}>
-      <div style={{backgroundColor: '#e5e5f2'}}>
-      <div align="center" style={{"margin-right": "88px","margin-left": "88px"}}>
-      <br/>
-      <Row xs="3">
-      {this.state.spranges.map((value, index) =>(
-        <Col>
-        <Card>
-        <CardHeader id={"card"+index.toString()} style={{"color":"#ebf9f3",'backgroundColor': '#000080',"font-size": "20px","border-radius": "8px"}}>{value[2]==value[3]?value[2]>0?"Above $"+value[0].toString():"Below $"+value[0].toString(): "Between $"+value[0].toString()+" - $"+value[1].toString()}</CardHeader>
-        <UncontrolledCollapse toggler={"card"+index.toString()}>
-        <div align="left" style={{"color":"#e5e5f2",'backgroundColor': '#19198c',"border-radius": "4px"}}>
-        <CardBody>
-        <br/>
-        <CardText>
-        <ul>
-        <li>The Current ROI is {this.state.tamt==value[4]?this.state.roi:(this.state.amount*1000000*100*((this.state.roi*(this.state.tamt+this.state.amount*1000000)/100)-(0.02*this.state.roi*(this.state.tamt+this.state.amount*1000000)/100))/((value[4]+this.state.amount*1000000)*this.state.amount*1000000))}%.</li>
-        <br/>
-        <li>A fee of 2% inclusive on your winning returns is taken for the usage of the platform.</li>
-        <br/>
-        <li>If at the end of your staking period on {new Date(this.state.cycletime+(8*1000*this.state.duration)).toDateString()},the price of Xtz is in this range, then you get back your returns along with your staking investment.Else you would lose your staking returns and only get back your staking investment. </li>
-        </ul>
-        <div align="center">
-        <button onClick={()=>{this.select(index)}} style={{"color":"#e5e5f2",'backgroundColor': '#000080',"font-size": "20px","border-radius": "8px","width":"4.3cm"}}>Select</button>
-        </div>
-        </CardText>
-        </CardBody>
-        </div>
-        </UncontrolledCollapse>
-        </Card>
-        <br/>
-        </Col>
-      ))}
-      </Row>
-      </div>
-      </div>
-      </Collapse>
-      <div align="center" style={{backgroundColor: '#FFFFFF'}}>
-      <br/><br/>
-      &emsp;&emsp;&emsp;&nbsp;
-      <button onClick={()=>{this.betting()}} style={{"color":"#e5e5f2",'backgroundColor': '#000080',"font-size": "28px","border-radius": "8px","width":"4.3cm"}}><em>Stake</em></button>
-      <br/><br/><br/><br/>
-      <Modal isOpen={this.state.confirm} size="md" centered>
-        <ModalBody style={{"font-size": "28px","text-align":"center",backgroundColor: '#FFFFFF'}}>
-        <Spinner color="success" size="xl" style={{ width: '3rem', height: '3rem' }}/><br/>
-          &nbsp;&nbsp;Waiting for Transaction Confirmation...
-        </ModalBody>
-        </Modal>
-      </div>
-      </div>
-    )
+                <Col xs="6" style={{ "padding-top": "4vmax" }}>
+                  <label
+                    style={{
+                      color: "#5A7184",
+                      "font-family": "OpenSans-SemiBold",
+                      "font-size": "1.277778vmax",
+                    }}
+                  >
+                    I want to stake:
+                  </label>
+                </Col>
+                <Col xs="6" style={{ "padding-top": "4vmax" }}>
+                  <label
+                    style={{
+                      color: "#5A7184",
+                      "font-family": "OpenSans-SemiBold",
+                      "font-size": "1.277778vmax",
+                    }}
+                  >
+                    I predict the price of XTZ to be:
+                  </label>
+                </Col>
+                <Col xs="6">
+                  <InputGroup>
+                    <Input
+                      type="number"
+                      className="inputStyle"
+                      placeholder="1.000000"
+                      min="1"
+                      step="0.000001"
+                      value={this.state.amount}
+                      onChange={(eve) => {
+                        if (Math.abs(parseFloat(eve.target.value)) >= 1) {
+                          this.setState({
+                            amount:
+                              Math.round(
+                                Math.abs(parseFloat(eve.target.value)) * 1000000
+                              ) / 1000000,
+                          });
+                        } else if (eve.target.value == "") {
+                          this.setState({ amount: null });
+                        } else {
+                          var num = 1;
+                          this.setState({ amount: num.toFixed(6) });
+                        }
+                      }}
+                      style={{
+                        height: "3.8888889vmax",
+                        width: "13.3333333333vmax",
+                        border: "0.06944vmax solid #C3CAD9",
+                        "border-radius": "0.556vmax",
+                        background: "#FFFFFF 0% 0% no-repeat padding-box",
+                        color: "#959EAD",
+                        "font-family": "OpenSans-SemiBold",
+                        "font-size": "1.277778vmax",
+                        "text-align": "left",
+                        "padding-left": "1.6888889vmax",
+                      }}
+                    />
+                    <Badge
+                      color="light"
+                      style={{
+                        height: "3.888888889vmax",
+                        "line-height": "4.4444444vmax",
+                        "text-align": "left",
+                        "padding-left": "0.556vmax",
+                        "padding-right": "0.556vmax",
+                        color: "#959EAD",
+                        "font-family": "OpenSans-SemiBold",
+                        "font-size": "1.1111111111vmax",
+                      }}
+                    >
+                      <img
+                        src={tz}
+                        style={{
+                          height: "3.33333333vmax",
+                          "padding-right": "0.24444444vmax",
+                        }}
+                      />
+                      XTZ
+                    </Badge>
+                  </InputGroup>
+                </Col>
+                <Col xs="6">
+                  <Input
+                    id="mySelect"
+                    type="select"
+                    name="select"
+                    value={this.state.spindex}
+                    onChange={(eve) => {
+                      this.setState({ spindex: eve.target.value });
+                    }}
+                    style={{
+                      "text-align": "left",
+                      width: "100%",
+                      height: "3.8888889vmax",
+                      border: "0.06944vmax solid #C3CAD9",
+                      "border-radius": "0.556vmax",
+                      background: "#FFFFFF 0% 0% no-repeat padding-box",
+                      color: "#959EAD",
+                      "font-family": "OpenSans-SemiBold",
+                      "font-size": "1.277778vmax",
+                      "padding-left": "1.6888889vmax",
+                    }}
+                  >
+                    <option
+                      value={null}
+                      disabled
+                      selected
+                      style={{
+                        color:
+                          this.state.spindex == null ? "#183B56" : "#959EAD",
+                      }}
+                    >
+                      Select predicted price range in USD{" "}
+                    </option>
+                    {this.state.spranges.map((inv, index) => (
+                      <option
+                        value={index}
+                        style={{
+                          color:
+                            index == this.state.spindex ? "#183B56" : "#959EAD",
+                        }}
+                      >
+                        {inv[2] == inv[3]
+                          ? inv[2] > 0
+                            ? "Above $" + inv[0].toString()
+                            : "Below $" + inv[0].toString()
+                          : "In the range of $" +
+                            inv[0].toString() +
+                            " - $" +
+                            inv[1].toString()}
+                      </option>
+                    ))}
+                  </Input>
+                </Col>
+              </Row>
+
+              <p
+                style={{
+                  color: "#5A7184",
+                  "margin-left": "4vmax",
+                  "margin-right": "5.3vmax",
+                  "font-family": "OpenSans-Regular",
+                  "padding-top": "1.69vmax",
+                  "font-size": "1.1111111111vmax",
+                }}
+              >
+                By submitting this form you agree to our terms and conditions
+                and our Privacy Policy which explains how we may collect, use
+                and disclose your personal information including to third
+                parties.
+              </p>
+              <br />
+              <Row
+                xs="2"
+                style={{
+                  "margin-left": "4.144444vmax",
+                  "margin-right": "4.144444vmax",
+                }}
+              >
+                <Col
+                  xs="6"
+                  style={{ "text-align": "right", "padding-right": "1.3vmax" }}
+                >
+                  <button
+                    onClick={() => {
+                      this.showHelp();
+                    }}
+                    style={{
+                      "font-family": "OpenSans-Bold",
+                      color: "#1565D8",
+                      backgroundColor: "#FFFFFF",
+                      "text-align": "center",
+                      "font-size": "1.277778vmax",
+                      border: "0.06944vmax solid #1565D8",
+                      "border-radius": "0.556vmax",
+                      width: "14.7222222vmax",
+                      height: "3.333333vmax",
+                    }}
+                  >
+                    <strong>Staking Option</strong>
+                  </button>
+                </Col>
+                <Col
+                  xs="6"
+                  style={{ "text-align": "left", "padding-left": "1.3vmax" }}
+                >
+                  <button
+                    onClick={() => {
+                      this.betting();
+                    }}
+                    style={{
+                      "font-family": "OpenSans-Bold",
+                      color: "#FFFFFF",
+                      backgroundColor: "#1565D8",
+                      "text-align": "center",
+                      "font-size": "1.277778vmax",
+                      border: "0.06944vmax solid #1565D8",
+                      "border-radius": "0.556vmax",
+                      width: "14.7222222vmax",
+                      height: "3.333333vmax",
+                    }}
+                  >
+                    <strong>Stake</strong>
+                  </button>
+                </Col>
+              </Row>
+            </CardBody>
+          </Card>
+        </Container>
+
+        <Container
+          fluid="xs"
+          style={{
+            backgroundColor: "#F9FBFE",
+            width: "100vmax",
+            "padding-left": "9.0888888889vmax",
+            "padding-right": "7.6vmax",
+            "padding-top": "5vmax",
+            "padding-bottom":
+              this.state.help || this.state.option ? "3.3333333vmax" : "5vmax",
+          }}
+        >
+          <Row xs="2">
+            <Col xs="6">
+              <label
+                align="left"
+                style={{
+                  "font-family": "HKGrotesk-Bold",
+                  color: "#183B56",
+                  display: "block",
+                  "font-size": "3.3333333333vmax",
+                  "letter-spacing": "0.0138888889vmax",
+                }}
+              >
+                <strong>Staking Options</strong>
+              </label>
+            </Col>
+            <Col
+              xs="6"
+              style={{
+                "text-align": "right",
+                "padding-top": "2.9044444444vmax",
+                "padding-right": "3.59vmax",
+              }}
+            >
+              <button
+                id="stakeOption"
+                onClick={() => {
+                  this.showOption();
+                }}
+                style={{
+                  color: "#36B37E",
+                  "font-family": "HKGrotesk-Bold",
+                  backgroundColor: "#FFFFFF",
+                  "text-align": "center",
+                  "font-size": "1.1111111111vmax",
+                  border: "0.13889vmax solid #36B37E",
+                  "border-radius": "0.2777777778vmax",
+                  width: "9.6527777778vmax",
+                  height: "3.0555555556vmax",
+                  "letter-spacing": "0.0138888889vmax",
+                }}
+              >
+                <strong> {this.state.option ? "COLLAPSE" : "SHOW ALL"}</strong>
+              </button>
+            </Col>
+          </Row>
+          <p
+            style={{
+              color: "#5A7184",
+              "font-family": "OpenSans-Regular",
+              "font-size": "1.18055556vmax",
+              "padding-bottom": "3.3333333vmax",
+            }}
+          >
+            You can search for more details by clicking on the respective
+            category below.
+          </p>
+          <Collapse isOpen={this.state.option || this.state.help}>
+            {this.state.option || this.state.help ? (
+              this.state.option ? (
+                <Row xs="4">
+                  {this.state.spranges.map((value, index) => (
+                    <Col style={{ "padding-bottom": "1.6666667vmax" }}>
+                      <Card
+                        id={"card" + index.toString()}
+                        style={{
+                          "background-color": "#FFFFFF",
+                          "border-radius": "0.2777777778vmax",
+                        }}
+                      >
+                        <CardImg
+                          src={det}
+                          style={{
+                            width: "5vmax",
+                            height: "4.7222222222vmax",
+                            "padding-top": "1.6666666667vmax",
+                            "padding-left": "1.6666666667vmax",
+                          }}
+                        />
+                        <CardHeader
+                          style={{
+                            "background-color": "#FFFFFF",
+                            "text-align": "left",
+                            "font-family": "HKGrotesk-Bold",
+                            color: "#183B56",
+                            "font-size": "1.2152777778vmax",
+                            "letter-spacing": "0.0138888889vmax",
+                            "border-radius": "0.2083333333vmax",
+                            "padding-left": "1.6666666667vmax",
+                          }}
+                        >
+                          <strong>
+                            Price Prediction
+                            <br />
+                            {value[2] == value[3]
+                              ? value[2] > 0
+                                ? "Above $" + value[0].toString()
+                                : "Below $" + value[0].toString()
+                              : "Between $" +
+                                value[0].toString() +
+                                " - $" +
+                                value[1].toString()}
+                          </strong>
+                          <img
+                            align="right"
+                            src={value[2] < 0 ? down : up}
+                            style={{
+                              width: "2.2222222222vmax",
+                              height: "2.5vmax",
+                              "padding-right": "0.121vmax",
+                              "padding-bottom": "0.5777777778vmax",
+                            }}
+                          />
+                        </CardHeader>
+                      </Card>
+                      <UncontrolledPopover
+                        placement="bottom-start"
+                        hideArrow={true}
+                        trigger="legacy"
+                        flip={false}
+                        target={"card" + index.toString()}
+                        container={"card" + index.toString()}
+                      >
+                        <PopoverHeader
+                          style={{
+                            "text-align": "center",
+                            "font-size": "1.2152777778vmax",
+                          }}
+                        >
+                          The Predicted Price is
+                          <br />
+                          {value[2] == value[3]
+                            ? value[2] > 0
+                              ? "Above $" + value[0].toString()
+                              : "Below $" + value[0].toString()
+                            : "Between $" +
+                              value[0].toString() +
+                              " - $" +
+                              value[1].toString()}
+                        </PopoverHeader>
+                        <PopoverBody>
+                          <ul
+                            style={{
+                              "padding-left": "0.6333333333vmax",
+                              color: "#748093",
+                              "font-size": "0.9652778vmax",
+                            }}
+                          >
+                            <li
+                              style={{ "padding-bottom": "1vmax" }}
+                              style={{ "padding-bottom": "1vmax" }}
+                            >
+                              The Current ROI for your inputted staking amount
+                              is{" "}
+                              {this.state.tamt == value[4]
+                                ? this.state.roi
+                                : Math.round(
+                                    (10000 *
+                                      this.state.amount *
+                                      1000000 *
+                                      100 *
+                                      ((this.state.roi *
+                                        (this.state.tamt +
+                                          this.state.amount * 1000000)) /
+                                        100 -
+                                        (0.02 *
+                                          this.state.roi *
+                                          (this.state.tamt +
+                                            this.state.amount * 1000000)) /
+                                          100)) /
+                                      ((value[4] +
+                                        this.state.amount * 1000000) *
+                                        this.state.amount *
+                                        1000000)
+                                  ) / 10000}
+                              %.
+                            </li>
+                            <li style={{ "padding-bottom": "1vmax" }}>
+                              The staking rewards is calculated for the cycles{" "}
+                              {this.state.currentCycle + 1}-
+                              {this.state.endCycle}.
+                            </li>
+                            <li style={{ "padding-bottom": "1vmax" }}>
+                              A fee of 2% inclusive on your winning returns is
+                              taken for the usage of the platform.
+                            </li>
+                            <li style={{ "padding-bottom": "1vmax" }}>
+                              If, at the completion of your staking period on{" "}
+                              {new Date(
+                                this.state.cycletime + this.state.duration
+                              ).toDateString()}
+                              ,the price of Xtz is in this range, then you get
+                              back your returns along with your staking
+                              investment.Else you would lose your staking
+                              returns and only get back your staking investment.{" "}
+                            </li>
+                            <li style={{ "padding-bottom": "1vmax" }}>
+                              You shall get back your staked amount (plus the
+                              winning rewards if applicable) at the conclusion
+                              of cycle {this.state.endCycle - 1} on{" "}
+                              {new Date(
+                                this.state.cycletime + this.state.duration
+                              ).toDateString()}
+                              .
+                            </li>
+                          </ul>
+                          <div align="center">
+                            <button
+                              onClick={() => {
+                                this.select(index);
+                              }}
+                              style={{
+                                "font-family": "OpenSans-Bold",
+                                color: "#1565D8",
+                                backgroundColor: "#FFFFFF",
+                                "text-align": "center",
+                                "font-size": "1.277778vmax",
+                                border: "0.06944vmax solid #1565D8",
+                                "border-radius": "0.556vmax",
+                                width: "9.4444444vmax",
+                                height: "2.5555555vmax",
+                                padding: "0.13889vmax 0.13889vmax ",
+                              }}
+                            >
+                              Select
+                            </button>
+                          </div>
+                        </PopoverBody>
+                      </UncontrolledPopover>
+                    </Col>
+                  ))}
+                </Row>
+              ) : (
+                <Card
+                  style={{
+                    "margin-left": "21.7777777778vmax",
+                    "margin-right": "21.5vmax",
+                    "margin-bottom": "1.6666667vmax",
+                    "border-radius": "0.2777777778vmax",
+                  }}
+                >
+                  <CardHeader
+                    style={{
+                      "text-align": "left",
+                      "font-family": "HKGrotesk-Bold",
+                      color: "#183B56",
+                      "font-size": "1.3444444444vmax",
+                      "letter-spacing": "0.0138888889vmax",
+                      "background-color": "#f7f7f7",
+                    }}
+                  >
+                    <CardImg
+                      align="left"
+                      src={det}
+                      style={{
+                        width: "5vmax",
+                        height: "4.4444444444vmax",
+                        "padding-bottom": "1.6666666667vmax",
+                        "padding-left": "0.5555555556vmax",
+                        "padding-right": "1.6666666667vmax",
+                        width: "5.677vmax",
+                        height: "4.677vmax",
+                      }}
+                    />
+                    <br />
+                    <strong>
+                      Price Prediction{" "}
+                      {this.state.spranges[this.state.spindex][2] ==
+                      this.state.spranges[this.state.spindex][3]
+                        ? this.state.spranges[this.state.spindex][2] > 0
+                          ? "Above  $" +
+                            this.state.spranges[
+                              this.state.spindex
+                            ][0].toString()
+                          : "Below  $" +
+                            this.state.spranges[
+                              this.state.spindex
+                            ][0].toString()
+                        : "Between  $" +
+                          this.state.spranges[
+                            this.state.spindex
+                          ][0].toString() +
+                          " - $" +
+                          this.state.spranges[this.state.spindex][1].toString()}
+                    </strong>
+                    <CardImg
+                      src={
+                        this.state.spranges[this.state.spindex][2] < 0
+                          ? down
+                          : up
+                      }
+                      style={{
+                        width: "2.2222222222vmax",
+                        height: "2.5vmax",
+                        "margin-left": "1.366666667vmax",
+                        "padding-bottom": "0.5777777778vmax",
+                      }}
+                    />
+                  </CardHeader>
+                  <CardBody>
+                    <CardText>
+                      <ul
+                        style={{
+                          "padding-left": "0.6333333333vmax",
+                          color: "#748093",
+                          "font-size": "1.118056vmax",
+                        }}
+                      >
+                        <li style={{ "padding-bottom": "1vmax" }}>
+                          The Current ROI for your inputted staking amount is{" "}
+                          {this.state.tamt ==
+                          this.state.spranges[this.state.spindex][4]
+                            ? this.state.roi
+                            : Math.round(
+                                (10000 *
+                                  this.state.amount *
+                                  1000000 *
+                                  100 *
+                                  ((this.state.roi *
+                                    (this.state.tamt +
+                                      this.state.amount * 1000000)) /
+                                    100 -
+                                    (0.02 *
+                                      this.state.roi *
+                                      (this.state.tamt +
+                                        this.state.amount * 1000000)) /
+                                      100)) /
+                                  ((this.state.spranges[this.state.spindex][4] +
+                                    this.state.amount * 1000000) *
+                                    this.state.amount *
+                                    1000000)
+                              ) / 10000}
+                          %.
+                        </li>
+                        <li style={{ "padding-bottom": "1vmax" }}>
+                          The staking rewards is calculated for the cycles{" "}
+                          {this.state.currentCycle + 1}-{this.state.endCycle}.
+                        </li>
+                        <li style={{ "padding-bottom": "1vmax" }}>
+                          A fee of 2% inclusive on your winning returns is taken
+                          for the usage of the platform.
+                        </li>
+                        <li style={{ "padding-bottom": "1vmax" }}>
+                          If, at the completion of your staking period on{" "}
+                          {new Date(
+                            this.state.cycletime + this.state.duration
+                          ).toDateString()}
+                          , the price of Xtz is in this range, then you get back
+                          your returns along with your staking investment.Else
+                          you would lose your staking returns and only get back
+                          your staking investment.{" "}
+                        </li>
+                        <li style={{ "padding-bottom": "1vmax" }}>
+                          You shall get back your staked amount (plus the
+                          winning rewards if applicable) at the conclusion of
+                          cycle {this.state.endCycle - 1} on{" "}
+                          {new Date(
+                            this.state.cycletime + this.state.duration
+                          ).toDateString()}
+                          .
+                        </li>
+                      </ul>
+                    </CardText>
+                  </CardBody>
+                </Card>
+              )
+            ) : null}
+          </Collapse>
+        </Container>
+        <Container
+          fluid="xs"
+          style={{
+            backgroundColor: "#2C7DF7",
+            "padding-left": "9.0888888889vmax",
+            "padding-right": "7.6vmax",
+            width: "100vmax",
+          }}
+        >
+          <Row
+            xs="2"
+            style={{ "padding-top": "5vmax", "padding-bottom": "5vmax" }}
+          >
+            <Col>
+              <label
+                style={{
+                  color: "#FFFFFF",
+                  "letter-spacing": "0.0138888889vmax",
+                  "font-family": "HKGrotesk-Bold",
+                  "font-size": "3.888888889vmax",
+                }}
+              >
+                Try Stakepool now for smart prediction
+              </label>
+            </Col>
+            <Col
+              style={{
+                "text-align": "right",
+                "padding-top": "4.2677777778vmax",
+              }}
+            >
+              <NavLink href="#stake">
+                <button
+                  style={{
+                    color: "#1565D8",
+                    backgroundColor: "#F2F5F8",
+                    "font-family": "OpenSans-Bold",
+                    "text-align": "center",
+                    "font-size": "2.4305555556vmax",
+                    border: "0.06944vmax solid #1565D8",
+                    "border-radius": "0.5555556vmax",
+                    width: "24.5138888888889vmax",
+                    height: "5.55555556vmax",
+                    "line-height": "5.55555556vmax",
+                  }}
+                >
+                  Stake
+                </button>
+              </NavLink>
+            </Col>
+          </Row>
+        </Container>
+        <Container
+          fluid="xs"
+          id="contact"
+          align="center"
+          style={{
+            backgroundColor: "#F9FBFE",
+            height: "100%",
+            width: "100vmax",
+            "padding-top": "3.333333vmax",
+            "padding-bottom": "3.333333vmax",
+          }}
+        >
+          <img src={heart} style={{ width: "8.8vmax", height: "8.8vmax" }} />
+          <p
+            style={{
+              color: "#5A7184",
+              "font-family": "OpenSans-SemiBold",
+              "font-size": "1.34027778vmax",
+            }}
+          >
+            <strong>Copyright © 2020. Crafted with love.</strong>
+          </p>
+          <img
+            src={google}
+            style={{
+              width: "1.125em",
+              height: "1.125em",
+              "margin-left": "1.25em",
+            }}
+          />
+          <img
+            src={youtube}
+            style={{
+              width: "1.25vmax",
+              height: "1.25vmax",
+              "margin-left": "1.3888888889vmax",
+            }}
+          />
+          <img
+            src={telegram}
+            style={{
+              width: "1.25vmax",
+              height: "1.25vmax",
+              "margin-left": "1.3888888889vmax",
+            }}
+          />
+          <img
+            src={tezsure}
+            style={{
+              width: "1.25vmax",
+              height: "1.25vmax",
+              "margin-left": "1.3888888889vmax",
+            }}
+          />
+          <img
+            src={twitter}
+            style={{
+              width: "1.25vmax",
+              height: "1.25vmax",
+              "margin-left": "1.3888888889vmax",
+            }}
+          />
+          <img
+            src={linkedin}
+            style={{
+              width: "1.25vmax",
+              height: "1.25vmax",
+              "margin-left": "1.3888888889vmax",
+            }}
+          />
+          <img
+            src={instagram}
+            style={{
+              width: "1.25vmax",
+              height: "1.25vmax",
+              "margin-left": "1.3888888889vmax",
+            }}
+          />
+        </Container>
+      </Container>
+    );
   }
 }

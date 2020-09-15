@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import Home from './components/Home';
-import Wager from './components/Wager';
+import Account from './components/Account';
+//import Wager from './components/Wager';
 import Error from './components/Error';
 
 class App extends Component {
@@ -12,7 +13,7 @@ class App extends Component {
         <div>
             <Switch>
              <Route path="/" component={Home} exact/>
-             <Route path="/wager" component={Wager}/>
+             <Route path="/Account" component={Account}/>
              <Route component={Error}/>
            </Switch>
         </div>
