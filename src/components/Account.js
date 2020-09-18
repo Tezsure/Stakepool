@@ -38,9 +38,6 @@ export default class setseller extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      thanosError: false,
-      error: false,
-      errMsg: "",
       activeTab: "carthagenet",
       result: [],
       account: "",
@@ -75,8 +72,11 @@ export default class setseller extends React.Component {
       const tezos = wallet.toTezos();
       const accountPkh = await tezos.wallet.pkh();
       const storagedata = await axios.get(
-        "https://api.carthagenet.tzstats.com/explorer/contract/KT1QqNLspda7dLCz9DPeG5iRGm8q8kAgxDqK/storage"
+        "https://api.carthagenet.tzstats.com/explorer/contract/KT1FeextweSNMsA9T2yQWVt7DEMxzJYLpY2X/storage"
       );
+      /*const storagedata = await axios.get(
+        "https://cors-anywhere.herokuapp.com/https://api.carthagenet.tzstats.com/explorer/contract/KT1FeextweSNMsA9T2yQWVt7DEMxzJYLpY2X/storage"
+      );*/
       var cycle = Math.trunc(storagedata.data.meta.height / 2048);
       var find = JSONPath.nodes(storagedata, "$..bettor");
       find = find.filter((find) => find.value === accountPkh);
@@ -84,6 +84,7 @@ export default class setseller extends React.Component {
       var entries = [];
       for (x of find) {
         var entry = [];
+        var roi;
         var lrange =
           ((100 - Number(x.path[6].slice(0, x.path[6].indexOf("#"))) / 100) *
             Number(storagedata.data.value.cycleDet[x.path[4]].cPrice)) /
@@ -108,22 +109,55 @@ export default class setseller extends React.Component {
           );
         var ending = Number(x.path[4]) + 5 + 1;
         if (ending <= Number(storagedata.data.value.withdrawcycle)) {
-          wPrice = storagedata.data.value.cycleDet[ending.toString()].cPrice;
+          wPrice = "$"(
+            Number(storagedata.data.value.cycleDet[ending.toString()].cPrice) /
+              100
+          ).toString();
+          roi =
+            (winning * 100) /
+            parseFloat(
+              storagedata.data.value.cycleDet[x.path[4]].betDet[x.path[6]].det[
+                x.path[8]
+              ].invest
+            );
         } else {
           wPrice = "Staking Period Ongoing";
+          if (
+            parseFloat(
+              storagedata.data.value.cycleDet[x.path[4]].betDet[x.path[6]].amt
+            ) == parseFloat(storagedata.data.value.cycleDet[x.path[4]].cAmount)
+          ) {
+            roi = Number(storagedata.data.value.rate) / 100;
+          } else {
+            roi =
+              ((100 - 2) *
+                parseFloat(storagedata.data.value.rate) *
+                parseFloat(
+                  storagedata.data.value.cycleDet[x.path[4]].cAmount
+                )) /
+              (10000 *
+                parseFloat(
+                  storagedata.data.value.cycleDet[x.path[4]].betDet[x.path[6]]
+                    .amt
+                ));
+          }
         }
         entry = [
           cycle -
             Number(storagedata.data.value.withdrawcycle) +
-            Number(x.path[4]),
+            Number(x.path[4]) +
+            1,
           lrange.toFixed(2),
           urange.toFixed(2),
           wPrice,
-          storagedata.data.value.cycleDet[x.path[4]].betDet[x.path[6]].det[
-            x.path[8]
-          ].invest,
+          Number(
+            storagedata.data.value.cycleDet[x.path[4]].betDet[x.path[6]].det[
+              x.path[8]
+            ].invest
+          ),
           winning,
           x.path[6].includes("-"),
+          parseFloat(roi.toFixed(4)),
         ];
         entries.push(entry);
       }
@@ -136,11 +170,11 @@ export default class setseller extends React.Component {
             show: true,
           };
         });
-      }
-      else{
+      } else {
         await swal({
           title: "Error!!!",
-          text:"The selected account has not executed any staking orders in the past 11 cycles.",
+          text:
+            "The selected account has not executed any staking orders in the past 11 cycles.",
           icon: "error",
         });
       }
@@ -167,7 +201,6 @@ export default class setseller extends React.Component {
           ),
           icon: "error",
         });
-        
       } else {
         await swal({
           title: "Error!!!",
@@ -213,6 +246,7 @@ export default class setseller extends React.Component {
             backgroundClip: "padding-box",
             backgroundRepeat: "repeat-x",
             "box-shadow": "0px 10px 35px #00000008",
+            "padding-bottom": "10vmax",
           }}
         >
           <Navbar
@@ -304,7 +338,11 @@ export default class setseller extends React.Component {
                     />
                   </DropdownToggle>
                   <DropdownMenu
-                    style={{ backgroundColor: "#F9FBFE", width: "4vmax" }}
+                    style={{
+                      backgroundColor: "#F9FBFE",
+                      width: "200%",
+                      "border-radius": "0.27777778vmax",
+                    }}
                   >
                     <DropdownItem header>Stakepool</DropdownItem>
                     <DropdownItem style={{ "line-height": "0.6667vmax" }}>
@@ -491,11 +529,11 @@ export default class setseller extends React.Component {
                   }}
                 >
                   <tr>
-                    <th>Staking Order Cycle </th>
                     <th>Staking Period</th>
                     <th>Predicted Price Range</th>
                     <th>Price at conclusion of Staking Period</th>
                     <th>Staked Amount</th>
+                    <th>Staked ROI</th>
                     <th>Staking Reward Won</th>
                   </tr>
                 </thead>
@@ -509,9 +547,8 @@ export default class setseller extends React.Component {
                 >
                   {this.state.result.map((value) => (
                     <tr>
-                      <td>{value[0]}</td>
                       <td>
-                        {value[0] + 1} - {value[0] + 6}
+                        {value[0]} - {value[0] + 5}
                       </td>
                       <td>
                         {value[1] == value[2]
@@ -525,6 +562,7 @@ export default class setseller extends React.Component {
                       </td>
                       <td>{value[3]}</td>
                       <td>{value[4] / 1000000} XTZ</td>
+                      <td>{value[7]}%</td>
                       <td>{value[5] / 1000000} XTZ</td>
                     </tr>
                   ))}
@@ -532,6 +570,58 @@ export default class setseller extends React.Component {
               </Table>
             </Collapse>
           </Card>
+        </Container>
+        <Container
+          fluid="xs"
+          style={{
+            backgroundColor: "#2C7DF7",
+            "padding-left": "9.0888888889vmax",
+            "padding-right": "7.6vmax",
+            width: "100vmax",
+          }}
+        >
+          <Row
+            xs="2"
+            style={{ "padding-top": "5vmax", "padding-bottom": "5vmax" }}
+          >
+            <Col>
+              <label
+                style={{
+                  color: "#FFFFFF",
+                  "letter-spacing": "0.0138888889vmax",
+                  "font-family": "HKGrotesk-Bold",
+                  "font-size": "3.888888889vmax",
+                }}
+              >
+                Try Stakepool now for smart prediction
+              </label>
+            </Col>
+            <Col
+              style={{
+                "text-align": "right",
+                "padding-top": "4.2677777778vmax",
+              }}
+            >
+              <NavLink href="/">
+                <button
+                  style={{
+                    color: "#1565D8",
+                    backgroundColor: "#F2F5F8",
+                    "font-family": "OpenSans-Bold",
+                    "text-align": "center",
+                    "font-size": "2.4305555556vmax",
+                    border: "0.06944vmax solid #1565D8",
+                    "border-radius": "0.5555556vmax",
+                    width: "24.5138888888889vmax",
+                    height: "5.55555556vmax",
+                    "line-height": "5.55555556vmax",
+                  }}
+                >
+                  Stake
+                </button>
+              </NavLink>
+            </Col>
+          </Row>
         </Container>
         <Container
           fluid="xs"
