@@ -142,10 +142,10 @@ export default class setseller extends React.Component {
   }
 
   async fetchCycleData() {
-    const tzresponse = await axios.get(
+    /*const tzresponse = await axios.get(
       "https://cors-anywhere.herokuapp.com/https://api.carthagenet.tzstats.com/explorer/cycle/head"
-    );
-    //const tzresponse=await axios.get('https://api.carthagenet.tzstats.com/explorer/cycle/head/');
+    );*/
+    const tzresponse=await axios.get('https://api.carthagenet.tzstats.com/explorer/cycle/head/');
     console.log(JSON.stringify(tzresponse));
     const ctime = new Date(tzresponse.data.end_time).valueOf();
     const stime = new Date(tzresponse.data.start_time).valueOf();
@@ -164,7 +164,7 @@ export default class setseller extends React.Component {
 
   async fetchContractData() {
     const storagedata = await axios.get(
-      "https://api.better-call.dev/v1/contract/carthagenet/KT1QqNLspda7dLCz9DPeG5iRGm8q8kAgxDqK/storage/rich"
+      "https://api.better-call.dev/v1/contract/carthagenet/KT1FeextweSNMsA9T2yQWVt7DEMxzJYLpY2X/storage/rich"
     );
     const l = storagedata.data.args[0].args[1].args[1].length;
     const mapdata =
@@ -251,22 +251,26 @@ export default class setseller extends React.Component {
               </li>
               <li style={{ "padding-bottom": "1vmax" }}>
                 Current Estimated ROI:{" "}
-                {this.state.tamt == this.state.spranges[i][4]
+                {this.state.tamt == this.state.spranges[this.state.spindex][4]
                   ? this.state.roi
+                  : this.state.amount !== null
+                  ? Math.round(
+                      (10000 *
+                        (100 - 2) *
+                        this.state.roi *
+                        (this.state.tamt + this.state.amount * 1000000)) /
+                        (100 *
+                          (this.state.spranges[this.state.spindex][4] +
+                            this.state.amount * 1000000))
+                    ) / 10000
                   : Math.round(
                       (10000 *
-                        amt *
-                        1000000 *
-                        100 *
-                        ((this.state.roi * (this.state.tamt + amt * 1000000)) /
-                          100 -
-                          (0.02 *
-                            this.state.roi *
-                            (this.state.tamt + amt * 1000000)) /
-                            100)) /
-                        ((this.state.spranges[i][4] + amt * 1000000) *
-                          amt *
-                          1000000)
+                        (100 - 2) *
+                        this.state.roi *
+                        (this.state.tamt + 1 * 1000000)) /
+                        (100 *
+                          (this.state.spranges[this.state.spindex][4] +
+                            1 * 1000000))
                     ) / 10000}
                 %.
               </li>
@@ -303,7 +307,7 @@ export default class setseller extends React.Component {
         const accountBalance = await tezos.tz.getBalance(accountPkh);
         console.info(`address: ${accountPkh}, balance: ${accountBalance}`);
         const sell = await tezos.wallet.at(
-          "KT1QqNLspda7dLCz9DPeG5iRGm8q8kAgxDqK"
+          "KT1FeextweSNMsA9T2yQWVt7DEMxzJYLpY2X"
         );
         const operation = await sell.methods
           .setWager(param1.toString(), param2.toString())
@@ -428,7 +432,7 @@ export default class setseller extends React.Component {
             light
             style={{ "margin-left": "6.667vmax", "margin-right": "5.2vmax" }}
           >
-            <link href="/bootstrap.min.css" type="text/css" rel="stylesheet" />
+            <link href="bootstrap.min.css" rel="stylesheet" />
             <NavbarBrand
               href="/"
               className="mr-auto"
@@ -511,7 +515,13 @@ export default class setseller extends React.Component {
                       }}
                     />
                   </DropdownToggle>
-                  <DropdownMenu>
+                  <DropdownMenu
+                    style={{
+                      backgroundColor: "#F9FBFE",
+                      width: "200%",
+                      "border-radius": "0.27777778vmax",
+                    }}
+                  >
                     <DropdownItem header>Stakepool</DropdownItem>
                     <DropdownItem style={{ "line-height": "0.6667vmax" }}>
                       <NavLink
@@ -1079,24 +1089,23 @@ export default class setseller extends React.Component {
                               is{" "}
                               {this.state.tamt == value[4]
                                 ? this.state.roi
+                                : this.state.amount !== null
+                                ? Math.round(
+                                    (10000 *
+                                      (100 - 2) *
+                                      this.state.roi *
+                                      (this.state.tamt +
+                                        this.state.amount * 1000000)) /
+                                      (100 *
+                                        (value[4] +
+                                          this.state.amount * 1000000))
+                                  ) / 10000
                                 : Math.round(
                                     (10000 *
-                                      this.state.amount *
-                                      1000000 *
-                                      100 *
-                                      ((this.state.roi *
-                                        (this.state.tamt +
-                                          this.state.amount * 1000000)) /
-                                        100 -
-                                        (0.02 *
-                                          this.state.roi *
-                                          (this.state.tamt +
-                                            this.state.amount * 1000000)) /
-                                          100)) /
-                                      ((value[4] +
-                                        this.state.amount * 1000000) *
-                                        this.state.amount *
-                                        1000000)
+                                      (100 - 2) *
+                                      this.state.roi *
+                                      (this.state.tamt + 1 * 1000000)) /
+                                      (100 * (value[4] + 1 * 1000000))
                                   ) / 10000}
                               %.
                             </li>
@@ -1236,24 +1245,29 @@ export default class setseller extends React.Component {
                           {this.state.tamt ==
                           this.state.spranges[this.state.spindex][4]
                             ? this.state.roi
+                            : this.state.amount !== null
+                            ? Math.round(
+                                (10000 *
+                                  (100 - 2) *
+                                  this.state.roi *
+                                  (this.state.tamt +
+                                    this.state.amount * 1000000)) /
+                                  (100 *
+                                    (this.state.spranges[
+                                      this.state.spindex
+                                    ][4] +
+                                      this.state.amount * 1000000))
+                              ) / 10000
                             : Math.round(
                                 (10000 *
-                                  this.state.amount *
-                                  1000000 *
-                                  100 *
-                                  ((this.state.roi *
-                                    (this.state.tamt +
-                                      this.state.amount * 1000000)) /
-                                    100 -
-                                    (0.02 *
-                                      this.state.roi *
-                                      (this.state.tamt +
-                                        this.state.amount * 1000000)) /
-                                      100)) /
-                                  ((this.state.spranges[this.state.spindex][4] +
-                                    this.state.amount * 1000000) *
-                                    this.state.amount *
-                                    1000000)
+                                  (100 - 2) *
+                                  this.state.roi *
+                                  (this.state.tamt + 1 * 1000000)) /
+                                  (100 *
+                                    (this.state.spranges[
+                                      this.state.spindex
+                                    ][4] +
+                                      1 * 1000000))
                               ) / 10000}
                           %.
                         </li>
