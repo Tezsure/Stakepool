@@ -164,7 +164,7 @@ export default class setseller extends React.Component {
 
   async fetchContractData() {
     const storagedata = await axios.get(
-      "https://api.better-call.dev/v1/contract/carthagenet/KT1FeextweSNMsA9T2yQWVt7DEMxzJYLpY2X/storage/rich"
+      "https://api.better-call.dev/v1/contract/carthagenet/KT1J4R214vjRk6vCBbZs5nXdByUH83Hrp7Sn/storage/rich"
     );
     const l = storagedata.data.args[0].args[1].args[1].length;
     const mapdata =
@@ -307,7 +307,7 @@ export default class setseller extends React.Component {
         const accountBalance = await tezos.tz.getBalance(accountPkh);
         console.info(`address: ${accountPkh}, balance: ${accountBalance}`);
         const sell = await tezos.wallet.at(
-          "KT1FeextweSNMsA9T2yQWVt7DEMxzJYLpY2X"
+          "KT1J4R214vjRk6vCBbZs5nXdByUH83Hrp7Sn"
         );
         const operation = await sell.methods
           .setWager(param1.toString(), param2.toString())
