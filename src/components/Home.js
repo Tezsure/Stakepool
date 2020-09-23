@@ -142,10 +142,10 @@ export default class setseller extends React.Component {
   }
 
   async fetchCycleData() {
-    /*const tzresponse = await axios.get(
+    const tzresponse = await axios.get(
       "https://cors-anywhere.herokuapp.com/https://api.carthagenet.tzstats.com/explorer/cycle/head"
-    );*/
-    const tzresponse=await axios.get('https://api.carthagenet.tzstats.com/explorer/cycle/head/');
+    );
+    //const tzresponse=await axios.get('https://api.carthagenet.tzstats.com/explorer/cycle/head/');
     console.log(JSON.stringify(tzresponse));
     const ctime = new Date(tzresponse.data.end_time).valueOf();
     const stime = new Date(tzresponse.data.start_time).valueOf();
