@@ -33,12 +33,13 @@ import twitter from "./icons/twitter.png";
 import axios from "axios";
 import swal from "@sweetalert/with-react";
 import { JSONPath } from "@astronautlabs/jsonpath";
+import { animateScroll as scroll } from "react-scroll";
 
 export default class setseller extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeTab: "carthagenet",
+      activeTab: "delphinet",
       result: [],
       account: "",
       Cycle: null,
@@ -51,6 +52,7 @@ export default class setseller extends React.Component {
       return { error: false };
     });
   }
+
 
   async setTab(tab) {
     if (this.state.activeTab !== tab) {
@@ -68,14 +70,14 @@ export default class setseller extends React.Component {
         throw new Error("Please Install ");
       }
       const wallet = new ThanosWallet("Stakepool");
-      await wallet.connect("carthagenet", { forcePermission: true });
+      await wallet.connect("delphinet", { forcePermission: true });
       const tezos = wallet.toTezos();
       const accountPkh = await tezos.wallet.pkh();
       /*const storagedata = await axios.get(
-        "https://api.carthagenet.tzstats.com/explorer/contract/KT1J4R214vjRk6vCBbZs5nXdByUH83Hrp7Sn/storage"
+        "https://api.delphi.tzstats.com/explorer/contract/KT1AkmEKWNKSqK48FTrAF9xUXZ1UdZEPcryk/storage"
       );*/
       const storagedata = await axios.get(
-        "https://cors-anywhere.herokuapp.com/https://api.carthagenet.tzstats.com/explorer/contract/KT1J4R214vjRk6vCBbZs5nXdByUH83Hrp7Sn/storage"
+        "https://cors-anywhere.herokuapp.com/https://api.delphi.tzstats.com/explorer/contract/KT1AkmEKWNKSqK48FTrAF9xUXZ1UdZEPcryk/storage"
       );
       var cycle = Math.trunc(storagedata.data.meta.height / 2048);
       var find = JSONPath.nodes(storagedata, "$..bettor");
@@ -268,10 +270,11 @@ export default class setseller extends React.Component {
             <Nav>
               <NavItem>
                 <NavLink
-                  href="/components/"
+                  disabled
+                  href="#"
                   style={{
                     "font-size": "1.1111111111vmax",
-                    "font-family": "OpenSans-SemiBold",
+                    "font-family": "OpenSans-SemiBold, sans-serif",
                     color: "#FFFFFF",
                     "margin-top": "1.736vmax",
                   }}
@@ -281,10 +284,10 @@ export default class setseller extends React.Component {
               </NavItem>
               <NavItem>
                 <NavLink
-                  href="https://github.com/reactstrap/reactstrap"
+                  href="https://gitlab.com/tezsure/staking-market-george/-/tree/StakePool"
                   style={{
                     "font-size": "1.1111111111vmax",
-                    "font-family": "OpenSans-SemiBold",
+                    "font-family": "OpenSans-SemiBold, sans-serif",
                     color: "#FFFFFF",
                     "margin-top": "1.736vmax",
                   }}
@@ -294,15 +297,17 @@ export default class setseller extends React.Component {
               </NavItem>
               <NavItem>
                 <NavLink
-                  href="#contact"
                   style={{
                     "font-size": "1.1111111111vmax",
-                    "font-family": "OpenSans-SemiBold",
+                    "font-family": "OpenSans-SemiBold, sans-serif",
                     color: "#FFFFFF",
                     "margin-top": "0.764vmax",
                   }}
                 >
                   <button
+                    onClick={() => {
+                      scroll.scrollToBottom();
+                    }}
                     style={{
                       color: "#FFFFFF",
                       backgroundColor: "#1565D8",
@@ -350,7 +355,7 @@ export default class setseller extends React.Component {
                         href="/"
                         style={{
                           "font-size": "1.1111111111vmax",
-                          "font-family": "OpenSans-SemiBold",
+                          "font-family": "OpenSans-SemiBold, sans-serif",
                           color: "#5A7184",
                         }}
                       >
@@ -362,11 +367,11 @@ export default class setseller extends React.Component {
                         href="/"
                         style={{
                           "font-size": "1.1111111111vmax",
-                          "font-family": "OpenSans-SemiBold",
+                          "font-family": "OpenSans-SemiBold, sans-serif",
                           color: "#5A7184",
                         }}
                       >
-                        Carthagenet
+                        Delphinet
                       </NavLink>
                     </DropdownItem>
                     <DropdownItem divider />
@@ -375,7 +380,7 @@ export default class setseller extends React.Component {
                         href="/Account"
                         style={{
                           "font-size": "1.1111111111vmax",
-                          "font-family": "OpenSans-SemiBold",
+                          "font-family": "OpenSans-SemiBold, sans-serif",
                           color: "#5A7184",
                         }}
                       >
@@ -391,7 +396,7 @@ export default class setseller extends React.Component {
             align="center"
             style={{
               "font-size": "3.888888889vmax",
-              "font-family": "Leelawadee UI",
+              "font-family": "OpenSans-Bold, sans-serif",
               "padding-top": "5vmax",
               "padding-bottom": "1.66666667vmax",
               "padding-left": "0.902777778vmax",
@@ -429,7 +434,7 @@ export default class setseller extends React.Component {
                       this.state.activeTab === "mainnet"
                         ? "#183B56"
                         : "#5A7184",
-                    "font-family": "OpenSans-SemiBold",
+                    "font-family": "OpenSans-SemiBold, sans-serif",
                     "text-align": "left",
                     "font-size": "1.7vmax",
                   }}
@@ -440,22 +445,22 @@ export default class setseller extends React.Component {
               <NavItem style={{ width: "16vmax" }}>
                 <NavLink
                   className={classnames({
-                    active: this.state.activeTab === "carthagenet",
+                    active: this.state.activeTab === "delphinet",
                   })}
                   onClick={() => {
-                    this.setTab("carthagenet");
+                    this.setTab("delphinet");
                   }}
                   style={{
                     color:
-                      this.state.activeTab === "carthagenet"
+                      this.state.activeTab === "delphinet"
                         ? "#183B56"
                         : "#5A7184",
-                    "font-family": "OpenSans-SemiBold",
+                    "font-family": "OpenSans-SemiBold, sans-serif",
                     "text-align": "left",
                     "font-size": "1.7vmax",
                   }}
                 >
-                  Carthagenet
+                  Delphinet
                 </NavLink>
               </NavItem>
             </Nav>
@@ -472,7 +477,7 @@ export default class setseller extends React.Component {
                   this.stakingDet();
                 }}
                 style={{
-                  "font-family": "OpenSans-Bold",
+                  "font-family": "OpenSans-Bold, sans-serif",
                   color: "#1565D8",
                   backgroundColor: "#FFFFFF",
                   "text-align": "center",
@@ -499,7 +504,7 @@ export default class setseller extends React.Component {
                   <label
                     style={{
                       color: "#5A7184",
-                      "font-family": "OpenSans-SemiBold",
+                      "font-family": "OpenSans-SemiBold, sans-serif",
                       "font-size": "1.277778vmax",
                     }}
                   >
@@ -511,7 +516,7 @@ export default class setseller extends React.Component {
                         "text-align": "left",
                         "padding-left": "0.8888889vmax",
                         color: "#959EAD",
-                        "font-family": "OpenSans-SemiBold",
+                        "font-family": "OpenSans-SemiBold, sans-serif",
                         "font-size": "1.277778vmax",
                       }}
                     >
@@ -523,7 +528,7 @@ export default class setseller extends React.Component {
               <Table hover responsive style={{ "margin-bottom": "2.15vmax" }}>
                 <thead
                   style={{
-                    "font-family": "OpenSans-SemiBold",
+                    "font-family": "OpenSans-SemiBold, sans-serif",
                     "font-size": "1.282vmax",
                     "text-align": "center",
                   }}
@@ -541,7 +546,7 @@ export default class setseller extends React.Component {
                   style={{
                     "text-align": "center",
                     color: "#5A7184",
-                    "font-family": "OpenSans-SemiBold",
+                    "font-family": "OpenSans-SemiBold, sans-serif",
                     "font-size": "1.277778vmax",
                   }}
                 >
@@ -589,7 +594,7 @@ export default class setseller extends React.Component {
                 style={{
                   color: "#FFFFFF",
                   "letter-spacing": "0.0138888889vmax",
-                  "font-family": "HKGrotesk-Bold",
+                  "font-family": "OpenSans-Bold, sans-serif",
                   "font-size": "3.888888889vmax",
                 }}
               >
@@ -607,7 +612,7 @@ export default class setseller extends React.Component {
                   style={{
                     color: "#1565D8",
                     backgroundColor: "#F2F5F8",
-                    "font-family": "OpenSans-Bold",
+                    "font-family": "OpenSans-Bold, sans-serif",
                     "text-align": "center",
                     "font-size": "2.4305555556vmax",
                     border: "0.06944vmax solid #1565D8",
@@ -639,7 +644,7 @@ export default class setseller extends React.Component {
           <p
             style={{
               color: "#5A7184",
-              "font-family": "OpenSans-SemiBold",
+              "font-family": "OpenSans-SemiBold, sans-serif",
               "font-size": "1.34027778vmax",
             }}
           >
