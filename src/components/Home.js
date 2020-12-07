@@ -252,7 +252,12 @@ export default class setseller extends React.Component {
                     this.state.spranges[i][1].toString()}
               </li>
               <li style={{ "padding-bottom": "1vmax" }}>
-                Expected ROI as per current active bets:{" "}
+                Expected Min ROI as per current active bets:{" "}
+                {this.state.roi}
+                %.
+              </li>
+              <li style={{ "padding-bottom": "1vmax" }}>
+                Expected Max ROI as per current active bets*:{" "}
                 {this.state.tamt == this.state.spranges[this.state.spindex][4]
                   ? this.state.roi
                   : this.state.amount !== null
@@ -293,6 +298,16 @@ export default class setseller extends React.Component {
                 Platform Usage Fee: 2% of the winning returns
               </li>
             </ul>
+            <p
+              style={{
+                color: "#5A7184",
+                "font-family": "OpenSans-Regular, sans-serif",
+                "padding-top": "1vmax",
+                "font-size": "1.1111111111vmax",
+              }}
+            >
+              * The maximum expected ROI is variable under the cycle and is dependent on the total number of XTZ staked on the other price ranges and the outcome of the previous cycle/s pool.
+            </p>
           </Container>
         ),
         icon: "info",
@@ -451,8 +466,7 @@ export default class setseller extends React.Component {
             <Nav>
               <NavItem>
                 <NavLink
-                  disabled
-                  href="#"
+                  href="https://www.notion.so/Stakepool-A-no-loss-price-prediction-experiment-38bc2c0e0fe540aaaa1bc91ebcdcf5c4"
                   style={{
                     "font-size": "1.1111111111vmax",
                     "font-family": "OpenSans-SemiBold, sans-serif",
