@@ -9,11 +9,11 @@ import Error from './components/Error';
 class App extends Component {
   render() {
     return (
-       <BrowserRouter>
+       <BrowserRouter basename="/components">
         <div>
             <Switch>
              <Route path="/" component={Home} exact/>
-             <Route path="/Account" component={Account}/>
+             <Route path="/account" component={Account}/>
              <Route component={Error}/>
            </Switch>
         </div>
