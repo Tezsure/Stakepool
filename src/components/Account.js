@@ -270,8 +270,7 @@ export default class setseller extends React.Component {
             <Nav>
               <NavItem>
                 <NavLink
-                  disabled
-                  href="#"
+                  href="https://www.notion.so/Stakepool-A-no-loss-price-prediction-experiment-38bc2c0e0fe540aaaa1bc91ebcdcf5c4"
                   style={{
                     "font-size": "1.1111111111vmax",
                     "font-family": "OpenSans-SemiBold, sans-serif",
