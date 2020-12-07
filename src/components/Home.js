@@ -1,6 +1,6 @@
 import React from "react";
 import { ThanosWallet } from "@thanos-wallet/dapp";
-import { Link } from "react-router-dom";
+import { animateScroll as scroll } from "react-scroll";
 import {
   Container,
   Collapse,
@@ -143,9 +143,11 @@ export default class setseller extends React.Component {
 
   async fetchCycleData() {
     const tzresponse = await axios.get(
-      "https://cors-anywhere.herokuapp.com/https://api.carthagenet.tzstats.com/explorer/cycle/head"
+      "https://cors-anywhere.herokuapp.com/https://api.delphi.tzstats.com/explorer/cycle/head"
     );
-    //const tzresponse=await axios.get('https://api.carthagenet.tzstats.com/explorer/cycle/head/');
+    /*const tzresponse = await axios.get(
+      "https://api.delphi.tzstats.com/explorer/cycle/head/"
+    );*/
     console.log(JSON.stringify(tzresponse));
     const ctime = new Date(tzresponse.data.end_time).valueOf();
     const stime = new Date(tzresponse.data.start_time).valueOf();
@@ -164,17 +166,17 @@ export default class setseller extends React.Component {
 
   async fetchContractData() {
     const storagedata = await axios.get(
-      "https://api.better-call.dev/v1/contract/carthagenet/KT1J4R214vjRk6vCBbZs5nXdByUH83Hrp7Sn/storage/rich"
+      "https://api.better-call.dev/v1/contract/delphinet/KT1AkmEKWNKSqK48FTrAF9xUXZ1UdZEPcryk/storage/rich"
     );
-    const l = storagedata.data.args[0].args[1].args[1].length;
+    const l = storagedata.data.args[0].args[1].args[0].length;
     const mapdata =
-      storagedata.data.args[0].args[1].args[1][l - 1].args[1].args[0];
+      storagedata.data.args[0].args[1].args[0][l - 1].args[1].args[0];
     const price =
-      storagedata.data.args[0].args[1].args[1][l - 1].args[1].args[1].args[1]
+      storagedata.data.args[0].args[1].args[0][l - 1].args[1].args[1].args[1]
         .int;
     const rate = parseInt(storagedata.data.args[1].args[1].args[0].int) / 100;
     const tamount = parseInt(
-      storagedata.data.args[0].args[1].args[1][l - 1].args[1].args[1].args[0]
+      storagedata.data.args[0].args[1].args[0][l - 1].args[1].args[1].args[0]
         .int
     );
     if (this.state.tamt != tamount) {
@@ -236,7 +238,7 @@ export default class setseller extends React.Component {
               }}
             >
               <li style={{ "padding-bottom": "1vmax" }}>
-                Staked Amount: {amt} Xtz
+                Staked Amount: {amt} XTZ
               </li>
               <li style={{ "padding-bottom": "1vmax" }}>
                 Predicted Price Range:{" "}
@@ -250,7 +252,7 @@ export default class setseller extends React.Component {
                     this.state.spranges[i][1].toString()}
               </li>
               <li style={{ "padding-bottom": "1vmax" }}>
-                Current Estimated ROI:{" "}
+                Expected ROI as per current active bets:{" "}
                 {this.state.tamt == this.state.spranges[this.state.spindex][4]
                   ? this.state.roi
                   : this.state.amount !== null
@@ -288,7 +290,7 @@ export default class setseller extends React.Component {
                 ).toDateString()}
               </li>
               <li style={{ "padding-bottom": "1vmax" }}>
-                Platform Usage Fee:2% of the winning returns
+                Platform Usage Fee: 2% of the winning returns
               </li>
             </ul>
           </Container>
@@ -301,13 +303,16 @@ export default class setseller extends React.Component {
 
       if (val) {
         const wallet = new ThanosWallet("Stakepool");
-        await wallet.connect("carthagenet", { forcePermission: true });
+        await wallet.connect("delphinet", { forcePermission: true });
         const tezos = wallet.toTezos();
         const accountPkh = await tezos.wallet.pkh();
         const accountBalance = await tezos.tz.getBalance(accountPkh);
         console.info(`address: ${accountPkh}, balance: ${accountBalance}`);
+        if(amt+0.1>accountBalance/1000000){
+          throw new Error("Insufficient Balance in your Account to complete this transaction!");
+        }
         const sell = await tezos.wallet.at(
-          "KT1J4R214vjRk6vCBbZs5nXdByUH83Hrp7Sn"
+          "KT1AkmEKWNKSqK48FTrAF9xUXZ1UdZEPcryk"
         );
         const operation = await sell.methods
           .setWager(param1.toString(), param2.toString())
@@ -334,7 +339,7 @@ export default class setseller extends React.Component {
                 align="center"
                 style={{
                   "font-size": "2.2vmax",
-                  "font-family": "OpenSans-SemiBold",
+                  "font-family": "OpenSans-SemiBold, sans-serif",
                   color: "#5A7184",
                   "letter-spacing": "0.049vmax",
                 }}
@@ -387,7 +392,7 @@ export default class setseller extends React.Component {
         });
         const counterValue = await sell.storage();
         console.info(`storage: ${counterValue}`);
-        window.location.reload(false);
+        window.location.reload(true);
       }
     } catch (err) {
       if (err.message == "Please Install ") {
@@ -446,10 +451,11 @@ export default class setseller extends React.Component {
             <Nav>
               <NavItem>
                 <NavLink
-                  href="/components/"
+                  disabled
+                  href="#"
                   style={{
                     "font-size": "1.1111111111vmax",
-                    "font-family": "OpenSans-SemiBold",
+                    "font-family": "OpenSans-SemiBold, sans-serif",
                     color: "#FFFFFF",
                     "margin-top": "1.736vmax",
                   }}
@@ -459,10 +465,10 @@ export default class setseller extends React.Component {
               </NavItem>
               <NavItem>
                 <NavLink
-                  href="https://github.com/reactstrap/reactstrap"
+                  href="https://gitlab.com/tezsure/staking-market-george/-/tree/StakePool"
                   style={{
                     "font-size": "1.1111111111vmax",
-                    "font-family": "OpenSans-SemiBold",
+                    "font-family": "OpenSans-SemiBold, sans-serif",
                     color: "#FFFFFF",
                     "margin-top": "1.736vmax",
                   }}
@@ -472,15 +478,17 @@ export default class setseller extends React.Component {
               </NavItem>
               <NavItem>
                 <NavLink
-                  href="#contact"
                   style={{
                     "font-size": "1.1111111111vmax",
-                    "font-family": "OpenSans-SemiBold",
+                    "font-family": "OpenSans-SemiBold, sans-serif",
                     color: "#FFFFFF",
                     "margin-top": "0.764vmax",
                   }}
                 >
                   <button
+                    onClick={() => {
+                      scroll.scrollToBottom();
+                    }}
                     style={{
                       color: "#FFFFFF",
                       backgroundColor: "#1565D8",
@@ -528,7 +536,7 @@ export default class setseller extends React.Component {
                         href="/"
                         style={{
                           "font-size": "1.1111111111vmax",
-                          "font-family": "OpenSans-SemiBold",
+                          "font-family": "OpenSans-SemiBold, sans-serif",
                           color: "#5A7184",
                         }}
                       >
@@ -540,20 +548,20 @@ export default class setseller extends React.Component {
                         href="/"
                         style={{
                           "font-size": "1.1111111111vmax",
-                          "font-family": "OpenSans-SemiBold",
+                          "font-family": "OpenSans-SemiBold, sans-serif",
                           color: "#5A7184",
                         }}
                       >
-                        Carthagenet
+                        Delphinet
                       </NavLink>
                     </DropdownItem>
                     <DropdownItem divider />
                     <DropdownItem style={{ "line-height": "0.6667vmax" }}>
                       <NavLink
-                        href="/Account"
+                        href="/account"
                         style={{
                           "font-size": "1.1111111111vmax",
-                          "font-family": "OpenSans-SemiBold",
+                          "font-family": "OpenSans-SemiBold, sans-serif",
                           color: "#5A7184",
                         }}
                       >
@@ -569,7 +577,7 @@ export default class setseller extends React.Component {
             align="center"
             style={{
               "font-size": "3.888888889vmax",
-              "font-family": "Leelawadee UI",
+              "font-family": "OpenSans-Bold, sans-serif",
               "padding-top": "5vmax",
               "padding-bottom": "1.66666667vmax",
               "padding-left": "0.902777778vmax",
@@ -650,7 +658,7 @@ export default class setseller extends React.Component {
                   <label
                     style={{
                       color: "#5A7184",
-                      "font-family": "OpenSans-SemiBold",
+                      "font-family": "OpenSans-SemiBold,sans-serif",
                       "font-size": "1.277778vmax",
                     }}
                   >
@@ -662,7 +670,7 @@ export default class setseller extends React.Component {
                   <label
                     style={{
                       color: "#5A7184",
-                      "font-family": "OpenSans-SemiBold",
+                      "font-family": "OpenSans-SemiBold, sans-serif",
                       "font-size": "1.277778vmax",
                     }}
                   >
@@ -679,7 +687,7 @@ export default class setseller extends React.Component {
                       "text-align": "left",
                       "padding-left": "1.8888889vmax",
                       color: "#959EAD",
-                      "font-family": "OpenSans-SemiBold",
+                      "font-family": "OpenSans-SemiBold, sans-serif",
                       "font-size": "1.277778vmax",
                     }}
                   >
@@ -702,7 +710,7 @@ export default class setseller extends React.Component {
                       "text-align": "left",
                       "padding-left": "1.8888889vmax",
                       color: "#183B56",
-                      "font-family": "OpenSans-SemiBold",
+                      "font-family": "OpenSans-SemiBold, sans-serif",
                       "font-size": "1.277778vmax",
                     }}
                   >
@@ -714,7 +722,7 @@ export default class setseller extends React.Component {
                   <label
                     style={{
                       color: "#5A7184",
-                      "font-family": "OpenSans-SemiBold",
+                      "font-family": "OpenSans-SemiBold, sans-serif",
                       "font-size": "1.277778vmax",
                     }}
                   >
@@ -725,7 +733,7 @@ export default class setseller extends React.Component {
                   <label
                     style={{
                       color: "#5A7184",
-                      "font-family": "OpenSans-SemiBold",
+                      "font-family": "OpenSans-SemiBold, sans-serif",
                       "font-size": "1.277778vmax",
                     }}
                   >
@@ -763,14 +771,14 @@ export default class setseller extends React.Component {
                         "border-radius": "0.556vmax",
                         background: "#FFFFFF 0% 0% no-repeat padding-box",
                         color: "#959EAD",
-                        "font-family": "OpenSans-SemiBold",
+                        "font-family": "OpenSans-SemiBold, sans-serif",
                         "font-size": "1.277778vmax",
                         "text-align": "left",
                         "padding-left": "1.6888889vmax",
                       }}
                     />
                     <Badge
-                      color="light"
+                      color="#FFFFFF"
                       style={{
                         height: "3.888888889vmax",
                         "line-height": "4.4444444vmax",
@@ -778,7 +786,7 @@ export default class setseller extends React.Component {
                         "padding-left": "0.556vmax",
                         "padding-right": "0.556vmax",
                         color: "#959EAD",
-                        "font-family": "OpenSans-SemiBold",
+                        "font-family": "OpenSans-SemiBold, sans-serif",
                         "font-size": "1.1111111111vmax",
                       }}
                     >
@@ -786,10 +794,10 @@ export default class setseller extends React.Component {
                         src={tz}
                         style={{
                           height: "3.33333333vmax",
-                          "padding-right": "0.24444444vmax",
+                          "padding-right": "0.64444444vmax",
                         }}
                       />
-                      XTZ
+
                     </Badge>
                   </InputGroup>
                 </Col>
@@ -810,7 +818,7 @@ export default class setseller extends React.Component {
                       "border-radius": "0.556vmax",
                       background: "#FFFFFF 0% 0% no-repeat padding-box",
                       color: "#959EAD",
-                      "font-family": "OpenSans-SemiBold",
+                      "font-family": "OpenSans-SemiBold, sans-serif",
                       "font-size": "1.277778vmax",
                       "padding-left": "1.6888889vmax",
                     }}
@@ -853,7 +861,7 @@ export default class setseller extends React.Component {
                   color: "#5A7184",
                   "margin-left": "4vmax",
                   "margin-right": "5.3vmax",
-                  "font-family": "OpenSans-Regular",
+                  "font-family": "OpenSans-Regular, sans-serif",
                   "padding-top": "1.69vmax",
                   "font-size": "1.1111111111vmax",
                 }}
@@ -880,7 +888,7 @@ export default class setseller extends React.Component {
                       this.showHelp();
                     }}
                     style={{
-                      "font-family": "OpenSans-Bold",
+                      "font-family": "OpenSans-Bold, sans-serif",
                       color: "#1565D8",
                       backgroundColor: "#FFFFFF",
                       "text-align": "center",
@@ -903,7 +911,7 @@ export default class setseller extends React.Component {
                       this.betting();
                     }}
                     style={{
-                      "font-family": "OpenSans-Bold",
+                      "font-family": "OpenSans-Bold, sans-serif",
                       color: "#FFFFFF",
                       backgroundColor: "#1565D8",
                       "text-align": "center",
@@ -939,7 +947,7 @@ export default class setseller extends React.Component {
               <label
                 align="left"
                 style={{
-                  "font-family": "HKGrotesk-Bold",
+                  "font-family": "OpenSans-Bold, sans-serif",
                   color: "#183B56",
                   display: "block",
                   "font-size": "3.3333333333vmax",
@@ -964,7 +972,7 @@ export default class setseller extends React.Component {
                 }}
                 style={{
                   color: "#36B37E",
-                  "font-family": "HKGrotesk-Bold",
+                  "font-family": "OpenSans-Bold, sans-serif",
                   backgroundColor: "#FFFFFF",
                   "text-align": "center",
                   "font-size": "1.1111111111vmax",
@@ -982,7 +990,7 @@ export default class setseller extends React.Component {
           <p
             style={{
               color: "#5A7184",
-              "font-family": "OpenSans-Regular",
+              "font-family": "OpenSans-Regular, sans-serif",
               "font-size": "1.18055556vmax",
               "padding-bottom": "3.3333333vmax",
             }}
@@ -1016,7 +1024,7 @@ export default class setseller extends React.Component {
                           style={{
                             "background-color": "#FFFFFF",
                             "text-align": "left",
-                            "font-family": "HKGrotesk-Bold",
+                            "font-family": "OpenSans-Bold, sans-serif",
                             color: "#183B56",
                             "font-size": "1.2152777778vmax",
                             "letter-spacing": "0.0138888889vmax",
@@ -1040,7 +1048,7 @@ export default class setseller extends React.Component {
                             align="right"
                             src={value[2] < 0 ? down : up}
                             style={{
-                              width: "2.2222222222vmax",
+                              width: "1.2222222222vmax",
                               height: "2.5vmax",
                               "padding-right": "0.121vmax",
                               "padding-bottom": "0.5777777778vmax",
@@ -1085,7 +1093,7 @@ export default class setseller extends React.Component {
                               style={{ "padding-bottom": "1vmax" }}
                               style={{ "padding-bottom": "1vmax" }}
                             >
-                              The Current ROI for your inputted staking amount
+                              The Expected ROI currently for your inputted staking amount
                               is{" "}
                               {this.state.tamt == value[4]
                                 ? this.state.roi
@@ -1123,7 +1131,7 @@ export default class setseller extends React.Component {
                               {new Date(
                                 this.state.cycletime + this.state.duration
                               ).toDateString()}
-                              ,the price of Xtz is in this range, then you get
+                              ,the price of XTZ is in this range, then you get
                               back your returns along with your staking
                               investment.Else you would lose your staking
                               returns and only get back your staking investment.{" "}
@@ -1144,7 +1152,7 @@ export default class setseller extends React.Component {
                                 this.select(index);
                               }}
                               style={{
-                                "font-family": "OpenSans-Bold",
+                                "font-family": "OpenSans-Bold, sans-serif",
                                 color: "#1565D8",
                                 backgroundColor: "#FFFFFF",
                                 "text-align": "center",
@@ -1176,7 +1184,7 @@ export default class setseller extends React.Component {
                   <CardHeader
                     style={{
                       "text-align": "left",
-                      "font-family": "HKGrotesk-Bold",
+                      "font-family": "OpenSans-Bold, sans-serif",
                       color: "#183B56",
                       "font-size": "1.3444444444vmax",
                       "letter-spacing": "0.0138888889vmax",
@@ -1224,7 +1232,7 @@ export default class setseller extends React.Component {
                           : up
                       }
                       style={{
-                        width: "2.2222222222vmax",
+                        width: "1.2222222222vmax",
                         height: "2.5vmax",
                         "margin-left": "1.366666667vmax",
                         "padding-bottom": "0.5777777778vmax",
@@ -1241,7 +1249,7 @@ export default class setseller extends React.Component {
                         }}
                       >
                         <li style={{ "padding-bottom": "1vmax" }}>
-                          The Current ROI for your inputted staking amount is{" "}
+                          The Expected ROI currently for your inputted staking amount is{" "}
                           {this.state.tamt ==
                           this.state.spranges[this.state.spindex][4]
                             ? this.state.roi
@@ -1284,7 +1292,7 @@ export default class setseller extends React.Component {
                           {new Date(
                             this.state.cycletime + this.state.duration
                           ).toDateString()}
-                          , the price of Xtz is in this range, then you get back
+                          , the price of XTZ is in this range, then you get back
                           your returns along with your staking investment.Else
                           you would lose your staking returns and only get back
                           your staking investment.{" "}
@@ -1324,7 +1332,7 @@ export default class setseller extends React.Component {
                 style={{
                   color: "#FFFFFF",
                   "letter-spacing": "0.0138888889vmax",
-                  "font-family": "HKGrotesk-Bold",
+                  "font-family": "OpenSans-Bold, sans-serif",
                   "font-size": "3.888888889vmax",
                 }}
               >
@@ -1337,12 +1345,15 @@ export default class setseller extends React.Component {
                 "padding-top": "4.2677777778vmax",
               }}
             >
-              <NavLink href="#stake">
+              <NavLink>
                 <button
+                  onClick={() => {
+                    scroll.scrollToTop();
+                  }}
                   style={{
                     color: "#1565D8",
                     backgroundColor: "#F2F5F8",
-                    "font-family": "OpenSans-Bold",
+                    "font-family": "OpenSans-Bold, sans-serif",
                     "text-align": "center",
                     "font-size": "2.4305555556vmax",
                     border: "0.06944vmax solid #1565D8",
@@ -1374,7 +1385,7 @@ export default class setseller extends React.Component {
           <p
             style={{
               color: "#5A7184",
-              "font-family": "OpenSans-SemiBold",
+              "font-family": "OpenSans-SemiBold, sans-serif",
               "font-size": "1.34027778vmax",
             }}
           >
