@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import Stats from './components/stats';
+import StatsMainnet from './components/stats_mainnet';
+import StatsDelphinet from './components/stats_delphinet';
 import Home from './components/Home';
 import Account from './components/Account';
 //import Wager from './components/Wager';
@@ -14,7 +15,8 @@ class App extends Component {
             <Switch>
              <Route path="/" component={Home} exact/>
              <Route path="/account" component={Account}/>
-             <Route path="/stats" component={Stats}/>
+             <Route path="/statsmainnet" component={StatsMainnet}/>
+             <Route path="/statsdelphinet" component={StatsDelphinet}/>
              <Route component={Error}/>
            </Switch>
         </div>

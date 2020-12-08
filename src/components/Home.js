@@ -490,19 +490,59 @@ export default class setseller extends React.Component {
                   GitHub
                 </NavLink>
               </NavItem>
+
               <NavItem>
-                <NavLink
-                  href="/stats"
-                  style={{
-                    "font-size": "1.1111111111vmax",
-                    "font-family": "OpenSans-SemiBold, sans-serif",
-                    color: "#FFFFFF",
-                    "margin-top": "1.736vmax",
-                  }}
+                <UncontrolledButtonDropdown
+                  direction="bottom-start"
+                  style={{ color: "#1565D8" }}
                 >
-                  Stats
-                </NavLink>
+                  <DropdownToggle
+                    caret={false}
+                    color="#1565D8"
+                    style={{
+                      "font-size": "1.1111111111vmax",
+                      "font-family": "OpenSans-SemiBold, sans-serif",
+                      color: "#FFFFFF",
+                      "margin-top": "1.736vmax",
+                    }}>
+                    Stats
+                  </DropdownToggle>
+
+                  <DropdownMenu
+                    style={{
+                      backgroundColor: "#F9FBFE",
+                      width: "200%",
+                      "border-radius": "0.27777778vmax",
+                    }}
+                  >
+                    <DropdownItem style={{ "line-height": "0.6667vmax" }}>
+                      <NavLink
+                        href="/statsmainnet"
+                        style={{
+                          "font-size": "1.1111111111vmax",
+                          "font-family": "OpenSans-SemiBold, sans-serif",
+                          color: "#5A7184",
+                        }}
+                      >
+                        Mainnet
+                      </NavLink>
+                    </DropdownItem>
+                    <DropdownItem style={{ "line-height": "0.6667vmax" }}>
+                      <NavLink
+                        href="/statsdelphinet"
+                        style={{
+                          "font-size": "1.1111111111vmax",
+                          "font-family": "OpenSans-SemiBold, sans-serif",
+                          color: "#5A7184",
+                        }}
+                      >
+                        Delphinet
+                      </NavLink>
+                    </DropdownItem>
+                  </DropdownMenu>
+                </UncontrolledButtonDropdown>
               </NavItem>
+
               <NavItem>
                 <NavLink
                   style={{
