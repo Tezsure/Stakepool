@@ -69,9 +69,9 @@ export default class setseller extends React.Component {
       if(storagedata.data.value.withdrawcycle!="1"){
         if(Number(storagedata.data.value.withdrawcycle)>6){
           cycle=cycle-6;
-          var withdrawcycle=Number(storagedata.data.value.withdrawcycle)-1;
+          var withdrawcycle=Number(storagedata.data.value.withdrawcycle);
           var wprice=Number(storagedata.data.value.cycleDet[withdrawcycle.toString()].cPrice)/100;
-          withdrawcycle=withdrawcycle-5;
+          withdrawcycle=withdrawcycle-6;
           for(var key of Object.keys(storagedata.data.value.cycleDet[withdrawcycle.toString()].betDet)){
             var lrange =
               ((100 - Number(key.slice(0, key.indexOf("#"))) / 100) *
@@ -226,6 +226,7 @@ export default class setseller extends React.Component {
                 >
                   <DropdownItem style={{ "line-height": "0.6667vmax" }}>
                     <NavLink
+                    disabled
                       href="/statsmainnet"
                       style={{
                         "font-size": "1.1111111111vmax",
@@ -309,6 +310,7 @@ export default class setseller extends React.Component {
                   <DropdownItem header>Stakepool</DropdownItem>
                   <DropdownItem style={{ "line-height": "0.6667vmax" }}>
                     <NavLink
+                    disabled
                       href="/"
                       style={{
                         "font-size": "1.1111111111vmax",
@@ -379,6 +381,37 @@ export default class setseller extends React.Component {
           >
 
             <Row>
+
+            <Col
+                style={{
+                    "text-align": "right",
+                    "padding-right": "9.5vmax",
+                    "padding-top": this.state.show ? "1.666666667vmax" : "4vmax",
+                    "padding-bottom": this.state.show ? "1.66667vmax" : "4vmax",
+                }}
+                >
+                    <button
+                    disabled  
+                    style={{
+                      color: "white",
+                        backgroundColor: "#4868c2",
+                        "font-family": "OpenSans-Bold, sans-serif",
+                        "text-align": "center",
+                        "font-size": "1.805555556vmax",
+                        border: "0.06944vmax solid black",
+                        "border-radius": "0.5555556vmax",
+                        width: "24.5138888888889vmax",
+                        height: "7.05555556vmax",
+                        "line-height": "2.55555556vmax",
+
+                    }}
+                    >
+                      Winning Price{" "}<br/>
+                      {this.state.announce?this.state.Rannounce?"$"+this.state.winning[2]:"TBA":"TBA"}
+                    </button>
+
+                </Col>
+                
                 <Col
                 style={{
                     "text-align": "left",
@@ -408,35 +441,6 @@ export default class setseller extends React.Component {
 
                 </Col>
 
-                <Col
-                style={{
-                    "text-align": "right",
-                    "padding-right": "9.5vmax",
-                    "padding-top": this.state.show ? "1.666666667vmax" : "4vmax",
-                    "padding-bottom": this.state.show ? "1.66667vmax" : "4vmax",
-                }}
-                >
-                    <button
-                    disabled  
-                    style={{
-                      color: "white",
-                        backgroundColor: "#4868c2",
-                        "font-family": "OpenSans-Bold, sans-serif",
-                        "text-align": "center",
-                        "font-size": "1.805555556vmax",
-                        border: "0.06944vmax solid black",
-                        "border-radius": "0.5555556vmax",
-                        width: "24.5138888888889vmax",
-                        height: "7.05555556vmax",
-                        "line-height": "2.55555556vmax",
-
-                    }}
-                    >
-                      Winning Price{" "}<br/>
-                      {this.state.announce?this.state.Rannounce?"$"+this.state.winning[2]:"TBA":"TBA"}
-                    </button>
-
-                </Col>
             </Row>
 
             <Row>
@@ -677,7 +681,7 @@ export default class setseller extends React.Component {
             }}
           />
           <img
-            src={linkedin}
+            src={linkedin} 
             style={{
               width: "1.25vmax",
               height: "1.25vmax",

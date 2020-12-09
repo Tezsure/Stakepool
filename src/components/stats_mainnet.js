@@ -226,6 +226,7 @@ export default class setseller extends React.Component {
                 >
                   <DropdownItem style={{ "line-height": "0.6667vmax" }}>
                     <NavLink
+                    disabled
                       href="/statsmainnet"
                       style={{
                         "font-size": "1.1111111111vmax",
@@ -309,6 +310,7 @@ export default class setseller extends React.Component {
                   <DropdownItem header>Stakepool</DropdownItem>
                   <DropdownItem style={{ "line-height": "0.6667vmax" }}>
                     <NavLink
+                    disabled
                       href="/"
                       style={{
                         "font-size": "1.1111111111vmax",
