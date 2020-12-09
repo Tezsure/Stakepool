@@ -36,43 +36,28 @@ import { JSONPath } from "@astronautlabs/jsonpath";
 import { animateScroll as scroll } from "react-scroll";
 
 export default class setseller extends React.Component {
+  tzInterval;
   constructor(props) {
     super(props);
     this.state = {
-      activeTab: "delphinet",
-      result: [],
-      account: "",
-      Cycle: null,
-      show: false,
+      currentCycle: null,
+      winning: [],
+      tamt: null,
+      pool:null,
+      announce: true,
+      Rannounce:true
     };
   }
 
-  async onDismiss() {
-    this.setState((state) => {
-      return { error: false };
-    });
+  async componentDidMount() {
+    this.stakingStats();
   }
 
-
-  async setTab(tab) {
-    if (this.state.activeTab !== tab) {
-      this.setState((state) => {
-        return { activeTab: tab, show: false };
-      });
-    }
+  async componentWillUnmount() {
+    clearTimeout(this.tzInterval);
   }
 
-  async stakingDet() {
-    try {
-      const available = await ThanosWallet.isAvailable();
-      var amt;
-      if (!available) {
-        throw new Error("Please Install ");
-      }
-      const wallet = new ThanosWallet("Stakepool");
-      await wallet.connect("delphinet", { forcePermission: true });
-      const tezos = wallet.toTezos();
-      const accountPkh = await tezos.wallet.pkh();
+  async stakingStats() {
       /*const storagedata = await axios.get(
         "https://api.delphi.tzstats.com/explorer/contract/KT1AkmEKWNKSqK48FTrAF9xUXZ1UdZEPcryk/storage"
       );*/
@@ -80,149 +65,68 @@ export default class setseller extends React.Component {
         "https://cors-anywhere.herokuapp.com/https://api.delphi.tzstats.com/explorer/contract/KT1AkmEKWNKSqK48FTrAF9xUXZ1UdZEPcryk/storage"
       );
       var cycle = Math.trunc(storagedata.data.meta.height / 2048);
-      var find = JSONPath.nodes(storagedata, "$..bettor");
-      find = find.filter((find) => find.value === accountPkh);
-      var x;
-      var entries = [];
-      for (x of find) {
-        var entry = [];
-        var roi;
-        var lrange =
-          ((100 - Number(x.path[6].slice(0, x.path[6].indexOf("#"))) / 100) *
-            Number(storagedata.data.value.cycleDet[x.path[4]].cPrice)) /
-          10000;
-        var urange =
-          ((100 - Number(x.path[6].slice(x.path[6].indexOf("#") + 1)) / 100) *
-            Number(storagedata.data.value.cycleDet[x.path[4]].cPrice)) /
-          10000;
-        var wPrice;
-        var winning =
-          (parseFloat(
-            storagedata.data.value.cycleDet[x.path[4]].betDet[x.path[6]].det[
-              x.path[8]
-            ].invest
-          ) *
-            parseFloat(
-              storagedata.data.value.cycleDet[x.path[4]].betDet[x.path[6]]
-                .winnings
-            )) /
-          parseFloat(
-            storagedata.data.value.cycleDet[x.path[4]].betDet[x.path[6]].amt
-          );
-        var ending = Number(x.path[4]) + 5 + 1;
-        if (ending <= Number(storagedata.data.value.withdrawcycle)) {
-          wPrice = "$"(
-            Number(storagedata.data.value.cycleDet[ending.toString()].cPrice) /
-              100
-          ).toString();
-          roi =
-            (winning * 100) /
-            parseFloat(
-              storagedata.data.value.cycleDet[x.path[4]].betDet[x.path[6]].det[
-                x.path[8]
-              ].invest
-            );
-        } else {
-          wPrice = "Staking Period Ongoing";
-          if (
-            parseFloat(
-              storagedata.data.value.cycleDet[x.path[4]].betDet[x.path[6]].amt
-            ) == parseFloat(storagedata.data.value.cycleDet[x.path[4]].cAmount)
-          ) {
-            roi = Number(storagedata.data.value.rate) / 100;
-          } else {
-            roi =
-              ((100 - 2) *
-                parseFloat(storagedata.data.value.rate) *
-                parseFloat(
-                  storagedata.data.value.cycleDet[x.path[4]].cAmount
-                )) /
-              (10000 *
-                parseFloat(
-                  storagedata.data.value.cycleDet[x.path[4]].betDet[x.path[6]]
-                    .amt
-                ));
+      if(storagedata.data.value.withdrawcycle!="1"){
+        if(Number(storagedata.data.value.withdrawcycle)>6){
+          cycle=cycle-6;
+          var withdrawcycle=Number(storagedata.data.value.withdrawcycle)-1;
+          var wprice=Number(storagedata.data.value.cycleDet[withdrawcycle.toString()].cPrice)/100;
+          withdrawcycle=withdrawcycle-5;
+          for(var key of Object.keys(storagedata.data.value.cycleDet[withdrawcycle.toString()].betDet)){
+            var lrange =
+              ((100 - Number(key.slice(0, key.indexOf("#"))) / 100) *
+                Number(storagedata.data.value.cycleDet[withdrawcycle.toString()].cPrice)) /
+              10000;
+            var urange =
+              ((100 - Number(key.slice(key.indexOf("#") + 1)) / 100) *
+                Number(storagedata.data.value.cycleDet[withdrawcycle.toString()].cPrice)) /
+              10000;
+            if((lrange==urange)&&(key[0]=="-")&&(wprice<lrange)){
+              var reward=Number(storagedata.data.value.cycleDet[withdrawcycle.toString()].betDet[key].winnings)/1000000;
+              var cAmt=Number(storagedata.data.value.cycleDet[withdrawcycle.toString()].betDet[key].amt)/1000000;
+              break;
+            }
+            if((lrange==urange)&&(key[0]!="-")&&(wprice>=urange)){
+              var reward=Number(storagedata.data.value.cycleDet[withdrawcycle.toString()].betDet[key].winnings)/1000000;
+              var cAmt=Number(storagedata.data.value.cycleDet[withdrawcycle.toString()].betDet[key].amt)/1000000;
+              break;
+            }
+            if((lrange!=urange)&&(wprice>=lrange)&&(wprice<urange)){
+              var reward=Number(storagedata.data.value.cycleDet[withdrawcycle.toString()].betDet[key].winnings)/1000000;
+              var cAmt=Number(storagedata.data.value.cycleDet[withdrawcycle.toString()].betDet[key].amt)/1000000;
+              break;
+            }
           }
+          this.setState((state) => {
+            return {
+              currentCycle: cycle,
+              announce: true,
+              Rannounce:true,
+              Tamt:Number(storagedata.data.value.cycleDet[withdrawcycle.toString()].cAmount)/1000000,
+              pool:Number(storagedata.data.value.interestPool)/1000000,
+              winning:[lrange,urange,wprice,reward,cAmt]
+            };
+          });
+
+        }else{
+          cycle=cycle+1-Number(storagedata.data.value.withdrawcycle)
+          this.setState((state) => {
+            return {
+              currentCycle: cycle,
+              announce: true,
+              Rannounce:false,
+              Tamt:Number(storagedata.data.value.cycleDet[withdrawcycle.toString()].cAmount)/1000000
+            };
+          });
         }
-        entry = [
-          cycle -
-            Number(storagedata.data.value.withdrawcycle) +
-            Number(x.path[4]) +
-            1,
-          lrange.toFixed(2),
-          urange.toFixed(2),
-          wPrice,
-          Number(
-            storagedata.data.value.cycleDet[x.path[4]].betDet[x.path[6]].det[
-              x.path[8]
-            ].invest
-          ),
-          winning,
-          x.path[6].includes("-"),
-          parseFloat(roi.toFixed(4)),
-        ];
-        entries.push(entry);
-      }
-      if (entries.length != 0) {
+      }else{
         this.setState((state) => {
           return {
-            account: accountPkh,
-            result: entries.reverse(),
-            Cycle: cycle,
-            show: true,
+            currentCycle: cycle,
+            announce: false,
           };
         });
-      } else {
-        await swal({
-          title: "Error!!!",
-          text:
-            "The selected account has not executed any staking orders in the past 11 cycles.",
-          icon: "error",
-        });
       }
-    } catch (err) {
-      if (err.message == "Please Install ") {
-        await swal({
-          title: "Error!!!",
-          content: (
-            <Container fluid="xs" align="left">
-              <p
-                style={{
-                  "padding-left": "1.12rem",
-                  "line-height": "2.11rem",
-                  color: "#748093",
-                }}
-              >
-                {err.message}
-                <a href="https://thanoswallet.com/download">
-                  Thanos Wallet Browser Plugin
-                </a>{" "}
-                To Utilize The Services Of Stakepool
-              </p>
-            </Container>
-          ),
-          icon: "error",
-        });
-      } else {
-        await swal({
-          title: "Error!!!",
-          content: (
-            <Container fluid="xs" align="left">
-              <p
-                style={{
-                  "padding-left": "1.12rem",
-                  "line-height": "2.11rem",
-                  color: "#748093",
-                }}
-              >
-                {err.message}
-              </p>
-            </Container>
-          ),
-          icon: "error",
-        });
-      }
-    }
+      this.tzInterval = setTimeout(this.stakingStats.bind(this), (storagedata.data.meta.height % 2048)*30000);
   }
 
   render() {
@@ -251,180 +155,199 @@ export default class setseller extends React.Component {
             "padding-bottom": "10vmax",
           }}
         >
-          <Navbar
-            color="faded"
-            light
-            style={{ "margin-left": "6.667vmax", "margin-right": "5.2vmax" }}
+        <Navbar
+          color="faded"
+          light
+          style={{ "margin-left": "6.667vmax", "margin-right": "5.2vmax" }}
+        >
+          <link href="bootstrap.min.css" rel="stylesheet" />
+          <NavbarBrand
+            href="/"
+            className="mr-auto"
+            styles={{ "margin-top": "0.97222222vmax" }}
           >
-            <link href="bootstrap.min.css" rel="stylesheet" />
-            <NavbarBrand
-              href="/"
-              className="mr-auto"
-              styles={{ "margin-top": "0.97222222vmax" }}
-            >
-              <img
-                src={stakepool}
-                style={{ width: "13.264vmax", height: "3.056vmax" }}
-              />
-            </NavbarBrand>
-            <Nav>
-              <NavItem>
-                <NavLink
-                  disabled
-                  href="#"
+            <img
+              src={stakepool}
+              style={{ width: "13.264vmax", height: "3.056vmax" }}
+            />
+          </NavbarBrand>
+          <Nav>
+            <NavItem>
+              <NavLink
+                href="https://www.notion.so/Stakepool-A-no-loss-price-prediction-experiment-38bc2c0e0fe540aaaa1bc91ebcdcf5c4"
+                style={{
+                  "font-size": "1.1111111111vmax",
+                  "font-family": "OpenSans-SemiBold, sans-serif",
+                  color: "#FFFFFF",
+                  "margin-top": "1.736vmax",
+                }}
+              >
+                Documentation
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink
+                href="https://gitlab.com/tezsure/staking-market-george/-/tree/StakePool"
+                style={{
+                  "font-size": "1.1111111111vmax",
+                  "font-family": "OpenSans-SemiBold, sans-serif",
+                  color: "#FFFFFF",
+                  "margin-top": "1.736vmax",
+                }}
+              >
+                GitHub
+              </NavLink>
+            </NavItem>
+
+            <NavItem>
+              <UncontrolledButtonDropdown
+                direction="bottom-start"
+                style={{ color: "#1565D8" }}
+              >
+                <DropdownToggle
+                  caret={false}
+                  color="#1565D8"
                   style={{
                     "font-size": "1.1111111111vmax",
                     "font-family": "OpenSans-SemiBold, sans-serif",
                     color: "#FFFFFF",
                     "margin-top": "1.736vmax",
-                  }}
-                >
-                  Documentation
-                </NavLink>
-              </NavItem>
+                  }}>
+                  Stats
+                </DropdownToggle>
 
-              <NavItem>
-                <NavLink
-                  href="https://gitlab.com/tezsure/staking-market-george/-/tree/StakePool"
+                <DropdownMenu
                   style={{
-                    "font-size": "1.1111111111vmax",
-                    "font-family": "OpenSans-SemiBold, sans-serif",
-                    color: "#FFFFFF",
-                    "margin-top": "1.736vmax",
+                    backgroundColor: "#F9FBFE",
+                    width: "200%",
+                    "border-radius": "0.27777778vmax",
                   }}
                 >
-                  GitHub
-                </NavLink>
-              </NavItem>
-
-              <NavItem>
-                <UncontrolledButtonDropdown
-                  direction="bottom-start"
-                  style={{ color: "#1565D8" }}
-                >
-                  <DropdownToggle
-                    caret={false}
-                    color="#1565D8"
-                    style={{
-                      "font-size": "1.1111111111vmax",
-                      "font-family": "OpenSans-SemiBold, sans-serif",
-                      color: "#FFFFFF",
-                      "margin-top": "1.736vmax",
-                    }}>
-                    Stats
-                  </DropdownToggle>
-
-                  <DropdownMenu
-                    style={{
-                      backgroundColor: "#F9FBFE",
-                      width: "200%",
-                      "border-radius": "0.27777778vmax",
-                    }}
-                  >
-                    <DropdownItem style={{ "line-height": "0.6667vmax" }}>
-                      <NavLink
-                        href="/statsmainnet"
-                        style={{
-                          "font-size": "1.1111111111vmax",
-                          "font-family": "OpenSans-SemiBold, sans-serif",
-                          color: "#5A7184",
-                        }}
-                      >
-                        Mainnet
-                      </NavLink>
-                    </DropdownItem>
-                    <DropdownItem style={{ "line-height": "0.6667vmax" }}>
-                      <NavLink
-                        href="/statsdelphinet"
-                        style={{
-                          "font-size": "1.1111111111vmax",
-                          "font-family": "OpenSans-SemiBold, sans-serif",
-                          color: "#5A7184",
-                        }}
-                      >
-                        Delphinet
-                      </NavLink>
-                    </DropdownItem>
-                  </DropdownMenu>
-                </UncontrolledButtonDropdown>
-              </NavItem>
-
-              <NavItem>
-                <NavLink
-                  style={{
-                    "font-size": "1.1111111111vmax",
-                    "font-family": "OpenSans-SemiBold, sans-serif",
-                    color: "#FFFFFF",
-                    "margin-top": "0.764vmax",
-                  }}
-                >
-                  <button
-                    onClick={() => {
-                      scroll.scrollToBottom();
-                    }}
-                    style={{
-                      color: "#FFFFFF",
-                      backgroundColor: "#1565D8",
-                      "text-align": "center",
-                      "font-size": "1.1111111111vmax",
-                      border: "0.13889vmax solid #FFFFFF",
-                      "border-radius": "0.556vmax",
-                      width: "10.764vmax",
-                      padding: "0.762vmax 0vmax 0.556vmax 0vmax",
-                    }}
-                  >
-                    Get In Touch
-                  </button>
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <UncontrolledButtonDropdown
-                  direction="bottom-start"
-                  style={{ color: "#1565D8" }}
-                >
-                  <DropdownToggle
-                    caret={false}
-                    color="#1565D8"
-                    style={{ "margin-top": "0.764vmax" }}
-                  >
-                    <img
-                      src={setting}
+                  <DropdownItem style={{ "line-height": "0.6667vmax" }}>
+                    <NavLink
+                      href="/statsmainnet"
                       style={{
-                        width: "4vmax",
-                        height: "3.33333333vmax",
-                        "padding-right": "0.24444444vmax",
+                        "font-size": "1.1111111111vmax",
+                        "font-family": "OpenSans-SemiBold, sans-serif",
+                        color: "#5A7184",
                       }}
-                    />
-                  </DropdownToggle>
-                  <DropdownMenu
-                    style={{
-                      backgroundColor: "#F9FBFE",
-                      width: "200%",
-                      "border-radius": "0.27777778vmax",
-                    }}
-                  >
-                    <DropdownItem header>Stakepool</DropdownItem>
-                    <DropdownItem style={{ "line-height": "0.6667vmax" }}>
+                    >
+                      Mainnet
+                    </NavLink>
+                  </DropdownItem>
+                  <DropdownItem style={{ "line-height": "0.6667vmax" }}>
+                    <NavLink
+                      href="/statsdelphinet"
+                      style={{
+                        "font-size": "1.1111111111vmax",
+                        "font-family": "OpenSans-SemiBold, sans-serif",
+                        color: "#5A7184",
+                      }}
+                    >
+                      Delphinet
+                    </NavLink>
+                  </DropdownItem>
+                </DropdownMenu>
+              </UncontrolledButtonDropdown>
+            </NavItem>
 
-                    </DropdownItem>
-                    <DropdownItem divider />
-                    <DropdownItem style={{ "line-height": "0.6667vmax" }}>
-                      <NavLink
-                        href="/Account"
-                        style={{
-                          "font-size": "1.1111111111vmax",
-                          "font-family": "OpenSans-SemiBold, sans-serif",
-                          color: "#5A7184",
-                        }}
-                      >
-                        Staking Orders
-                      </NavLink>
-                    </DropdownItem>
-                  </DropdownMenu>
-                </UncontrolledButtonDropdown>
-              </NavItem>
-            </Nav>
-          </Navbar>
+            <NavItem>
+              <NavLink
+                style={{
+                  "font-size": "1.1111111111vmax",
+                  "font-family": "OpenSans-SemiBold, sans-serif",
+                  color: "#FFFFFF",
+                  "margin-top": "0.764vmax",
+                }}
+              >
+                <button
+                  onClick={() => {
+                    scroll.scrollToBottom();
+                  }}
+                  style={{
+                    color: "#FFFFFF",
+                    backgroundColor: "#1565D8",
+                    "text-align": "center",
+                    "font-size": "1.1111111111vmax",
+                    border: "0.13889vmax solid #FFFFFF",
+                    "border-radius": "0.556vmax",
+                    width: "10.764vmax",
+                    padding: "0.762vmax 0vmax 0.556vmax 0vmax",
+                  }}
+                >
+                  Get In Touch
+                </button>
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <UncontrolledButtonDropdown
+                direction="bottom-start"
+                style={{ color: "#1565D8" }}
+              >
+                <DropdownToggle
+                  caret={false}
+                  color="#1565D8"
+                  style={{ "margin-top": "0.764vmax" }}
+                >
+                  <img
+                    src={setting}
+                    style={{
+                      width: "4vmax",
+                      height: "3.33333333vmax",
+                      "padding-right": "0.24444444vmax",
+                    }}
+                  />
+                </DropdownToggle>
+                <DropdownMenu
+                  style={{
+                    backgroundColor: "#F9FBFE",
+                    width: "200%",
+                    "border-radius": "0.27777778vmax",
+                  }}
+                >
+                  <DropdownItem header>Stakepool</DropdownItem>
+                  <DropdownItem style={{ "line-height": "0.6667vmax" }}>
+                    <NavLink
+                      href="/"
+                      style={{
+                        "font-size": "1.1111111111vmax",
+                        "font-family": "OpenSans-SemiBold, sans-serif",
+                        color: "#5A7184",
+                      }}
+                    >
+                      Mainnet
+                    </NavLink>
+                  </DropdownItem>
+                  <DropdownItem style={{ "line-height": "0.6667vmax" }}>
+                    <NavLink
+                      href="/"
+                      style={{
+                        "font-size": "1.1111111111vmax",
+                        "font-family": "OpenSans-SemiBold, sans-serif",
+                        color: "#5A7184",
+                      }}
+                    >
+                      Delphinet
+                    </NavLink>
+                  </DropdownItem>
+                  <DropdownItem divider />
+                  <DropdownItem style={{ "line-height": "0.6667vmax" }}>
+                    <NavLink
+                      href="/account"
+                      style={{
+                        "font-size": "1.1111111111vmax",
+                        "font-family": "OpenSans-SemiBold, sans-serif",
+                        color: "#5A7184",
+                      }}
+                    >
+                      Staking Orders
+                    </NavLink>
+                  </DropdownItem>
+                </DropdownMenu>
+              </UncontrolledButtonDropdown>
+            </NavItem>
+          </Nav>
+        </Navbar>
           <p
             align="center"
             style={{
@@ -439,9 +362,9 @@ export default class setseller extends React.Component {
             }}
           >
             <strong>
-              Previous Cycle
+              Previous Staking Period
               <br />
-              Stats
+              Cycle {this.state.currentCycle} Stats
             </strong>
           </p>
           <Card
@@ -454,7 +377,7 @@ export default class setseller extends React.Component {
             }}
           >
 
-            <Row>    
+            <Row>
                 <Col
                 style={{
                     "text-align": "left",
@@ -478,7 +401,8 @@ export default class setseller extends React.Component {
                         "line-height": "5.55555556vmax",
                     }}
                     >
-                      Total Bet Amount
+                      Total Bet Amount:
+                      {this.state.announce?this.state.tamt?this.state.tamt.toString()+"XTZ":"0XTZ":"TBA"}
                     </button>
 
                 </Col>
@@ -502,17 +426,17 @@ export default class setseller extends React.Component {
                         border: "0.06944vmax solid #1565D8",
                         "border-radius": "0.5555556vmax",
                         width: "24.5138888888889vmax",
-                        height: "5.55555556vmax",
-                        "line-height": "5.55555556vmax",
+
                     }}
                     >
-                      Winning Price Range
+                      Winning Price:{" "}
+                      {this.state.announce?this.state.Rannounce?"$"+this.state.winning[2]:"TBA":"TBA"}
                     </button>
 
                 </Col>
             </Row>
 
-            <Row>    
+            <Row>
                 <Col
                 style={{
                     "text-align": "left",
@@ -532,11 +456,11 @@ export default class setseller extends React.Component {
                         border: "0.06944vmax solid #1565D8",
                         "border-radius": "0.5555556vmax",
                         width: "24.5138888888889vmax",
-                        height: "5.55555556vmax",
-                        "line-height": "5.55555556vmax",
+
                     }}
                     >
-                    Winners Aggregate ROI
+                    Winners Aggregate ROI{" "}
+                    {this.state.announce?this.state.Rannounce?this.state.winning[4]?this.state.winning[3]*100/this.state.winning[4]+"%":"0%":"TBA":"TBA"}
                     </button>
 
                 </Col>
@@ -560,17 +484,17 @@ export default class setseller extends React.Component {
                         border: "0.06944vmax solid #1565D8",
                         "border-radius": "0.5555556vmax",
                         width: "24.5138888888889vmax",
-                        height: "5.55555556vmax",
-                        "line-height": "5.55555556vmax",
+
                     }}
                     >
-                    Total Rewards in Pool
+                    Total Pool Rewards Won:{" "}
+                    {this.state.announce?this.state.Rannounce?this.state.winning[3]?this.state.winning[3]+"XTZ":"0XTZ":"TBA":"TBA"}
                     </button>
 
                 </Col>
             </Row>
 
-            <Row>    
+            <Row>
                 <Col
                 style={{
                     "text-align": "left",
@@ -594,7 +518,8 @@ export default class setseller extends React.Component {
                         "line-height": "5.55555556vmax",
                     }}
                     >
-                    Total Amount in Winning Range
+                    Total Amount in Winning Range:{" "}
+                    {this.state.announce?this.state.Rannounce?this.state.winning[4]?this.state.winning[4]+"XTZ":"0XTZ":"TBA":"TBA"}
                     </button>
 
                 </Col>
@@ -622,96 +547,12 @@ export default class setseller extends React.Component {
                         "line-height": "5.55555556vmax",
                     }}
                     >
-                    Carry Forwarded Amount from Previous Pool
+                    Carry Forwarded Amount from Previous Pool:{" "}
+                    {this.state.announce?this.state.Rannounce?this.state.pool?this.state.pool+"XTZ":"0XTZ":"TBA":"TBA"}
                     </button>
 
                 </Col>
             </Row>
-
-
-            <Collapse isOpen={this.state.show}>
-              <Row
-                sm="2"
-                style={{
-                  "margin-left": "1vmax",
-                  "margin-right": "3.5vmax",
-                  "margin-bottom": "1vmax",
-                }}
-              >
-                <Col sm="6">
-                  <label
-                    style={{
-                      color: "#5A7184",
-                      "font-family": "OpenSans-SemiBold, sans-serif",
-                      "font-size": "1.277778vmax",
-                    }}
-                  >
-                    Account Address:
-                    <Badge
-                      color="light"
-                      style={{
-                        height: "1.6666667vmax",
-                        "text-align": "left",
-                        "padding-left": "0.8888889vmax",
-                        color: "#959EAD",
-                        "font-family": "OpenSans-SemiBold, sans-serif",
-                        "font-size": "1.277778vmax",
-                      }}
-                    >
-                      {this.state.account}
-                    </Badge>
-                  </label>{" "}
-                </Col>
-              </Row>
-              <Table hover responsive style={{ "margin-bottom": "2.15vmax" }}>
-                <thead
-                  style={{
-                    "font-family": "OpenSans-SemiBold, sans-serif",
-                    "font-size": "1.282vmax",
-                    "text-align": "center",
-                  }}
-                >
-                  <tr>
-                    <th>Staking Period</th>
-                    <th>Predicted Price Range</th>
-                    <th>Price at conclusion of Staking Period</th>
-                    <th>Staked Amount</th>
-                    <th>Staked ROI</th>
-                    <th>Staking Reward Won</th>
-                  </tr>
-                </thead>
-                <tbody
-                  style={{
-                    "text-align": "center",
-                    color: "#5A7184",
-                    "font-family": "OpenSans-SemiBold, sans-serif",
-                    "font-size": "1.277778vmax",
-                  }}
-                >
-                  {this.state.result.map((value) => (
-                    <tr>
-                      <td>
-                        {value[0]} - {value[0] + 5}
-                      </td>
-                      <td>
-                        {value[1] == value[2]
-                          ? value[6]
-                            ? "Below $" + value[1].toString()
-                            : "Above $" + value[1].toString()
-                          : "Between $" +
-                            value[1].toString() +
-                            " - $" +
-                            value[2].toString()}
-                      </td>
-                      <td>{value[3]}</td>
-                      <td>{value[4] / 1000000} XTZ</td>
-                      <td>{value[7]}%</td>
-                      <td>{value[5] / 1000000} XTZ</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
-            </Collapse>
           </Card>
         </Container>
         <Container
