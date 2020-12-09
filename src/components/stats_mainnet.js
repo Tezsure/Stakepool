@@ -64,6 +64,7 @@ export default class setseller extends React.Component {
       const storagedata = await axios.get(
         "https://cors-anywhere.herokuapp.com/https://api.delphi.tzstats.com/explorer/contract/KT1AkmEKWNKSqK48FTrAF9xUXZ1UdZEPcryk/storage"
       );
+      console.log(storagedata);
       var cycle = Math.trunc(storagedata.data.meta.height / 2048);
       if(storagedata.data.value.withdrawcycle!="1"){
         if(Number(storagedata.data.value.withdrawcycle)>6){
@@ -381,7 +382,7 @@ export default class setseller extends React.Component {
                 <Col
                 style={{
                     "text-align": "left",
-                    "padding-left": "7.4vmax",
+                    "padding-left": "9.5vmax",
                     "padding-top": this.state.show ? "1.666666667vmax" : "4vmax",
                     "padding-bottom": this.state.show ? "1.66667vmax" : "4vmax",
                 }}
@@ -389,20 +390,20 @@ export default class setseller extends React.Component {
                     <button
                     disabled
                     style={{
-                        color: "#1565D8",
-                        backgroundColor: "#F2F5F8",
+                        color: "white",
+                        backgroundColor: "#4868c2",
                         "font-family": "OpenSans-Bold, sans-serif",
                         "text-align": "center",
-                        "font-size": "2.0305555556vmax",
-                        border: "0.06944vmax solid #1565D8",
+                        "font-size": "1.805555556vmax",
+                        border: "0.06944vmax solid black",
                         "border-radius": "0.5555556vmax",
                         width: "24.5138888888889vmax",
-                        height: "5.55555556vmax",
-                        "line-height": "5.55555556vmax",
+                        height: "7.05555556vmax",
+                        "line-height": "2.55555556vmax",
                     }}
                     >
-                      Total Bet Amount:
-                      {this.state.announce?this.state.tamt?this.state.tamt.toString()+"XTZ":"0XTZ":"TBA"}
+                      Total Bet Amount<br/>
+                      {this.state.announce?this.state.tamt?this.state.tamt.toString()+"XTZ":"0 XTZ":"TBA"}
                     </button>
 
                 </Col>
@@ -410,26 +411,28 @@ export default class setseller extends React.Component {
                 <Col
                 style={{
                     "text-align": "right",
-                    "padding-right": "7.4vmax",
+                    "padding-right": "9.5vmax",
                     "padding-top": this.state.show ? "1.666666667vmax" : "4vmax",
                     "padding-bottom": this.state.show ? "1.66667vmax" : "4vmax",
                 }}
                 >
                     <button
-                    disabled
+                    disabled  
                     style={{
-                        color: "#1565D8",
-                        backgroundColor: "#F2F5F8",
+                      color: "white",
+                        backgroundColor: "#4868c2",
                         "font-family": "OpenSans-Bold, sans-serif",
                         "text-align": "center",
-                        "font-size": "2.0305555556vmax",
-                        border: "0.06944vmax solid #1565D8",
+                        "font-size": "1.805555556vmax",
+                        border: "0.06944vmax solid black",
                         "border-radius": "0.5555556vmax",
                         width: "24.5138888888889vmax",
+                        height: "7.05555556vmax",
+                        "line-height": "2.55555556vmax",
 
                     }}
                     >
-                      Winning Price:{" "}
+                      Winning Price{" "}<br/>
                       {this.state.announce?this.state.Rannounce?"$"+this.state.winning[2]:"TBA":"TBA"}
                     </button>
 
@@ -440,7 +443,7 @@ export default class setseller extends React.Component {
                 <Col
                 style={{
                     "text-align": "left",
-                    "padding-left": "7.4vmax",
+                    "padding-left": "9.5vmax",
                     "padding-top": this.state.show ? "1.666666667vmax" : "4vmax",
                     "padding-bottom": this.state.show ? "1.66667vmax" : "4vmax",
                 }}
@@ -448,18 +451,20 @@ export default class setseller extends React.Component {
                     <button
                     disabled
                     style={{
-                        color: "#1565D8",
-                        backgroundColor: "#F2F5F8",
+                      color: "white",
+                        backgroundColor: "#4868c2",
                         "font-family": "OpenSans-Bold, sans-serif",
                         "text-align": "center",
-                        "font-size": "2.0305555556vmax",
-                        border: "0.06944vmax solid #1565D8",
+                        "font-size": "1.805555556vmax",
+                        border: "0.06944vmax solid black",
                         "border-radius": "0.5555556vmax",
                         width: "24.5138888888889vmax",
+                        height: "7.05555556vmax",
+                        "line-height": "2.55555556vmax",
 
                     }}
                     >
-                    Winners Aggregate ROI{" "}
+                    Winners Aggregate ROI{" "}<br/>
                     {this.state.announce?this.state.Rannounce?this.state.winning[4]?this.state.winning[3]*100/this.state.winning[4]+"%":"0%":"TBA":"TBA"}
                     </button>
 
@@ -468,7 +473,7 @@ export default class setseller extends React.Component {
                 <Col
                 style={{
                     "text-align": "right",
-                    "padding-right": "7.4vmax",
+                    "padding-right": "9.5vmax",
                     "padding-top": this.state.show ? "1.666666667vmax" : "4vmax",
                     "padding-bottom": this.state.show ? "1.66667vmax" : "4vmax",
                 }}
@@ -476,19 +481,21 @@ export default class setseller extends React.Component {
                     <button
                     disabled
                     style={{
-                        color: "#1565D8",
-                        backgroundColor: "#F2F5F8",
+                      color: "white",
+                        backgroundColor: "#4868c2",
                         "font-family": "OpenSans-Bold, sans-serif",
                         "text-align": "center",
-                        "font-size": "2.0305555556vmax",
-                        border: "0.06944vmax solid #1565D8",
+                        "font-size": "1.805555556vmax",
+                        border: "0.06944vmax solid black",
                         "border-radius": "0.5555556vmax",
                         width: "24.5138888888889vmax",
+                        height: "7.05555556vmax",
+                        "line-height": "2.55555556vmax",
 
                     }}
                     >
-                    Total Pool Rewards Won:{" "}
-                    {this.state.announce?this.state.Rannounce?this.state.winning[3]?this.state.winning[3]+"XTZ":"0XTZ":"TBA":"TBA"}
+                    Total Pool Rewards Won{" "}<br/>
+                    {this.state.announce?this.state.Rannounce?this.state.winning[3]?this.state.winning[3]+"XTZ":"0 XTZ":"TBA":"TBA"}
                     </button>
 
                 </Col>
@@ -498,7 +505,7 @@ export default class setseller extends React.Component {
                 <Col
                 style={{
                     "text-align": "left",
-                    "padding-left": "7.4vmax",
+                    "padding-left": "9.5vmax",
                     "padding-top": this.state.show ? "1.666666667vmax" : "4vmax",
                     "padding-bottom": this.state.show ? "1.66667vmax" : "4vmax",
                 }}
@@ -506,20 +513,20 @@ export default class setseller extends React.Component {
                     <button
                     disabled
                     style={{
-                        color: "#1565D8",
-                        backgroundColor: "#F2F5F8",
+                      color: "white",
+                        backgroundColor: "#4868c2",
                         "font-family": "OpenSans-Bold, sans-serif",
                         "text-align": "center",
-                        "font-size": "2.0305555556vmax",
-                        border: "0.06944vmax solid #1565D8",
+                        "font-size": "1.805555556vmax",
+                        border: "0.06944vmax solid black",
                         "border-radius": "0.5555556vmax",
                         width: "24.5138888888889vmax",
-                        height: "10.55555556vmax",
-                        "line-height": "5.55555556vmax",
+                        height: "9.05555556vmax",
+                        "line-height": "2.55555556vmax",
                     }}
                     >
-                    Total Amount in Winning Range:{" "}
-                    {this.state.announce?this.state.Rannounce?this.state.winning[4]?this.state.winning[4]+"XTZ":"0XTZ":"TBA":"TBA"}
+                    Total Amount in Winning Range{" "}<br/>
+                    {this.state.announce?this.state.Rannounce?this.state.winning[4]?this.state.winning[4]+"XTZ":"0 XTZ":"TBA":"TBA"}
                     </button>
 
                 </Col>
@@ -527,7 +534,7 @@ export default class setseller extends React.Component {
                 <Col
                 style={{
                     "text-align": "right",
-                    "padding-right": "7.4vmax",
+                    "padding-right": "9.5vmax",
                     "padding-top": this.state.show ? "1.666666667vmax" : "4vmax",
                     "padding-bottom": this.state.show ? "1.66667vmax" : "4vmax",
                 }}
@@ -535,20 +542,20 @@ export default class setseller extends React.Component {
                     <button
                     disabled
                     style={{
-                        color: "#1565D8",
-                        backgroundColor: "#F2F5F8",
+                      color: "white",
+                        backgroundColor: "#4868c2",
                         "font-family": "OpenSans-Bold, sans-serif",
                         "text-align": "center",
-                        "font-size": "2.0305555556vmax",
-                        border: "0.06944vmax solid #1565D8",
+                        "font-size": "1.805555556vmax",
+                        border: "0.06944vmax solid black",
                         "border-radius": "0.5555556vmax",
                         width: "24.5138888888889vmax",
-                        height: "10.55555556vmax",
-                        "line-height": "5.55555556vmax",
+                        height: "9.05555556vmax",
+                        "line-height": "2.55555556vmax",
                     }}
                     >
-                    Carry Forwarded Amount from Previous Pool:{" "}
-                    {this.state.announce?this.state.Rannounce?this.state.pool?this.state.pool+"XTZ":"0XTZ":"TBA":"TBA"}
+                    Carry Forwarded Amount from Previous Pool{" "} <br/>
+                    {this.state.announce?this.state.Rannounce?this.state.pool?this.state.pool+"XTZ":"0 XTZ":"TBA":"TBA"}
                     </button>
 
                 </Col>
