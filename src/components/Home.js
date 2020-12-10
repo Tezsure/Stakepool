@@ -252,12 +252,12 @@ export default class setseller extends React.Component {
                     this.state.spranges[i][1].toString()}
               </li>
               <li style={{ "padding-bottom": "1vmax" }}>
-                Expected Min ROI as per current active bets:{" "}
+                Expected Min ROI as per current active bets*:{" "}
                 {this.state.roi}
                 %.
               </li>
               <li style={{ "padding-bottom": "1vmax" }}>
-                Expected Max ROI as per current active bets*:{" "}
+                Expected Max ROI as per current active bets**:{" "}
                 {this.state.tamt == this.state.spranges[this.state.spindex][4]
                   ? this.state.roi
                   : this.state.amount !== null
@@ -306,7 +306,8 @@ export default class setseller extends React.Component {
                 "font-size": "1.1111111111vmax",
               }}
             >
-              * The maximum expected ROI is variable under the cycle and is dependent on the total number of XTZ staked on the other price ranges and the outcome of the previous cycle/s pool.
+              *The mentioned ROI is only applicable if your prediction is right.Else your ROI would be 0%.
+              <br/>** The maximum expected ROI is variable under the cycle and is dependent on the total number of XTZ staked on the other price ranges and the outcome of the previous cycle/s pool.
             </p>
           </Container>
         ),
