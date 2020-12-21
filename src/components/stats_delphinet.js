@@ -57,7 +57,7 @@ export default class setseller extends React.Component {
         "https://api.delphi.tzstats.com/explorer/contract/KT1AQd6KeoPyFJdY4baRyR6zCkGZV2r35K1u/storage"
       );*/
       const storagedata = await axios.get(
-        "https://cors-anywhere.herokuapp.com/https://api.delphi.tzstats.com/explorer/contract/KT1AQd6KeoPyFJdY4baRyR6zCkGZV2r35K1u/storage"
+        "https://api.delphi.tzstats.com/explorer/contract/KT1AQd6KeoPyFJdY4baRyR6zCkGZV2r35K1u/storage"
       );
       var cycle = Math.trunc(storagedata.data.meta.height / 2048);
       if(storagedata.data.value.withdrawcycle!="1"){
@@ -112,7 +112,7 @@ export default class setseller extends React.Component {
               currentCycle: cycle,
               announce: true,
               Rannounce:false,
-              Tamt:Number(storagedata.data.value.cycleDet[withdrawcycle.toString()].cAmount)/1000000
+              //Tamt:Number(storagedata.data.value.cycleDet[withdrawcycle.toString()].cAmount)/1000000
             };
           });
         }
@@ -578,7 +578,7 @@ export default class setseller extends React.Component {
                     }}
                     >
                     Carry Forwarded Amount from Previous Pool{" "} <br/>
-                    {this.state.announce?this.state.Rannounce?this.state.pool?this.state.pool+"XTZ":"0 XTZ":"TBA":"TBA"}
+                    {this.state.announce?this.state.Rannounce?this.state.pool?this.state.pool+" XTZ":"0 XTZ":"TBA":"TBA"}
                     </button>
 
                 </Col>

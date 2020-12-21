@@ -75,7 +75,7 @@ export default class setseller extends React.Component {
         "https://api.delphi.tzstats.com/explorer/contract/KT1AQd6KeoPyFJdY4baRyR6zCkGZV2r35K1u/storage"
       );*/
       const storagedata = await axios.get(
-        "https://cors-anywhere.herokuapp.com/https://api.delphi.tzstats.com/explorer/contract/KT1AQd6KeoPyFJdY4baRyR6zCkGZV2r35K1u/storage"
+        "https://api.delphi.tzstats.com/explorer/contract/KT1AQd6KeoPyFJdY4baRyR6zCkGZV2r35K1u/storage"
       );
       var cycle = Math.trunc(storagedata.data.meta.height / 2048);
       var find = JSONPath.nodes(storagedata, "$..bettor");

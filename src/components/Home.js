@@ -141,7 +141,7 @@ export default class setseller extends React.Component {
 
   async fetchCycleData() {
     const tzresponse = await axios.get(
-      "https://cors-anywhere.herokuapp.com/https://api.delphi.tzstats.com/explorer/cycle/head"
+      "https://api.delphi.tzstats.com/explorer/cycle/head"
     );
     /*const tzresponse = await axios.get(
       "https://api.delphi.tzstats.com/explorer/cycle/head/"
