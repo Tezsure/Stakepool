@@ -28,21 +28,19 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "reactstrap";
-import stakepool from "./icons/stakepool.png";
+import stakepool from "./icons/stakepool.svg";
 import bg from "./icons/background.png";
-import setting from "./icons/setting.png";
-import tz from "./icons/tz.png";
-import heart from "./icons/Heart.png";
+import setting from "./icons/setting.svg";
+import tz from "./icons/tz.svg";
+import heart from "./icons/Heart.svg";
 import tezsure from "./icons/tezsure.png";
-import youtube from "./icons/youtube.png";
-import instagram from "./icons/instagram.png";
-import google from "./icons/google.png";
-import telegram from "./icons/telegram.png";
-import linkedin from "./icons/linkedin.png";
-import twitter from "./icons/twitter.png";
+import youtube from "./icons/youtube.svg";
+import telegram from "./icons/telegram.svg";
+import linkedin from "./icons/linkedin.svg";
+import twitter from "./icons/twitter.svg";
 import up from "./icons/up.jpeg";
 import down from "./icons/down.jpeg";
-import det from "./icons/details.png";
+import det from "./icons/details.svg";
 import axios from "axios";
 import Countdown from "react-countdown-now";
 import swal from "@sweetalert/with-react";
@@ -148,7 +146,6 @@ export default class setseller extends React.Component {
     /*const tzresponse = await axios.get(
       "https://api.delphi.tzstats.com/explorer/cycle/head/"
     );*/
-    console.log(JSON.stringify(tzresponse));
     const ctime = new Date(tzresponse.data.end_time).valueOf();
     const stime = new Date(tzresponse.data.start_time).valueOf();
     const cycle = tzresponse.data.cycle;
@@ -166,7 +163,7 @@ export default class setseller extends React.Component {
 
   async fetchContractData() {
     const storagedata = await axios.get(
-      "https://api.better-call.dev/v1/contract/delphinet/KT1AkmEKWNKSqK48FTrAF9xUXZ1UdZEPcryk/storage/rich"
+      "https://api.better-call.dev/v1/contract/delphinet/KT1AQd6KeoPyFJdY4baRyR6zCkGZV2r35K1u/storage/rich"
     );
     const l = storagedata.data.args[0].args[1].args[0].length;
     const mapdata =
@@ -328,7 +325,7 @@ export default class setseller extends React.Component {
           throw new Error("Insufficient Balance in your Account to complete this transaction!");
         }
         const sell = await tezos.wallet.at(
-          "KT1AkmEKWNKSqK48FTrAF9xUXZ1UdZEPcryk"
+          "KT1AQd6KeoPyFJdY4baRyR6zCkGZV2r35K1u"
         );
         const operation = await sell.methods
           .setWager(param1.toString(), param2.toString())
@@ -425,6 +422,212 @@ export default class setseller extends React.Component {
   }
 
   render() {
+
+    let upranges = [];
+    let lowranges = [];
+    for(let i=0;i<this.state.spranges.length;i++)
+    {
+      if(i<4)
+      {
+        upranges.push(this.state.spranges[i]);
+      }
+      else
+      {
+        lowranges.push(this.state.spranges[i]);
+      }
+    }
+
+    let upperItems = (
+      <div>
+        {upranges.map((value,index)=> {
+          
+          if(index <1)
+          {
+            return (
+              <div>
+                <Row xs="4">
+                  {upranges.map((value, index)=> (
+                    <Col style={{ "padding-bottom": "1.6666667vmax" }}>
+                      <Card
+                        id={"card" + index.toString()}
+                        style={{
+                          "background-color": "#FFFFFF",
+                          "border-radius": "0.2777777778vmax",
+                        }}
+                      >
+                        <CardImg
+                          src={det}
+                          style={{
+                            width: "5vmax",
+                            height: "4.7222222222vmax",
+                            "padding-top": "1.6666666667vmax",
+                            "padding-left": "1.6666666667vmax",
+                          }}
+                        />
+                        <CardHeader
+                          style={{
+                            "background-color": "#FFFFFF",
+                            "text-align": "left",
+                            "font-family": "OpenSans-Bold, sans-serif",
+                            color: "#183B56",
+                            "font-size": "1.2152777778vmax",
+                            "letter-spacing": "0.0138888889vmax",
+                            "border-radius": "0.2083333333vmax",
+                            "padding-left": "1.6666666667vmax",
+                          }}
+                        >
+                          <strong>
+                            Price Prediction
+                            <br />
+                            {value[2] == value[3]
+                              ? value[2] > 0
+                                ? "Above $" + value[0].toString()
+                                : "Below $" + value[0].toString()
+                              : "Between $" +
+                                value[0].toString() +
+                                " - $" +
+                                value[1].toString()}
+                          </strong>
+                          <img
+                            align="right"
+                            src={value[2] < 0 ? down : up}
+                            style={{
+                              width: "1.2222222222vmax",
+                              height: "2.5vmax",
+                              "padding-right": "0.121vmax",
+                              "padding-bottom": "0.5777777778vmax",
+                            }}
+                          />
+                        </CardHeader>
+                      </Card>
+                      <UncontrolledPopover
+                        placement="bottom-start"
+                        hideArrow={true}
+                        trigger="legacy"
+                        flip={false}
+                        target={"card" + index.toString()}
+                        container={"card" + index.toString()}
+                      >
+                        <PopoverHeader
+                          style={{
+                            "text-align": "center",
+                            "font-size": "1.2152777778vmax",
+                          }}
+                        >
+                          The Predicted Price is
+                          <br />
+                          {value[2] == value[3]
+                            ? value[2] > 0
+                              ? "Above $" + value[0].toString()
+                              : "Below $" + value[0].toString()
+                            : "Between $" +
+                              value[0].toString() +
+                              " - $" +
+                              value[1].toString()}
+                        </PopoverHeader>
+                        <PopoverBody>
+                          <ul
+                            style={{
+                              "padding-left": "0.6333333333vmax",
+                              color: "#748093",
+                              "font-size": "0.9652778vmax",
+                            }}
+                          >
+                            <li
+                              style={{ "padding-bottom": "1vmax" }}
+                              style={{ "padding-bottom": "1vmax" }}
+                            >
+                              The Expected ROI currently for your inputted staking amount
+                              is{" "}
+                              {this.state.tamt == value[4]
+                                ? this.state.roi
+                                : this.state.amount !== null
+                                ? Math.round(
+                                    (10000 *
+                                      (100 - 2) *
+                                      this.state.roi *
+                                      (this.state.tamt +
+                                        this.state.amount * 1000000)) /
+                                      (100 *
+                                        (value[4] +
+                                          this.state.amount * 1000000))
+                                  ) / 10000
+                                : Math.round(
+                                    (10000 *
+                                      (100 - 2) *
+                                      this.state.roi *
+                                      (this.state.tamt + 1 * 1000000)) /
+                                      (100 * (value[4] + 1 * 1000000))
+                                  ) / 10000}
+                              %.
+                            </li>
+                            <li style={{ "padding-bottom": "1vmax" }}>
+                              The staking rewards is calculated for the cycles{" "}
+                              {this.state.currentCycle + 1}-
+                              {this.state.endCycle}.
+                            </li>
+                            <li style={{ "padding-bottom": "1vmax" }}>
+                              A fee of 2% inclusive on your winning returns is
+                              taken for the usage of the platform.
+                            </li>
+                            <li style={{ "padding-bottom": "1vmax" }}>
+                              If, at the completion of your staking period on{" "}
+                              {new Date(
+                                this.state.cycletime + this.state.duration
+                              ).toDateString()}
+                              ,the price of XTZ is in this range, then you get
+                              back your returns along with your staking
+                              investment.Else you would lose your staking
+                              returns and only get back your staking investment.{" "}
+                            </li>
+                            <li style={{ "padding-bottom": "1vmax" }}>
+                              You shall get back your staked amount (plus the
+                              winning rewards if applicable) at the conclusion
+                              of cycle {this.state.endCycle - 1} on{" "}
+                              {new Date(
+                                this.state.cycletime + this.state.duration
+                              ).toDateString()}
+                              .
+                            </li>
+                          </ul>
+                          <div align="center">
+                            <button
+                              onClick={() => {
+                                this.select(index);
+                              }}
+                              style={{
+                                "font-family": "OpenSans-Bold, sans-serif",
+                                color: "#1565D8",
+                                backgroundColor: "#FFFFFF",
+                                "text-align": "center",
+                                "font-size": "1.277778vmax",
+                                border: "0.06944vmax solid #1565D8",
+                                "border-radius": "0.556vmax",
+                                width: "9.4444444vmax",
+                                height: "2.5555555vmax",
+                                padding: "0.13889vmax 0.13889vmax ",
+                              }}
+                            >
+                              Select
+                            </button>
+                          </div>
+                        </PopoverBody>
+                      </UncontrolledPopover>
+                    </Col>
+                  ))}
+                </Row>
+              </div>
+            )
+          }
+          else
+          {
+            return null;
+          }
+        })}
+      </div>
+    )
+
+
     return (
       <Container
         fluid="xs"
@@ -468,6 +671,8 @@ export default class setseller extends React.Component {
               <NavItem>
                 <NavLink
                   href="https://www.notion.so/Stakepool-A-no-loss-price-prediction-experiment-38bc2c0e0fe540aaaa1bc91ebcdcf5c4"
+                  target="_blank" rel="noopener noreferrer"
+
                   style={{
                     "font-size": "1.1111111111vmax",
                     "font-family": "OpenSans-SemiBold, sans-serif",
@@ -480,7 +685,8 @@ export default class setseller extends React.Component {
               </NavItem>
               <NavItem>
                 <NavLink
-                  href="https://gitlab.com/tezsure/staking-market-george/-/tree/StakePool"
+                  href="https://github.com/Tezsure/Stakepool-Contracts"
+                  target="_blank" rel="noopener noreferrer"
                   style={{
                     "font-size": "1.1111111111vmax",
                     "font-family": "OpenSans-SemiBold, sans-serif",
@@ -518,8 +724,7 @@ export default class setseller extends React.Component {
                   >
                     <DropdownItem style={{ "line-height": "0.6667vmax" }}>
                       <NavLink
-                      disbled
-                        href="/"
+                        href="/mainnet"
                         style={{
                           "font-size": "1.1111111111vmax",
                           "font-family": "OpenSans-SemiBold, sans-serif",
@@ -543,6 +748,20 @@ export default class setseller extends React.Component {
                     </DropdownItem>
                   </DropdownMenu>
                 </UncontrolledButtonDropdown>
+              </NavItem>
+
+              <NavItem>
+                <NavLink
+                  href="/FAQ"
+                  style={{
+                    "font-size": "1.1111111111vmax",
+                    "font-family": "OpenSans-SemiBold, sans-serif",
+                    color: "#FFFFFF",
+                    "margin-top": "1.736vmax",
+                  }}
+                >
+                  FAQ
+                </NavLink>
               </NavItem>
 
               <NavItem>
@@ -602,8 +821,7 @@ export default class setseller extends React.Component {
                     <DropdownItem header>Stakepool</DropdownItem>
                     <DropdownItem style={{ "line-height": "0.6667vmax" }}>
                       <NavLink
-                        disabled
-                        href="/"
+                        href="/mainnet"
                         style={{
                           "font-size": "1.1111111111vmax",
                           "font-family": "OpenSans-SemiBold, sans-serif",
@@ -615,7 +833,7 @@ export default class setseller extends React.Component {
                     </DropdownItem>
                     <DropdownItem style={{ "line-height": "0.6667vmax" }}>
                       <NavLink
-                        href="/"
+                        href="/mainnet"
                         style={{
                           "font-size": "1.1111111111vmax",
                           "font-family": "OpenSans-SemiBold, sans-serif",
@@ -936,10 +1154,6 @@ export default class setseller extends React.Component {
                   "font-size": "1.1111111111vmax",
                 }}
               >
-                By submitting this form you agree to our terms and conditions
-                and our Privacy Policy which explains how we may collect, use
-                and disclose your personal information including to third
-                parties.
               </p>
               <br />
               <Row
@@ -1068,11 +1282,14 @@ export default class setseller extends React.Component {
             You can search for more details by clicking on the respective
             category below.
           </p>
+          
+            {upperItems}
+          
           <Collapse isOpen={this.state.option || this.state.help}>
             {this.state.option || this.state.help ? (
               this.state.option ? (
                 <Row xs="4">
-                  {this.state.spranges.map((value, index) => (
+                  {lowranges.map((value, index) => (
                     <Col style={{ "padding-bottom": "1.6666667vmax" }}>
                       <Card
                         id={"card" + index.toString()}
@@ -1461,30 +1678,10 @@ export default class setseller extends React.Component {
           >
             <strong>Copyright © 2020. Crafted with love.</strong>
           </p>
-          <img
-            src={google}
-            style={{
-              width: "1.125em",
-              height: "1.125em",
-              "margin-left": "1.25em",
-            }}
-          />
-          <img
-            src={youtube}
-            style={{
-              width: "1.25vmax",
-              height: "1.25vmax",
-              "margin-left": "1.3888888889vmax",
-            }}
-          />
-          <img
-            src={telegram}
-            style={{
-              width: "1.25vmax",
-              height: "1.25vmax",
-              "margin-left": "1.3888888889vmax",
-            }}
-          />
+          <a
+          href="https://tezsure.com"
+          target="_blank" rel="noopener noreferrer"
+          >
           <img
             src={tezsure}
             style={{
@@ -1493,6 +1690,11 @@ export default class setseller extends React.Component {
               "margin-left": "1.3888888889vmax",
             }}
           />
+          </a>
+          <a
+          href="https://twitter.com/tezsure"
+          target="_blank" rel="noopener noreferrer"
+          >
           <img
             src={twitter}
             style={{
@@ -1501,6 +1703,11 @@ export default class setseller extends React.Component {
               "margin-left": "1.3888888889vmax",
             }}
           />
+          </a>
+          <a
+          href="https://www.linkedin.com/company/tezsure/"
+          target="_blank" rel="noopener noreferrer"
+          >
           <img
             src={linkedin}
             style={{
@@ -1509,14 +1716,33 @@ export default class setseller extends React.Component {
               "margin-left": "1.3888888889vmax",
             }}
           />
+          </a>
+          <a
+          href="https://www.youtube.com/channel/UCZg7LT1bFWeFiKwGBLcLfLQ"
+          target="_blank" rel="noopener noreferrer"
+          >
           <img
-            src={instagram}
+            src={youtube}
             style={{
               width: "1.25vmax",
               height: "1.25vmax",
               "margin-left": "1.3888888889vmax",
             }}
           />
+          </a>
+          <a
+          href="https://web.telegram.org/#/im?p=@Indiatezos"
+          target="_blank" rel="noopener noreferrer"
+          >
+          <img
+            src={telegram}
+            style={{
+              width: "1.25vmax",
+              height: "1.25vmax",
+              "margin-left": "1.3888888889vmax",
+            }}
+          />
+          </a>
         </Container>
       </Container>
     );

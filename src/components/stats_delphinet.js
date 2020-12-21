@@ -18,21 +18,16 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "reactstrap";
-import classnames from "classnames";
-import stakepool from "./icons/stakepool.png";
+import stakepool from "./icons/stakepool.svg";
 import bg from "./icons/background.png";
-import setting from "./icons/setting.png";
-import heart from "./icons/Heart.png";
+import setting from "./icons/setting.svg";
+import heart from "./icons/Heart.svg";
 import tezsure from "./icons/tezsure.png";
-import youtube from "./icons/youtube.png";
-import instagram from "./icons/instagram.png";
-import google from "./icons/google.png";
-import telegram from "./icons/telegram.png";
-import linkedin from "./icons/linkedin.png";
-import twitter from "./icons/twitter.png";
+import youtube from "./icons/youtube.svg";
+import telegram from "./icons/telegram.svg";
+import linkedin from "./icons/linkedin.svg";
+import twitter from "./icons/twitter.svg";
 import axios from "axios";
-import swal from "@sweetalert/with-react";
-import { JSONPath } from "@astronautlabs/jsonpath";
 import { animateScroll as scroll } from "react-scroll";
 
 export default class setseller extends React.Component {
@@ -42,7 +37,7 @@ export default class setseller extends React.Component {
     this.state = {
       currentCycle: null,
       winning: [],
-      tamt: null,
+      Tamt: null,
       pool:null,
       announce: true,
       Rannounce:true
@@ -59,12 +54,11 @@ export default class setseller extends React.Component {
 
   async stakingStats() {
       /*const storagedata = await axios.get(
-        "https://api.delphi.tzstats.com/explorer/contract/KT1AkmEKWNKSqK48FTrAF9xUXZ1UdZEPcryk/storage"
+        "https://api.delphi.tzstats.com/explorer/contract/KT1AQd6KeoPyFJdY4baRyR6zCkGZV2r35K1u/storage"
       );*/
       const storagedata = await axios.get(
-        "https://cors-anywhere.herokuapp.com/https://api.delphi.tzstats.com/explorer/contract/KT1AkmEKWNKSqK48FTrAF9xUXZ1UdZEPcryk/storage"
+        "https://cors-anywhere.herokuapp.com/https://api.delphi.tzstats.com/explorer/contract/KT1AQd6KeoPyFJdY4baRyR6zCkGZV2r35K1u/storage"
       );
-      console.log(storagedata);
       var cycle = Math.trunc(storagedata.data.meta.height / 2048);
       if(storagedata.data.value.withdrawcycle!="1"){
         if(Number(storagedata.data.value.withdrawcycle)>6){
@@ -82,16 +76,19 @@ export default class setseller extends React.Component {
                 Number(storagedata.data.value.cycleDet[withdrawcycle.toString()].cPrice)) /
               10000;
             if((lrange==urange)&&(key[0]=="-")&&(wprice<lrange)){
+              var negative=true;
               var reward=Number(storagedata.data.value.cycleDet[withdrawcycle.toString()].betDet[key].winnings)/1000000;
               var cAmt=Number(storagedata.data.value.cycleDet[withdrawcycle.toString()].betDet[key].amt)/1000000;
               break;
             }
             if((lrange==urange)&&(key[0]!="-")&&(wprice>=urange)){
+              var negative=false;
               var reward=Number(storagedata.data.value.cycleDet[withdrawcycle.toString()].betDet[key].winnings)/1000000;
               var cAmt=Number(storagedata.data.value.cycleDet[withdrawcycle.toString()].betDet[key].amt)/1000000;
               break;
             }
             if((lrange!=urange)&&(wprice>=lrange)&&(wprice<urange)){
+              var negative=false;
               var reward=Number(storagedata.data.value.cycleDet[withdrawcycle.toString()].betDet[key].winnings)/1000000;
               var cAmt=Number(storagedata.data.value.cycleDet[withdrawcycle.toString()].betDet[key].amt)/1000000;
               break;
@@ -104,7 +101,7 @@ export default class setseller extends React.Component {
               Rannounce:true,
               Tamt:Number(storagedata.data.value.cycleDet[withdrawcycle.toString()].cAmount)/1000000,
               pool:Number(storagedata.data.value.interestPool)/1000000,
-              winning:[lrange,urange,wprice,reward,cAmt]
+              winning:[lrange.toFixed(2),urange.toFixed(2),wprice,reward,cAmt,negative]
             };
           });
 
@@ -176,6 +173,7 @@ export default class setseller extends React.Component {
             <NavItem>
               <NavLink
                 href="https://www.notion.so/Stakepool-A-no-loss-price-prediction-experiment-38bc2c0e0fe540aaaa1bc91ebcdcf5c4"
+                target="_blank" rel="noopener noreferrer"
                 style={{
                   "font-size": "1.1111111111vmax",
                   "font-family": "OpenSans-SemiBold, sans-serif",
@@ -188,7 +186,8 @@ export default class setseller extends React.Component {
             </NavItem>
             <NavItem>
               <NavLink
-                href="https://gitlab.com/tezsure/staking-market-george/-/tree/StakePool"
+                href="https://github.com/Tezsure/Stakepool-Contracts"
+                target="_blank" rel="noopener noreferrer"
                 style={{
                   "font-size": "1.1111111111vmax",
                   "font-family": "OpenSans-SemiBold, sans-serif",
@@ -226,8 +225,7 @@ export default class setseller extends React.Component {
                 >
                   <DropdownItem style={{ "line-height": "0.6667vmax" }}>
                     <NavLink
-                    disabled
-                      href="/statsmainnet"
+                      href="/mainnet"
                       style={{
                         "font-size": "1.1111111111vmax",
                         "font-family": "OpenSans-SemiBold, sans-serif",
@@ -252,6 +250,20 @@ export default class setseller extends React.Component {
                 </DropdownMenu>
               </UncontrolledButtonDropdown>
             </NavItem>
+
+            <NavItem>
+                <NavLink
+                  href="/FAQ"
+                  style={{
+                    "font-size": "1.1111111111vmax",
+                    "font-family": "OpenSans-SemiBold, sans-serif",
+                    color: "#FFFFFF",
+                    "margin-top": "1.736vmax",
+                  }}
+                >
+                  FAQ
+                </NavLink>
+              </NavItem>
 
             <NavItem>
               <NavLink
@@ -310,8 +322,7 @@ export default class setseller extends React.Component {
                   <DropdownItem header>Stakepool</DropdownItem>
                   <DropdownItem style={{ "line-height": "0.6667vmax" }}>
                     <NavLink
-                    disabled
-                      href="/"
+                      href="/mainnet"
                       style={{
                         "font-size": "1.1111111111vmax",
                         "font-family": "OpenSans-SemiBold, sans-serif",
@@ -367,7 +378,7 @@ export default class setseller extends React.Component {
             <strong>
               Previous Staking Period
               <br />
-              Cycle {this.state.currentCycle} Stats
+              Cycle {this.state.currentCycle+1} - {this.state.currentCycle+6} Stats
             </strong>
           </p>
           <Card
@@ -391,7 +402,7 @@ export default class setseller extends React.Component {
                 }}
                 >
                     <button
-                    disabled  
+                    disabled
                     style={{
                       color: "white",
                         backgroundColor: "#4868c2",
@@ -406,12 +417,20 @@ export default class setseller extends React.Component {
 
                     }}
                     >
-                      Winning Price{" "}<br/>
-                      {this.state.announce?this.state.Rannounce?"$"+this.state.winning[2]:"TBA":"TBA"}
+                      Winning Price Range{" "}<br/>
+                      {this.state.announce?this.state.Rannounce?this.state.winning[0] == this.state.winning[1]
+                        ? this.state.winning[5]
+                          ? "Below $" + this.state.winning[0]
+                          : "Above $" + this.state.winning[0]
+                        : "Between $" +
+                          this.state.winning[0] +
+                          " - $" +
+                          this.state.winning[1]
+                      :"TBA":"TBA"}
                     </button>
 
                 </Col>
-                
+
                 <Col
                 style={{
                     "text-align": "left",
@@ -436,7 +455,7 @@ export default class setseller extends React.Component {
                     }}
                     >
                       Total Bet Amount<br/>
-                      {this.state.announce?this.state.tamt?this.state.tamt.toString()+"XTZ":"0 XTZ":"TBA"}
+                      {this.state.announce?this.state.Tamt?this.state.Tamt.toString()+" XTZ":"0 XTZ":"TBA"}
                     </button>
 
                 </Col>
@@ -469,7 +488,7 @@ export default class setseller extends React.Component {
                     }}
                     >
                     Winners Aggregate ROI{" "}<br/>
-                    {this.state.announce?this.state.Rannounce?this.state.winning[4]?this.state.winning[3]*100/this.state.winning[4]+"%":"0%":"TBA":"TBA"}
+                    {this.state.announce?this.state.Rannounce?this.state.winning[4]?(this.state.winning[3]*100/this.state.winning[4]).toFixed(4)+"%":"0%":"TBA":"TBA"}
                     </button>
 
                 </Col>
@@ -499,7 +518,7 @@ export default class setseller extends React.Component {
                     }}
                     >
                     Total Pool Rewards Won{" "}<br/>
-                    {this.state.announce?this.state.Rannounce?this.state.winning[3]?this.state.winning[3]+"XTZ":"0 XTZ":"TBA":"TBA"}
+                    {this.state.announce?this.state.Rannounce?this.state.winning[3]?this.state.winning[3]+" XTZ":"0 XTZ":"TBA":"TBA"}
                     </button>
 
                 </Col>
@@ -530,7 +549,7 @@ export default class setseller extends React.Component {
                     }}
                     >
                     Total Amount in Winning Range{" "}<br/>
-                    {this.state.announce?this.state.Rannounce?this.state.winning[4]?this.state.winning[4]+"XTZ":"0 XTZ":"TBA":"TBA"}
+                    {this.state.announce?this.state.Rannounce?this.state.winning[4]?this.state.winning[4]+" XTZ":"0 XTZ":"TBA":"TBA"}
                     </button>
 
                 </Col>
@@ -640,30 +659,10 @@ export default class setseller extends React.Component {
           >
             <strong>Copyright © 2020. Crafted with love.</strong>
           </p>
-          <img
-            src={google}
-            style={{
-              width: "1.125em",
-              height: "1.125em",
-              "margin-left": "1.25em",
-            }}
-          />
-          <img
-            src={youtube}
-            style={{
-              width: "1.25vmax",
-              height: "1.25vmax",
-              "margin-left": "1.3888888889vmax",
-            }}
-          />
-          <img
-            src={telegram}
-            style={{
-              width: "1.25vmax",
-              height: "1.25vmax",
-              "margin-left": "1.3888888889vmax",
-            }}
-          />
+          <a
+          href="https://tezsure.com"
+          target="_blank" rel="noopener noreferrer"
+          >
           <img
             src={tezsure}
             style={{
@@ -672,6 +671,11 @@ export default class setseller extends React.Component {
               "margin-left": "1.3888888889vmax",
             }}
           />
+          </a>
+          <a
+          href="https://twitter.com/tezsure"
+          target="_blank" rel="noopener noreferrer"
+          >
           <img
             src={twitter}
             style={{
@@ -680,22 +684,46 @@ export default class setseller extends React.Component {
               "margin-left": "1.3888888889vmax",
             }}
           />
+          </a>
+          <a
+          href="https://www.linkedin.com/company/tezsure/"
+          target="_blank" rel="noopener noreferrer"
+          >
           <img
-            src={linkedin} 
+            src={linkedin}
             style={{
               width: "1.25vmax",
               height: "1.25vmax",
               "margin-left": "1.3888888889vmax",
             }}
           />
+          </a>
+          <a
+          href="https://www.youtube.com/channel/UCZg7LT1bFWeFiKwGBLcLfLQ"
+          target="_blank" rel="noopener noreferrer"
+          >
           <img
-            src={instagram}
+            src={youtube}
             style={{
               width: "1.25vmax",
               height: "1.25vmax",
               "margin-left": "1.3888888889vmax",
             }}
           />
+          </a>
+          <a
+          href="https://web.telegram.org/#/im?p=@Indiatezos"
+          target="_blank" rel="noopener noreferrer"
+          >
+          <img
+            src={telegram}
+            style={{
+              width: "1.25vmax",
+              height: "1.25vmax",
+              "margin-left": "1.3888888889vmax",
+            }}
+          />
+          </a>
         </Container>
       </Container>
     );

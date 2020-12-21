@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="131" height="131" viewBox="0 0 131 131">
+  <defs>
+    <filter id="Base" x="0" y="0" width="131" height="131" filterUnits="userSpaceOnUse">
+      <feOffset dy="5" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="12.5" result="blur"/>
+      <feFlood flood-opacity="0.2"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="Group_37424" data-name="Group 37424" transform="translate(-783.5 -2771.5)">
+    <g id="Group_37423" data-name="Group 37423">
+      <g id="Heart" transform="translate(821 2804)">
+        <g transform="matrix(1, 0, 0, 1, -37.5, -32.5)" filter="url(#Base)">
+          <rect id="Base-2" data-name="Base" width="56" height="56" rx="28" transform="translate(37.5 32.5)" fill="#1576d8"/>
+        </g>
+      </g>
+      <path id="heart_1_" data-name="heart (1)" d="M23.86,2.256A6.969,6.969,0,0,0,18.676,0,6.519,6.519,0,0,0,14.6,1.406a8.331,8.331,0,0,0-1.646,1.719,8.326,8.326,0,0,0-1.646-1.719A6.518,6.518,0,0,0,7.24,0,6.969,6.969,0,0,0,2.056,2.256,8.1,8.1,0,0,0,0,7.788,9.646,9.646,0,0,0,2.571,14.1,54.809,54.809,0,0,0,9,20.141c.892.76,1.9,1.621,2.951,2.538a1.521,1.521,0,0,0,2,0c1.049-.918,2.06-1.779,2.952-2.539A54.778,54.778,0,0,0,23.345,14.1a9.645,9.645,0,0,0,2.57-6.314A8.1,8.1,0,0,0,23.86,2.256Zm0,0" transform="translate(836 2823)" fill="#f9fbfe"/>
+    </g>
+  </g>
+</svg>
