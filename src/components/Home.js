@@ -1267,7 +1267,7 @@ export default class setseller extends React.Component {
                   "letter-spacing": "0.0138888889vmax",
                 }}
               >
-                <strong> {this.state.option ? "COLLAPSE" : "SHOW ALL"}</strong>
+                <strong> {this.state.option ? "SHOW LESS" : "SHOW MORE"}</strong>
               </button>
             </Col>
           </Row>

@@ -59,20 +59,20 @@ export default class setseller extends React.Component {
       const storagedata = await axios.get(
         "https://api.delphi.tzstats.com/explorer/contract/KT1AQd6KeoPyFJdY4baRyR6zCkGZV2r35K1u/storage"
       );
+      var withdrawcycle=Number(storagedata.data.value.withdrawcycle);
       var cycle = Math.trunc(storagedata.data.meta.height / 2048);
       if(storagedata.data.value.withdrawcycle!="1"){
         if(Number(storagedata.data.value.withdrawcycle)>6){
           cycle=cycle-6;
-          var withdrawcycle=Number(storagedata.data.value.withdrawcycle);
           var wprice=Number(storagedata.data.value.cycleDet[withdrawcycle.toString()].cPrice)/100;
           withdrawcycle=withdrawcycle-6;
           for(var key of Object.keys(storagedata.data.value.cycleDet[withdrawcycle.toString()].betDet)){
             var lrange =
-              ((100 - Number(key.slice(0, key.indexOf("#"))) / 100) *
+              ((100 + Number(key.slice(0, key.indexOf("#"))) / 100) *
                 Number(storagedata.data.value.cycleDet[withdrawcycle.toString()].cPrice)) /
               10000;
             var urange =
-              ((100 - Number(key.slice(key.indexOf("#") + 1)) / 100) *
+              ((100 + Number(key.slice(key.indexOf("#") + 1)) / 100) *
                 Number(storagedata.data.value.cycleDet[withdrawcycle.toString()].cPrice)) /
               10000;
             if((lrange==urange)&&(key[0]=="-")&&(wprice<lrange)){
@@ -112,7 +112,7 @@ export default class setseller extends React.Component {
               currentCycle: cycle,
               announce: true,
               Rannounce:false,
-              //Tamt:Number(storagedata.data.value.cycleDet[withdrawcycle.toString()].cAmount)/1000000
+              Tamt:Number(storagedata.data.value.cycleDet[withdrawcycle.toString()].cAmount)/1000000
             };
           });
         }
