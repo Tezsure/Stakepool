@@ -112,7 +112,7 @@ export default class setseller extends React.Component {
               currentCycle: cycle,
               announce: true,
               Rannounce:false,
-              Tamt:Number(storagedata.data.value.cycleDet[withdrawcycle.toString()].cAmount)/1000000
+              Tamt:Number(storagedata.data.value.cycleDet["1"].cAmount)/1000000
             };
           });
         }
