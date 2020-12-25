@@ -334,7 +334,7 @@ export default class setseller extends React.Component {
             "padding-right": 20,
             }}
         >
-        Stakepool is a price prediction platform which helps you earn more than delegating your tokens to your baker.
+        Stakepool is a price prediction platform which can help you earn more than delegating your tokens to a baker, if your prediction is correct.
         </p>
 
         <h2
@@ -378,7 +378,7 @@ export default class setseller extends React.Component {
             "padding-right": 20,
             }}
         >
-        <strong>How is Stakepool different from other betting platforms?</strong>
+        <strong>For what duration of period is my stake delegated to a baker?</strong>
         </h2>
         <br/>
 
@@ -392,9 +392,8 @@ export default class setseller extends React.Component {
             "padding-right": 20,
             }}
         >
-        In other betting platform you loose your bet amount if your prediction turns out be wrong, here in Stakepool you get your bet amount back.
-        <br/>
-        If you win then you get rewards just like any other betting platform.
+        Suppose you have submitted your stake and its associated prediction details at cycle 150, 
+        then your stake will be delegated for the period of cycle 151-156 and 151-158 on delphinet and mainnet respectively. 
         </p>
 
         <h2
@@ -408,7 +407,7 @@ export default class setseller extends React.Component {
             "padding-right": 20,
             }}
         >
-        <strong>How it works?</strong>
+        <strong>When and how is a winner of a particular staking period chosen?</strong>
         </h2>
         <br/>
 
@@ -422,9 +421,37 @@ export default class setseller extends React.Component {
             "padding-right": 20,
             }}
         >
-        When you bet on Stakepool your bet amount gets locked for 6 cycles and is delegated to a baker. 
-        The baker then sends us the rewards after 6 cycles which is distributed among winners after deduction of platform usage fee. 
-        All the participants get their staked amount back.
+        Considering the above scenario, at the beginning of cycle 156 or 158, for delphinet and mainnet respectively,
+        the winning range and winners are chosen based on the price of XTZ at the conclusion of the staking period i.e at the beginning of cycle 156 and 158 for delphinet and mainnet respectively.
+        </p>
+
+        <h2
+        style=
+            {{
+            // "font-size": "4.1111111111vmax",
+            "font-family": "OpenSans-SemiBold, sans-serif",
+            color: "black",
+            "margin-top": "2.736vmax",
+            "padding-left": 40,
+            "padding-right": 20,
+            }}
+        >
+        <strong>When can I expect my initial amount back into my address?</strong>
+        </h2>
+        <br/>
+
+        <p
+        style=
+            {{
+            "font-size": "1.6111111111vmax",
+            "font-family": "OpenSans-SemiBold, sans-serif",
+            color: "black",
+            "padding-left": 40,
+            "padding-right": 20,
+            }}
+        >
+        Considering the above scenario, at the conclusion of the staking period at the beginning of the cycle 156 and 158 for delphinet and mainnet respectively,
+        the initial staking investment along with any winnings would be transferred back to your accounts without any delay. 
         </p>
 
         <h2
@@ -465,10 +492,10 @@ export default class setseller extends React.Component {
             color: "black",
             "margin-top": "2.736vmax",
             "padding-left": 40,
-            "padding-right": 20,            
+            "padding-right": 20,
             }}
         >
-        <strong>Is my money safe?</strong>
+        <strong>How is Stakepool different from other betting platforms?</strong>
         </h2>
         <br/>
 
@@ -482,8 +509,9 @@ export default class setseller extends React.Component {
             "padding-right": 20,
             }}
         >
-        Absolutely !  All the payouts are managed by our smart contract and there is no way to redirect them. 
-        You can go through our smart contract to know how we disburse payment effectively.
+        In other betting platform you loose your bet amount if your prediction turns out be wrong, here in Stakepool you get your bet amount back.
+        <br/>
+        If you win then you get rewards just like any other betting platform.
         </p>
 
         <h2
@@ -511,6 +539,35 @@ export default class setseller extends React.Component {
         >
         Well, there is no fixed ROI, your rewards are directly proportional to the amount staked on a particular cycle, 
         so if you want to earn more rewards then invite your friends on stakepool.
+        </p>
+
+        <h2
+        style=
+            {{
+            // "font-size": "4.1111111111vmax",
+            "font-family": "OpenSans-SemiBold, sans-serif",
+            color: "black",
+            "margin-top": "2.736vmax",
+            "padding-left": 40,
+            "padding-right": 20,            
+            }}
+        >
+        <strong>Is my money safe?</strong>
+        </h2>
+        <br/>
+
+        <p
+        style=
+            {{
+            "font-size": "1.6111111111vmax",
+            "font-family": "OpenSans-SemiBold, sans-serif",
+            color: "black",
+            "padding-left": 40,
+            "padding-right": 20,
+            }}
+        >
+        Absolutely !  All the payouts are managed by our smart contract and there is no way to redirect them. 
+        You can go through our smart contract to know how we disburse payment effectively.
         </p>
 
         <h2
