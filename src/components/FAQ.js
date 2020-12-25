@@ -522,33 +522,6 @@ export default class setseller extends React.Component {
             color: "black",
             "margin-top": "2.736vmax",
             "padding-left": 40,
-            }}
-        >
-        <strong>How much profit  can I expect from Stakepool?</strong>
-        </h2>
-        <br/>
-        <p
-        style=
-            {{
-            "font-size": "1.6111111111vmax",
-            "font-family": "OpenSans-SemiBold, sans-serif",
-            color: "black",
-            "padding-left": 40,
-            "padding-right": 20,
-            }}
-        >
-        Well, there is no fixed ROI, your rewards are directly proportional to the amount staked on a particular cycle, 
-        so if you want to earn more rewards then invite your friends on stakepool.
-        </p>
-
-        <h2
-        style=
-            {{
-            // "font-size": "4.1111111111vmax",
-            "font-family": "OpenSans-SemiBold, sans-serif",
-            color: "black",
-            "margin-top": "2.736vmax",
-            "padding-left": 40,
             "padding-right": 20,            
             }}
         >
@@ -568,6 +541,33 @@ export default class setseller extends React.Component {
         >
         Absolutely !  All the payouts are managed by our smart contract and there is no way to redirect them. 
         You can go through our smart contract to know how we disburse payment effectively.
+        </p>
+
+        <h2
+        style=
+            {{
+            // "font-size": "4.1111111111vmax",
+            "font-family": "OpenSans-SemiBold, sans-serif",
+            color: "black",
+            "margin-top": "2.736vmax",
+            "padding-left": 40,
+            }}
+        >
+        <strong>How much profit  can I expect from Stakepool?</strong>
+        </h2>
+        <br/>
+        <p
+        style=
+            {{
+            "font-size": "1.6111111111vmax",
+            "font-family": "OpenSans-SemiBold, sans-serif",
+            color: "black",
+            "padding-left": 40,
+            "padding-right": 20,
+            }}
+        >
+        Well, there is no fixed ROI, your rewards are directly proportional to the amount staked on a particular cycle, 
+        so if you want to earn more rewards then invite your friends on stakepool.
         </p>
 
         <h2
