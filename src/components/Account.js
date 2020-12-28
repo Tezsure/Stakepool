@@ -86,13 +86,13 @@ export default class setseller extends React.Component {
         var entry = [];
         var roi;
         var lrange =
-          ((100 + Number(x.path[6].slice(0, x.path[6].indexOf("#"))) / 100) *
-            Number(storagedata.data.value.cycleDet[x.path[4]].cPrice)) /
-          10000;
+          Math.trunc((100 + Number(x.path[6].slice(0, x.path[6].indexOf("#"))))  *
+            Number(storagedata.data.value.cycleDet[x.path[4]].cPrice) /
+          10000)/100;
         var urange =
-          ((100 + Number(x.path[6].slice(x.path[6].indexOf("#") + 1)) / 100) *
-            Number(storagedata.data.value.cycleDet[x.path[4]].cPrice)) /
-          10000;
+          Math.trunc((100 + Number(x.path[6].slice(x.path[6].indexOf("#") + 1)))  *
+            Number(storagedata.data.value.cycleDet[x.path[4]].cPrice) /
+            10000)/100;
         var wPrice;
         var winning =
           (parseFloat(
