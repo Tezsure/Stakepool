@@ -68,13 +68,13 @@ export default class setseller extends React.Component {
           withdrawcycle=withdrawcycle-6;
           for(var key of Object.keys(storagedata.data.value.cycleDet[withdrawcycle.toString()].betDet)){
             var lrange =
-              ((100 + Number(key.slice(0, key.indexOf("#"))) / 100) *
-                Number(storagedata.data.value.cycleDet[withdrawcycle.toString()].cPrice)) /
-              10000;
+              Math.trunc((100 + Number(key.slice(0, key.indexOf("#")))) *
+                Number(storagedata.data.value.cycleDet[withdrawcycle.toString()].cPrice) /
+                10000)/100;
             var urange =
-              ((100 + Number(key.slice(key.indexOf("#") + 1)) / 100) *
-                Number(storagedata.data.value.cycleDet[withdrawcycle.toString()].cPrice)) /
-              10000;
+              Math.trunc((100 + Number(key.slice(key.indexOf("#")+ 1))) *
+                Number(storagedata.data.value.cycleDet[withdrawcycle.toString()].cPrice) /
+                10000)/100;
             if((lrange==urange)&&(key[0]=="-")&&(wprice<lrange)){
               var negative=true;
               var reward=Number(storagedata.data.value.cycleDet[withdrawcycle.toString()].betDet[key].winnings)/1000000;
