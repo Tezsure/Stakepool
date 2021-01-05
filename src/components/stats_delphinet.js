@@ -577,7 +577,7 @@ export default class setseller extends React.Component {
                         "line-height": "2.55555556vmax",
                     }}
                     >
-                    Carry Forwarded Amount from Previous Pool{" "} <br/>
+                    Carry Forwarded Amount to Current Pool{" "} <br/>
                     {this.state.announce?this.state.Rannounce?this.state.pool?this.state.pool+" XTZ":"0 XTZ":"TBA":"TBA"}
                     </button>
 
@@ -666,8 +666,8 @@ export default class setseller extends React.Component {
           <img
             src={tezsure}
             style={{
-              width: "1.25vmax",
-              height: "1.25vmax",
+              width: "1.2vmax",
+              height: "1.2vmax",
               "margin-left": "1.3888888889vmax",
             }}
           />

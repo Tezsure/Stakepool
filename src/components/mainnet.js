@@ -331,8 +331,8 @@ export default class setseller extends React.Component {
           <img
             src={tezsure}
             style={{
-              width: "1.25vmax",
-              height: "1.25vmax",
+              width: "1.2vmax",
+              height: "1.2vmax",
               "margin-left": "1.3888888889vmax",
             }}
           />
