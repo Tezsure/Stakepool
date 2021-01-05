@@ -33,7 +33,7 @@ import bg from "./icons/background.png";
 import setting from "./icons/setting.svg";
 import tz from "./icons/tz.svg";
 import heart from "./icons/Heart.svg";
-import tezsure from "./icons/tezsure.png";
+import tezsure from "./icons/tezsure.jpg";
 import youtube from "./icons/youtube.svg";
 import telegram from "./icons/telegram.svg";
 import linkedin from "./icons/linkedin.svg";
@@ -1677,7 +1677,7 @@ export default class setseller extends React.Component {
               "font-size": "1.34027778vmax",
             }}
           >
-            <strong>Copyright © 2020. Crafted with love.</strong>
+            <strong>Copyright © 2021. Crafted with love.</strong>
           </p>
           <a
           href="https://tezsure.com"
