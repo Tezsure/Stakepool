@@ -378,6 +378,34 @@ export default class setseller extends React.Component {
             "padding-right": 20,
             }}
         >
+        <strong>On which systems Stakepool is supported?</strong>
+        </h2>
+        <br/>
+
+        <p
+        style=
+            {{
+            "font-size": "1.6111111111vmax",
+            "font-family": "OpenSans-SemiBold, sans-serif",
+            color: "black",
+            "padding-left": 40,
+            "padding-right": 20,
+            }}
+        >
+        You can use any system on which you can install Thanos wallet upon Chrome or Firefox.
+        </p>
+
+        <h2
+        style=
+            {{
+            // "font-size": "4.1111111111vmax",
+            "font-family": "OpenSans-SemiBold, sans-serif",
+            color: "black",
+            "margin-top": "2.736vmax",
+            "padding-left": 40,
+            "padding-right": 20,
+            }}
+        >
         <strong>Which range should I choose if my predicted value is at extremes of two ranges?</strong>
         </h2>
         <br/>
