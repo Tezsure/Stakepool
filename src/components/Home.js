@@ -182,13 +182,12 @@ export default class setseller extends React.Component {
       for (i in mapdata) {
         var sprange = [];
         lRange =
-        lRange =
         Math.trunc(parseInt(price) +
-            parseInt((price * mapdata[i].args[0].args[0].int) / 10000)) /
+            parseInt((price * mapdata[i].args[0].args[0].int)) / 10000) /
           100;
         uRange =
         Math.trunc(parseInt(price) +
-            parseInt((price * mapdata[i].args[0].args[1].int) / 10000)) /
+            parseInt((price * mapdata[i].args[0].args[1].int)) / 10000) /
           100;
         sprange = [
           lRange.toFixed(2),
