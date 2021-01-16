@@ -163,38 +163,35 @@ export default class setseller extends React.Component {
 
   async fetchContractData() {
     const storagedata = await axios.get(
-      "https://api.better-call.dev/v1/contract/delphinet/KT1AQd6KeoPyFJdY4baRyR6zCkGZV2r35K1u/storage/rich"
+      "https://api.delphi.tzstats.com/explorer/contract/KT1AQd6KeoPyFJdY4baRyR6zCkGZV2r35K1u/storage"
     );
-    const l = storagedata.data.args[0].args[1].args[0].length;
-    const mapdata =
-      storagedata.data.args[0].args[1].args[0][l - 1].args[1].args[0];
+    const withdrawcycle = storagedata.data.value.withdrawcycle;
     const price =
-      storagedata.data.args[0].args[1].args[0][l - 1].args[1].args[1].args[1]
-        .int;
-    const rate = parseInt(storagedata.data.args[1].args[1].args[0].int) / 100;
+      parseInt(storagedata.data.value.cycleDet[withdrawcycle.toString()].cPrice);
+    const rate = parseInt(storagedata.data.value.rate) / 100;
     const tamount = parseInt(
-      storagedata.data.args[0].args[1].args[0][l - 1].args[1].args[1].args[0]
-        .int
+      storagedata.data.value.cycleDet[withdrawcycle.toString()].cAmount
     );
     if (this.state.tamt != tamount) {
       var sp = [];
-      var i, lRange, uRange;
-      for (i in mapdata) {
+      //var i, lRange, uRange;
+      for(var key of Object.keys(storagedata.data.value.cycleDet[withdrawcycle.toString()].betDet)){
+        var lRange =
+              Math.trunc((100 + (Number(key.slice(0, key.indexOf("#"))) / 100)) *
+                Number(storagedata.data.value.cycleDet[withdrawcycle.toString()].cPrice)/100) /
+              100;
+        var uRange =
+            Math.trunc((100 + (Number(key.slice(key.indexOf("#")+1)) / 100)) *
+                Number(storagedata.data.value.cycleDet[withdrawcycle.toString()].cPrice)/100) /
+            100;
         var sprange = [];
-        lRange =
-        Math.trunc(parseInt(price) +
-            parseInt((price * mapdata[i].args[0].args[0].int)) / 10000) /
-          100;
-        uRange =
-        Math.trunc(parseInt(price) +
-            parseInt((price * mapdata[i].args[0].args[1].int)) / 10000) /
-          100;
+
         sprange = [
           lRange.toFixed(2),
           uRange.toFixed(2),
-          parseInt(mapdata[i].args[0].args[0].int),
-          parseInt(mapdata[i].args[0].args[1].int),
-          parseInt(mapdata[i].args[1].args[0].int),
+          parseInt(key.slice(0, key.indexOf("#"))),
+          parseInt(key.slice(key.indexOf("#")+1)),
+          parseInt(storagedata.data.value.cycleDet[withdrawcycle.toString()].betDet[key].amt),
         ];
         sp.push(sprange);
       }
