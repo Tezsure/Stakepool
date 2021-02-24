@@ -29,10 +29,10 @@ export default class setbuyer extends React.Component {
         const accountBalance = await tezos.tz.getBalance(accountPkh);
         console.info(`address: ${accountPkh}, balance: ${accountBalance}`);
         const strikeprice=this.state.sprice*100
-        const amt=this.state.amount
+        const amountInRange=this.state.amount
 
         const buy = await tezos.wallet.at("KT1FTfe28g6sgEsQ75MA8J6WHRdV9w5oit1b");
-        const operation = await buy.methods.setBuyer(strikeprice).send({ amount: amt });
+        const operation = await buy.methods.setBuyer(strikeprice).send({ amount: amountInRange });
         const transtat = await operation.confirmation();
         const getCircularReplacer = () => {
           const seen = new WeakSet();
@@ -70,7 +70,7 @@ export default class setbuyer extends React.Component {
         <label>&emsp;&emsp;&emsp;Enter the price you estimate XTZ/USD will fall below during the staking period: </label>
         <input type="number" className="inputStyle" placeholder="1.00" step="0.01" value={this.state.sprice} onChange={ (eve) => { this.setState({ sprice: Number(eve.target.value) }) } }/>
         <br/><br/>
-        <label>&emsp;&emsp;&emsp;Enter the amount of XTZ you are willing to invest for this wager condition: </label>
+        <label>&emsp;&emsp;&emsp;Enter the amount of XTZ you are willing to betAmount for this wager condition: </label>
         <input type="number" className="inputStyle" placeholder="1.000000" step="0.000001" value={this.state.amount} onChange={ (eve) => { this.setState({ amount: Number(eve.target.value) })} } />
         <br/><br/>
         <br/><br/>

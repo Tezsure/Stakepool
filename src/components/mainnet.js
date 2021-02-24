@@ -36,7 +36,7 @@ export default class setseller extends React.Component {
     this.state = {
       currentCycle: null,
       winning: [],
-      tamt: null,
+      tamountInRange: null,
       pool:null,
       announce: true,
       Rannounce:true

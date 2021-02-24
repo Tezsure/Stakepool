@@ -40,7 +40,7 @@ import linkedin from "./icons/linkedin.svg";
 import twitter from "./icons/twitter.svg";
 import up from "./icons/up.jpeg";
 import down from "./icons/down.jpeg";
-import det from "./icons/details.svg";
+import bettorsDetails from "./icons/bettorsDetailsails.svg";
 import axios from "axios";
 import Countdown from "react-countdown-now";
 import swal from "@sweetalert/with-react";
@@ -59,7 +59,7 @@ export default class setseller extends React.Component {
       error: false,
       errMsg: "",
       spranges: [],
-      tamt: null,
+      tamountInRange: null,
       roi: null,
       duration: null,
       currentCycle: null,
@@ -167,22 +167,22 @@ export default class setseller extends React.Component {
     );
     const withdrawcycle = storagedata.data.value.withdrawcycle;
     const price =
-      parseInt(storagedata.data.value.cycleDet[withdrawcycle.toString()].cPrice);
+      parseInt(storagedata.data.value.cyclebettorsDetails[withdrawcycle.toString()].priceAtCurrentCycle);
     const rate = parseInt(storagedata.data.value.rate) / 100;
     const tamount = parseInt(
-      storagedata.data.value.cycleDet[withdrawcycle.toString()].cAmount
+      storagedata.data.value.cyclebettorsDetails[withdrawcycle.toString()].cAmount
     );
-    if (this.state.tamt != tamount) {
+    if (this.state.tamountInRange != tamount) {
       var sp = [];
       //var i, lRange, uRange;
-      for(var key of Object.keys(storagedata.data.value.cycleDet[withdrawcycle.toString()].betDet)){
+      for(var key of Object.keys(storagedata.data.value.cyclebettorsDetails[withdrawcycle.toString()].rangebettorsDetailsails)){
         var lRange =
               Math.trunc((100 + (Number(key.slice(0, key.indexOf("#"))) / 100)) *
-                Number(storagedata.data.value.cycleDet[withdrawcycle.toString()].cPrice)/100) /
+                Number(storagedata.data.value.cyclebettorsDetails[withdrawcycle.toString()].priceAtCurrentCycle)/100) /
               100;
         var uRange =
             Math.trunc((100 + (Number(key.slice(key.indexOf("#")+1)) / 100)) *
-                Number(storagedata.data.value.cycleDet[withdrawcycle.toString()].cPrice)/100) /
+                Number(storagedata.data.value.cyclebettorsDetails[withdrawcycle.toString()].priceAtCurrentCycle)/100) /
             100;
         var sprange = [];
 
@@ -191,12 +191,12 @@ export default class setseller extends React.Component {
           uRange.toFixed(2),
           parseInt(key.slice(0, key.indexOf("#"))),
           parseInt(key.slice(key.indexOf("#")+1)),
-          parseInt(storagedata.data.value.cycleDet[withdrawcycle.toString()].betDet[key].amt),
+          parseInt(storagedata.data.value.cyclebettorsDetails[withdrawcycle.toString()].rangebettorsDetailsails[key].amountInRange),
         ];
         sp.push(sprange);
       }
       this.setState((state) => {
-        return { roi: rate, tamt: tamount, spranges: sp };
+        return { roi: rate, tamountInRange: tamount, spranges: sp };
       });
     }
     this.bcdInterval = setTimeout(this.fetchContractData.bind(this), 60000);
@@ -205,7 +205,7 @@ export default class setseller extends React.Component {
   async betting() {
     try {
       const available = await ThanosWallet.isAvailable();
-      var amt;
+      var amountInRange;
       if (!available) {
         throw new Error("Please Install ");
       }
@@ -213,9 +213,9 @@ export default class setseller extends React.Component {
         throw new Error("Please select a suitable price range!");
       }
       if (this.state.amount == null) {
-        amt = 1;
+        amountInRange = 1;
       } else {
-        amt = this.state.amount;
+        amountInRange = this.state.amount;
       }
       const i = this.state.spindex;
       const param1 = this.state.spranges[i][2];
@@ -232,7 +232,7 @@ export default class setseller extends React.Component {
               }}
             >
               <li style={{ "padding-bottom": "1vmax" }}>
-                Staked Amount: {amt} XTZ
+                Staked Amount: {amountInRange} XTZ
               </li>
               <li style={{ "padding-bottom": "1vmax" }}>
                 Predicted Price Range:{" "}
@@ -252,14 +252,14 @@ export default class setseller extends React.Component {
               </li>
               <li style={{ "padding-bottom": "1vmax" }}>
                 Expected Max ROI as per current active bets**:{" "}
-                {this.state.tamt == this.state.spranges[this.state.spindex][4]
+                {this.state.tamountInRange == this.state.spranges[this.state.spindex][4]
                   ? this.state.roi
                   : this.state.amount !== null
                   ? Math.round(
                       (10000 *
                         (100 - 2) *
                         this.state.roi *
-                        (this.state.tamt + this.state.amount * 1000000)) /
+                        (this.state.tamountInRange + this.state.amount * 1000000)) /
                         (100 *
                           (this.state.spranges[this.state.spindex][4] +
                             this.state.amount * 1000000))
@@ -268,7 +268,7 @@ export default class setseller extends React.Component {
                       (10000 *
                         (100 - 2) *
                         this.state.roi *
-                        (this.state.tamt + 1 * 1000000)) /
+                        (this.state.tamountInRange + 1 * 1000000)) /
                         (100 *
                           (this.state.spranges[this.state.spindex][4] +
                             1 * 1000000))
@@ -318,15 +318,15 @@ export default class setseller extends React.Component {
         const accountPkh = await tezos.wallet.pkh();
         const accountBalance = await tezos.tz.getBalance(accountPkh);
         console.info(`address: ${accountPkh}, balance: ${accountBalance}`);
-        if(amt+0.1>accountBalance/1000000){
+        if(amountInRange+0.1>accountBalance/1000000){
           throw new Error("Insufficient Balance in your Account to complete this transaction!");
         }
         const sell = await tezos.wallet.at(
           "KT1AQd6KeoPyFJdY4baRyR6zCkGZV2r35K1u"
         );
         const operation = await sell.methods
-          .setWager(param1.toString(), param2.toString())
-          .send({ amount: amt, mutez: false });
+          .placeBet(param1.toString(), param2.toString())
+          .send({ amount: amountInRange, mutez: false });
 
         swal({
           closeOnClickOutside: false,
@@ -453,7 +453,7 @@ export default class setseller extends React.Component {
                         }}
                       >
                         <CardImg
-                          src={det}
+                          src={bettorsDetails}
                           style={{
                             width: "5vmax",
                             height: "4.7222222222vmax",
@@ -536,14 +536,14 @@ export default class setseller extends React.Component {
                             >
                               The Expected ROI currently for your inputted staking amount
                               is{" "}
-                              {this.state.tamt == value[4]
+                              {this.state.tamountInRange == value[4]
                                 ? this.state.roi
                                 : this.state.amount !== null
                                 ? Math.round(
                                     (10000 *
                                       (100 - 2) *
                                       this.state.roi *
-                                      (this.state.tamt +
+                                      (this.state.tamountInRange +
                                         this.state.amount * 1000000)) /
                                       (100 *
                                         (value[4] +
@@ -553,7 +553,7 @@ export default class setseller extends React.Component {
                                     (10000 *
                                       (100 - 2) *
                                       this.state.roi *
-                                      (this.state.tamt + 1 * 1000000)) /
+                                      (this.state.tamountInRange + 1 * 1000000)) /
                                       (100 * (value[4] + 1 * 1000000))
                                   ) / 10000}
                               %.
@@ -574,8 +574,8 @@ export default class setseller extends React.Component {
                               ).toDateString()}
                               ,the price of XTZ is in this range, then you get
                               back your returns along with your staking
-                              investment.Else you would lose your staking
-                              returns and only get back your staking investment.{" "}
+                              betAmountment.Else you would lose your staking
+                              returns and only get back your staking betAmountment.{" "}
                             </li>
                             <li style={{ "padding-bottom": "1vmax" }}>
                               You shall get back your staked amount (plus the
@@ -1276,7 +1276,7 @@ export default class setseller extends React.Component {
               "padding-bottom": "3.3333333vmax",
             }}
           >
-            You can search for more details by clicking on the respective
+            You can search for more bettorsDetailsails by clicking on the respective
             category below.
           </p>
           
@@ -1296,7 +1296,7 @@ export default class setseller extends React.Component {
                         }}
                       >
                         <CardImg
-                          src={det}
+                          src={bettorsDetails}
                           style={{
                             width: "5vmax",
                             height: "4.7222222222vmax",
@@ -1379,14 +1379,14 @@ export default class setseller extends React.Component {
                             >
                               The Expected ROI currently for your inputted staking amount
                               is{" "}
-                              {this.state.tamt == value[4]
+                              {this.state.tamountInRange == value[4]
                                 ? this.state.roi
                                 : this.state.amount !== null
                                 ? Math.round(
                                     (10000 *
                                       (100 - 2) *
                                       this.state.roi *
-                                      (this.state.tamt +
+                                      (this.state.tamountInRange +
                                         this.state.amount * 1000000)) /
                                       (100 *
                                         (value[4] +
@@ -1396,7 +1396,7 @@ export default class setseller extends React.Component {
                                     (10000 *
                                       (100 - 2) *
                                       this.state.roi *
-                                      (this.state.tamt + 1 * 1000000)) /
+                                      (this.state.tamountInRange + 1 * 1000000)) /
                                       (100 * (value[4] + 1 * 1000000))
                                   ) / 10000}
                               %.
@@ -1417,8 +1417,8 @@ export default class setseller extends React.Component {
                               ).toDateString()}
                               ,the price of XTZ is in this range, then you get
                               back your returns along with your staking
-                              investment.Else you would lose your staking
-                              returns and only get back your staking investment.{" "}
+                              betAmountment.Else you would lose your staking
+                              returns and only get back your staking betAmountment.{" "}
                             </li>
                             <li style={{ "padding-bottom": "1vmax" }}>
                               You shall get back your staked amount (plus the
@@ -1477,7 +1477,7 @@ export default class setseller extends React.Component {
                   >
                     <CardImg
                       align="left"
-                      src={det}
+                      src={bettorsDetails}
                       style={{
                         width: "5vmax",
                         height: "4.4444444444vmax",
@@ -1534,7 +1534,7 @@ export default class setseller extends React.Component {
                       >
                         <li style={{ "padding-bottom": "1vmax" }}>
                           The Expected ROI currently for your inputted staking amount is{" "}
-                          {this.state.tamt ==
+                          {this.state.tamountInRange ==
                           this.state.spranges[this.state.spindex][4]
                             ? this.state.roi
                             : this.state.amount !== null
@@ -1542,7 +1542,7 @@ export default class setseller extends React.Component {
                                 (10000 *
                                   (100 - 2) *
                                   this.state.roi *
-                                  (this.state.tamt +
+                                  (this.state.tamountInRange +
                                     this.state.amount * 1000000)) /
                                   (100 *
                                     (this.state.spranges[
@@ -1554,7 +1554,7 @@ export default class setseller extends React.Component {
                                 (10000 *
                                   (100 - 2) *
                                   this.state.roi *
-                                  (this.state.tamt + 1 * 1000000)) /
+                                  (this.state.tamountInRange + 1 * 1000000)) /
                                   (100 *
                                     (this.state.spranges[
                                       this.state.spindex
@@ -1577,9 +1577,9 @@ export default class setseller extends React.Component {
                             this.state.cycletime + this.state.duration
                           ).toDateString()}
                           , the price of XTZ is in this range, then you get back
-                          your returns along with your staking investment.Else
+                          your returns along with your staking betAmountment.Else
                           you would lose your staking returns and only get back
-                          your staking investment.{" "}
+                          your staking betAmountment.{" "}
                         </li>
                         <li style={{ "padding-bottom": "1vmax" }}>
                           You shall get back your staked amount (plus the

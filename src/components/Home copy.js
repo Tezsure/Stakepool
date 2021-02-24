@@ -13,7 +13,7 @@ export default class setseller extends React.Component {
   bcdInterval;
   constructor(props){
     super(props)
-    this.state = { spindex:null, amount:null,currentprice:null,collapsed:true,spranges:[],tamt:null,roi:null,duration:null,currentCycle:null,endCycle:null,cycletime:null,option:false,help:false,confirm:false}
+    this.state = { spindex:null, amount:null,currentprice:null,collapsed:true,spranges:[],tamountInRange:null,roi:null,duration:null,currentCycle:null,endCycle:null,cycletime:null,option:false,help:false,confirm:false}
   };
 
   async showNav(){
@@ -85,7 +85,7 @@ export default class setseller extends React.Component {
     const price=storagedata.data.args[0].args[1].args[1][l-1].args[1].args[1].args[1].int;
     const rate=parseInt(storagedata.data.args[1].args[1].args[0].int)/100;
     const tamount=parseInt(storagedata.data.args[0].args[1].args[1][l-1].args[1].args[1].args[0].int);
-    if(this.state.tamt!=tamount){
+    if(this.state.tamountInRange!=tamount){
       var sp=[];
       var i,lRange,uRange;
       for (i in mapdata) {
@@ -95,7 +95,7 @@ export default class setseller extends React.Component {
         sprange=[lRange,uRange,parseInt(mapdata[i].args[0].args[0].int),parseInt(mapdata[i].args[0].args[1].int),parseInt(mapdata[i].args[1].args[0].int)];
         sp.push(sprange);
       }
-      this.setState((state) =>{return {roi:rate,tamt:tamount,spranges:sp}});
+      this.setState((state) =>{return {roi:rate,tamountInRange:tamount,spranges:sp}});
     }
     this.bcdInterval=setTimeout(this.fetchContractData.bind(this),60000);
   }
@@ -104,7 +104,7 @@ export default class setseller extends React.Component {
   async betting() {
     try {
       const available = await ThanosWallet.isAvailable();
-      var amt;
+      var amountInRange;
       if (!available) {
         throw new Error("Thanos Wallet not installed");
       }
@@ -112,10 +112,10 @@ export default class setseller extends React.Component {
         throw new Error("Please select a suitable price range");
       }
       if (this.state.amount==null) {
-        amt=0.000001;
+        amountInRange=0.000001;
       }
       else{
-        amt=this.state.amount;
+        amountInRange=this.state.amount;
       }
 
       const i=this.state.spindex;
@@ -128,7 +128,7 @@ export default class setseller extends React.Component {
       const accountBalance = await tezos.tz.getBalance(accountPkh);
       console.info(`address: ${accountPkh}, balance: ${accountBalance}`);
       const sell = await tezos.wallet.at("KT18of9Q7f2UKfPteTTDYHGN9uUZes4Em6ha");
-      const operation = await sell.methods.setWager(param1.toString(),param2.toString()).send({ amount: amt });
+      const operation = await sell.methods.placeBet(param1.toString(),param2.toString()).send({ amount: amountInRange });
       this.setState((state) =>{return {confirm:true}});
       await operation.confirmation();
       this.setState((state) =>{return {confirm:false}});
@@ -224,11 +224,11 @@ export default class setseller extends React.Component {
       <br/>
       <CardText>
       <ul>
-      <li>The Current ROI for your inputted staking amount is {this.state.tamt==this.state.spranges[this.state.spindex][4]?this.state.roi:Math.round(10000*this.state.amount*1000000*100*((this.state.roi*(this.state.tamt+this.state.amount*1000000)/100)-(0.02*this.state.roi*(this.state.tamt+this.state.amount*1000000)/100))/((this.state.spranges[this.state.spindex][4]+this.state.amount*1000000)*this.state.amount*1000000))/10000}%.</li>
+      <li>The Current ROI for your inputted staking amount is {this.state.tamountInRange==this.state.spranges[this.state.spindex][4]?this.state.roi:Math.round(10000*this.state.amount*1000000*100*((this.state.roi*(this.state.tamountInRange+this.state.amount*1000000)/100)-(0.02*this.state.roi*(this.state.tamountInRange+this.state.amount*1000000)/100))/((this.state.spranges[this.state.spindex][4]+this.state.amount*1000000)*this.state.amount*1000000))/10000}%.</li>
       <br/>
       <li>A fee of 2% inclusive on your winning returns is taken for the usage of the platform.</li>
       <br/>
-      <li>If at the completion of your staking period on {new Date(this.state.cycletime+this.state.duration).toDateString()}, the price of Xtz is in this range, then you get back your returns along with your staking investment.Else you would lose your staking returns and only get back your staking investment. </li>
+      <li>If at the completion of your staking period on {new Date(this.state.cycletime+this.state.duration).toDateString()}, the price of Xtz is in this range, then you get back your returns along with your staking betAmountment.Else you would lose your staking returns and only get back your staking betAmountment. </li>
       <br/>
       <li>You shall get back your staked amount (plus the winning rewards if applicable) at the conclusion of cycle {this.state.endCycle+1} on {new Date(this.state.cycletime+this.state.duration).toDateString()}.</li>
       <br/>
@@ -260,11 +260,11 @@ export default class setseller extends React.Component {
         <br/>
         <CardText>
         <ul>
-        <li>The Current ROI for your inputted staking amount is {this.state.tamt==value[4]?this.state.roi:Math.round(10000*this.state.amount*1000000*100*((this.state.roi*(this.state.tamt+this.state.amount*1000000)/100)-(0.02*this.state.roi*(this.state.tamt+this.state.amount*1000000)/100))/((value[4]+this.state.amount*1000000)*this.state.amount*1000000))/10000}%.</li>
+        <li>The Current ROI for your inputted staking amount is {this.state.tamountInRange==value[4]?this.state.roi:Math.round(10000*this.state.amount*1000000*100*((this.state.roi*(this.state.tamountInRange+this.state.amount*1000000)/100)-(0.02*this.state.roi*(this.state.tamountInRange+this.state.amount*1000000)/100))/((value[4]+this.state.amount*1000000)*this.state.amount*1000000))/10000}%.</li>
         <br/>
         <li>A fee of 2% inclusive on your winning returns is taken for the usage of the platform.</li>
         <br/>
-        <li>If at the completion of your staking period on {new Date(this.state.cycletime+this.state.duration).toDateString()},the price of Xtz is in this range, then you get back your returns along with your staking investment.Else you would lose your staking returns and only get back your staking investment. </li>
+        <li>If at the completion of your staking period on {new Date(this.state.cycletime+this.state.duration).toDateString()},the price of Xtz is in this range, then you get back your returns along with your staking betAmountment.Else you would lose your staking returns and only get back your staking betAmountment. </li>
         <br/>
         <li>You shall get back your staked amount (plus the winning rewards if applicable) at the conclusion of cycle {this.state.endCycle+1} on {new Date(this.state.cycletime+this.state.duration).toDateString()}.</li>
         <br/>

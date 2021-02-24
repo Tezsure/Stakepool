@@ -36,7 +36,7 @@ export default class setseller extends React.Component {
     this.state = {
       currentCycle: null,
       winning: [],
-      tamt: null,
+      tamountInRange: null,
       pool:null,
       announce: true,
       Rannounce:true
@@ -448,7 +448,7 @@ export default class setseller extends React.Component {
             "padding-right": 20,
             }}
         >
-        Suppose you have submitted your stake and its associated prediction details at cycle 150, 
+        Suppose you have submitted your stake and its associated prediction bettorsDetailsails at cycle 150, 
         then your stake will be delegated for the period of cycle 151-156 and 151-158 on delphinet and mainnet respectively. 
         </p>
 
@@ -507,7 +507,7 @@ export default class setseller extends React.Component {
             }}
         >
         Considering the above scenario, at the conclusion of the staking period at the beginning of the cycle 156 and 158 for delphinet and mainnet respectively,
-        the initial staking investment along with any winnings would be transferred back to your accounts without any delay. 
+        the initial staking betAmountment along with any totalRewards would be transferred back to your accounts without any delay. 
         </p>
 
         <h2

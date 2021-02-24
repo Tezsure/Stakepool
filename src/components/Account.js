@@ -60,10 +60,10 @@ export default class setseller extends React.Component {
     }
   }
 
-  async stakingDet() {
+  async stakingbettorsDetails() {
     try {
       const available = await ThanosWallet.isAvailable();
-      var amt;
+      var amountInRange;
       if (!available) {
         throw new Error("Please Install ");
       }
@@ -87,45 +87,45 @@ export default class setseller extends React.Component {
         var roi;
         var lrange =
         Math.trunc((100 + Number(x.path[6].slice(0, x.path[6].indexOf("#"))) / 100) *
-            Number(storagedata.data.value.cycleDet[x.path[4]].cPrice)/100) /
+            Number(storagedata.data.value.cyclebettorsDetails[x.path[4]].priceAtCurrentCycle)/100) /
           100;
         var urange =
         Math.trunc((100 + Number(x.path[6].slice(x.path[6].indexOf("#") + 1)) / 100) *
-            Number(storagedata.data.value.cycleDet[x.path[4]].cPrice)/100) /
+            Number(storagedata.data.value.cyclebettorsDetails[x.path[4]].priceAtCurrentCycle)/100) /
           100;
         var wPrice;
         var winning =
           (parseFloat(
-            storagedata.data.value.cycleDet[x.path[4]].betDet[x.path[6]].det[
+            storagedata.data.value.cyclebettorsDetails[x.path[4]].rangebettorsDetailsails[x.path[6]].bettorsDetails[
               x.path[8]
-            ].invest
+            ].betAmount
           ) *
             parseFloat(
-              storagedata.data.value.cycleDet[x.path[4]].betDet[x.path[6]]
-                .winnings
+              storagedata.data.value.cyclebettorsDetails[x.path[4]].rangebettorsDetailsails[x.path[6]]
+                .totalRewards
             )) /
           parseFloat(
-            storagedata.data.value.cycleDet[x.path[4]].betDet[x.path[6]].amt
+            storagedata.data.value.cyclebettorsDetails[x.path[4]].rangebettorsDetailsails[x.path[6]].amountInRange
           );
         var ending = Number(x.path[4]) + 5 + 1;
         if (ending <= Number(storagedata.data.value.withdrawcycle)) {
           wPrice = (
-            Number(storagedata.data.value.cycleDet[ending.toString()].cPrice) /
+            Number(storagedata.data.value.cyclebettorsDetails[ending.toString()].priceAtCurrentCycle) /
               100
           ).toString();
           roi =
             (winning * 100) /
             parseFloat(
-              storagedata.data.value.cycleDet[x.path[4]].betDet[x.path[6]].det[
+              storagedata.data.value.cyclebettorsDetails[x.path[4]].rangebettorsDetailsails[x.path[6]].bettorsDetails[
                 x.path[8]
-              ].invest
+              ].betAmount
             );
         } else {
           wPrice = "TBA";
           if (
             parseFloat(
-              storagedata.data.value.cycleDet[x.path[4]].betDet[x.path[6]].amt
-            ) == parseFloat(storagedata.data.value.cycleDet[x.path[4]].cAmount)
+              storagedata.data.value.cyclebettorsDetails[x.path[4]].rangebettorsDetailsails[x.path[6]].amountInRange
+            ) == parseFloat(storagedata.data.value.cyclebettorsDetails[x.path[4]].cAmount)
           ) {
             roi = Number(storagedata.data.value.rate) / 100;
           } else {
@@ -133,12 +133,12 @@ export default class setseller extends React.Component {
               ((100 - 2) *
                 parseFloat(storagedata.data.value.rate) *
                 parseFloat(
-                  storagedata.data.value.cycleDet[x.path[4]].cAmount
+                  storagedata.data.value.cyclebettorsDetails[x.path[4]].cAmount
                 )) /
               (10000 *
                 parseFloat(
-                  storagedata.data.value.cycleDet[x.path[4]].betDet[x.path[6]]
-                    .amt
+                  storagedata.data.value.cyclebettorsDetails[x.path[4]].rangebettorsDetailsails[x.path[6]]
+                    .amountInRange
                 ));
           }
         }
@@ -151,9 +151,9 @@ export default class setseller extends React.Component {
           urange.toFixed(2),
           wPrice,
           Number(
-            storagedata.data.value.cycleDet[x.path[4]].betDet[x.path[6]].det[
+            storagedata.data.value.cyclebettorsDetails[x.path[4]].rangebettorsDetailsails[x.path[6]].bettorsDetails[
               x.path[8]
-            ].invest
+            ].betAmount
           ),
           winning,
           x.path[6].includes("-"),
@@ -541,7 +541,7 @@ export default class setseller extends React.Component {
             >
               <button
                 onClick={() => {
-                  this.stakingDet();
+                  this.stakingbettorsDetails();
                 }}
                 style={{
                   "font-family": "OpenSans-Bold, sans-serif",
