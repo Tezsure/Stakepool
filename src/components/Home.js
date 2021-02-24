@@ -163,7 +163,7 @@ export default class setseller extends React.Component {
 
   async fetchContractData() {
     const storagedata = await axios.get(
-      "https://api.delphi.tzstats.com/explorer/contract/KT1AQd6KeoPyFJdY4baRyR6zCkGZV2r35K1u/storage"
+      "https://api.delphi.tzstats.com/explorer/contract/KT1WvnSNdkM8MFnKFApuZLtZH5VUNYYSm6Nr/storage"
     );
     const withdrawcycle = storagedata.data.value.withdrawcycle;
     const price =
@@ -322,7 +322,7 @@ export default class setseller extends React.Component {
           throw new Error("Insufficient Balance in your Account to complete this transaction!");
         }
         const sell = await tezos.wallet.at(
-          "KT1AQd6KeoPyFJdY4baRyR6zCkGZV2r35K1u"
+          "KT1WvnSNdkM8MFnKFApuZLtZH5VUNYYSm6Nr"
         );
         const operation = await sell.methods
           .placeBet(param1.toString(), param2.toString())

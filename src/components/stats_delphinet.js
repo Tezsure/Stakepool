@@ -54,10 +54,10 @@ export default class setseller extends React.Component {
 
   async stakingStats() {
       /*const storagedata = await axios.get(
-        "https://api.delphi.tzstats.com/explorer/contract/KT1AQd6KeoPyFJdY4baRyR6zCkGZV2r35K1u/storage"
+        "https://api.delphi.tzstats.com/explorer/contract/KT1WvnSNdkM8MFnKFApuZLtZH5VUNYYSm6Nr/storage"
       );*/
       const storagedata = await axios.get(
-        "https://api.delphi.tzstats.com/explorer/contract/KT1AQd6KeoPyFJdY4baRyR6zCkGZV2r35K1u/storage"
+        "https://api.delphi.tzstats.com/explorer/contract/KT1WvnSNdkM8MFnKFApuZLtZH5VUNYYSm6Nr/storage"
       );
       var withdrawcycle=Number(storagedata.data.value.withdrawcycle);
       var cycle = Math.trunc(storagedata.data.meta.height / 2048);
