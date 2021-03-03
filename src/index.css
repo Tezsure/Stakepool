@@ -3,25 +3,36 @@
 /*@import url('https://www.wfonts.com/download/data/2016/06/13/leelawadee-ui/LeelaUIb.ttf');*/
 /*@import url('https://ufonts.com/fonts/leelawadee-ui-bold.html');*/
 @font-face {
-  font-family: 'Leelawadee UI';
-  src: local('Leelawadee UI'), url(./fonts/leelawadee-ui-bold.ttf) format('truetype');
+    font-family: 'Leelawadee UI';
+    src: local('Leelawadee UI'),
+        url(./fonts/leelawadee-ui-bold.ttf) format('truetype');
 }
 @font-face {
-  font-family: 'HKGrotesk-Bold';
-  src: local('HKGrotesk-Bold'), url(./fonts/hkgrotesk-bold.ttf) format('truetype');
+    font-family: 'HKGrotesk-Bold';
+    src: local('HKGrotesk-Bold'),
+        url(./fonts/hkgrotesk-bold.ttf) format('truetype');
 }
 
-
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue','Quicksand',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
+        'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+        'Helvetica Neue', 'Quicksand', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+        monospace;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0 !important;
+}
+
+/* Firefox */
+input[type='number'] {
+    -moz-appearance: textfield !important;
 }
