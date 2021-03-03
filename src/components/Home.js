@@ -40,7 +40,7 @@ import linkedin from "./icons/linkedin.svg";
 import twitter from "./icons/twitter.svg";
 import up from "./icons/up.jpeg";
 import down from "./icons/down.jpeg";
-import bettorsDetails from "./icons/bettorsDetailsails.svg";
+import det from "./icons/details.svg";
 import axios from "axios";
 import Countdown from "react-countdown-now";
 import swal from "@sweetalert/with-react";
@@ -67,6 +67,8 @@ export default class setseller extends React.Component {
       cycletime: null,
       option: false,
       help: false,
+      warningBarOpen : true,
+      bettorsCount : 0
     };
   }
 
@@ -114,6 +116,10 @@ export default class setseller extends React.Component {
     });
   }
 
+  closeWarningBar = () => {
+    this.setState({warningBarOpen : false})
+  }
+
   async componentDidMount() {
     this.fetchContractData();
     this.fetchPrice();
@@ -123,6 +129,17 @@ export default class setseller extends React.Component {
   async componentWillUnmount() {
     clearTimeout(this.coingeckoInterval);
     clearTimeout(this.bcdInterval);
+  }
+
+  countBettorsInCycle = (rangeDetails) => {
+    console.log(rangeDetails);
+    let count = 0;
+    for(let key in rangeDetails)
+    {
+      count += rangeDetails[key].bettorsDetails.length;
+    }
+    console.log(count);
+    this.setState({bettorsCount : count});
   }
 
   async fetchPrice() {
@@ -163,26 +180,28 @@ export default class setseller extends React.Component {
 
   async fetchContractData() {
     const storagedata = await axios.get(
-      "https://api.delphi.tzstats.com/explorer/contract/KT1WvnSNdkM8MFnKFApuZLtZH5VUNYYSm6Nr/storage"
+      "https://api.delphi.tzstats.com/explorer/contract/KT1LSLUHe9U4MqDuyrMhWThCWu7P6g61vs5k/storage"
     );
-    const withdrawcycle = storagedata.data.value.withdrawcycle;
+    console.log(storagedata);
+    const withdrawcycle = storagedata.data.value.currentReferenceRewardCycle;
+    this.countBettorsInCycle(storagedata.data.value.cycleOperations[withdrawcycle].rangeDetails);
     const price =
-      parseInt(storagedata.data.value.cyclebettorsDetails[withdrawcycle.toString()].priceAtCurrentCycle);
+      parseInt(storagedata.data.value.cycleOperations[withdrawcycle.toString()].priceAtCurrentCycle);
     const rate = parseInt(storagedata.data.value.rate) / 100;
     const tamount = parseInt(
-      storagedata.data.value.cyclebettorsDetails[withdrawcycle.toString()].cAmount
+      storagedata.data.value.cycleOperations[withdrawcycle.toString()].cAmount
     );
     if (this.state.tamountInRange != tamount) {
       var sp = [];
       //var i, lRange, uRange;
-      for(var key of Object.keys(storagedata.data.value.cyclebettorsDetails[withdrawcycle.toString()].rangebettorsDetailsails)){
+      for(var key of Object.keys(storagedata.data.value.cycleOperations[withdrawcycle.toString()].rangeDetails)){
         var lRange =
               Math.trunc((100 + (Number(key.slice(0, key.indexOf("#"))) / 100)) *
-                Number(storagedata.data.value.cyclebettorsDetails[withdrawcycle.toString()].priceAtCurrentCycle)/100) /
+                Number(storagedata.data.value.cycleOperations[withdrawcycle.toString()].priceAtCurrentCycle)/100) /
               100;
         var uRange =
             Math.trunc((100 + (Number(key.slice(key.indexOf("#")+1)) / 100)) *
-                Number(storagedata.data.value.cyclebettorsDetails[withdrawcycle.toString()].priceAtCurrentCycle)/100) /
+                Number(storagedata.data.value.cycleOperations[withdrawcycle.toString()].priceAtCurrentCycle)/100) /
             100;
         var sprange = [];
 
@@ -191,7 +210,7 @@ export default class setseller extends React.Component {
           uRange.toFixed(2),
           parseInt(key.slice(0, key.indexOf("#"))),
           parseInt(key.slice(key.indexOf("#")+1)),
-          parseInt(storagedata.data.value.cyclebettorsDetails[withdrawcycle.toString()].rangebettorsDetailsails[key].amountInRange),
+          parseInt(storagedata.data.value.cycleOperations[withdrawcycle.toString()].rangeDetails[key].amountInRange),
         ];
         sp.push(sprange);
       }
@@ -322,7 +341,7 @@ export default class setseller extends React.Component {
           throw new Error("Insufficient Balance in your Account to complete this transaction!");
         }
         const sell = await tezos.wallet.at(
-          "KT1WvnSNdkM8MFnKFApuZLtZH5VUNYYSm6Nr"
+          "KT1LSLUHe9U4MqDuyrMhWThCWu7P6g61vs5k"
         );
         const operation = await sell.methods
           .placeBet(param1.toString(), param2.toString())
@@ -453,7 +472,7 @@ export default class setseller extends React.Component {
                         }}
                       >
                         <CardImg
-                          src={bettorsDetails}
+                          src={det}
                           style={{
                             width: "5vmax",
                             height: "4.7222222222vmax",
@@ -885,8 +904,20 @@ export default class setseller extends React.Component {
               "box-shadow": "0px 0.6944444vmax 2.430555556vmax #00000008",
             }}
           >
-            <Collapse isOpen={this.state.error}>
-              <CardBody
+            <Collapse isOpen={this.state.error || this.state.warningBarOpen}>
+              {this.state.warningBarOpen === true && this.state.error === false ? 
+              <div>
+                <CardBody style={{"text-align": "center","background-color": "#ffc107","color": "#f8f9fa","border": "0.06944vmax solid red","border-radius": "0.833333vmax;box-shadow: rgb(239, 150, 150) 0vmax 0vmax 0.902778vmax 0.06944vmax;"}}>
+                  
+                  <CardText>
+                  <button onClick={()=>{this.closeWarningBar()}} style={{"position": "absolute", "right": "0px", "top": "0px","padding": "0vmax 0.556vmax","border": "0.06944vmax solid red", "border-radius": "1.38889vmax"}}>X</button>
+                  Warning: We're currently in beta phase use it at your own risk! {this.state.bettorsCount >50 ? "Bettors beyond permissible limits, Please don't stake." : null}
+                  </CardText> 
+                </CardBody>
+              </div> 
+              : 
+              <div>
+                <CardBody
                 style={{
                   "text-align": "center",
                   backgroundColor: "#f8f9fa",
@@ -925,6 +956,9 @@ export default class setseller extends React.Component {
                   <CardText>Error: {this.state.errMsg}</CardText>
                 )}
               </CardBody>
+              </div> }
+
+              
             </Collapse>
             <CardBody
               style={{
@@ -932,6 +966,7 @@ export default class setseller extends React.Component {
                 "padding-bottom": "4.583vmax",
               }}
             >
+              
               <Row
                 xs="2"
                 style={{
@@ -1276,7 +1311,7 @@ export default class setseller extends React.Component {
               "padding-bottom": "3.3333333vmax",
             }}
           >
-            You can search for more bettorsDetailsails by clicking on the respective
+            You can search for more details by clicking on the respective
             category below.
           </p>
           
@@ -1296,7 +1331,7 @@ export default class setseller extends React.Component {
                         }}
                       >
                         <CardImg
-                          src={bettorsDetails}
+                          src={det}
                           style={{
                             width: "5vmax",
                             height: "4.7222222222vmax",
@@ -1477,7 +1512,7 @@ export default class setseller extends React.Component {
                   >
                     <CardImg
                       align="left"
-                      src={bettorsDetails}
+                      src={det}
                       style={{
                         width: "5vmax",
                         height: "4.4444444444vmax",

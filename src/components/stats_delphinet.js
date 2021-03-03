@@ -57,40 +57,40 @@ export default class setseller extends React.Component {
         "https://api.delphi.tzstats.com/explorer/contract/KT1WvnSNdkM8MFnKFApuZLtZH5VUNYYSm6Nr/storage"
       );*/
       const storagedata = await axios.get(
-        "https://api.delphi.tzstats.com/explorer/contract/KT1WvnSNdkM8MFnKFApuZLtZH5VUNYYSm6Nr/storage"
+        "https://api.delphi.tzstats.com/explorer/contract/KT1LSLUHe9U4MqDuyrMhWThCWu7P6g61vs5k/storage"
       );
       var withdrawcycle=Number(storagedata.data.value.withdrawcycle);
       var cycle = Math.trunc(storagedata.data.meta.height / 2048);
       if(storagedata.data.value.withdrawcycle!="1"){
         if(Number(storagedata.data.value.withdrawcycle)>6){
           cycle=cycle-6;
-          var wprice=Number(storagedata.data.value.cyclebettorsDetails[withdrawcycle.toString()].priceAtCurrentCycle)/100;
+          var wprice=Number(storagedata.data.value.cycleOperations[withdrawcycle.toString()].priceAtCurrentCycle)/100;
           withdrawcycle=withdrawcycle-6;
-          for(var key of Object.keys(storagedata.data.value.cyclebettorsDetails[withdrawcycle.toString()].rangebettorsDetailsails)){
+          for(var key of Object.keys(storagedata.data.value.cycleOperations[withdrawcycle.toString()].rangebettorsDetailsails)){
             var lrange =
             Math.trunc((100 + (Number(key.slice(0, key.indexOf("#"))) / 100)) *
-                Number(storagedata.data.value.cyclebettorsDetails[withdrawcycle.toString()].priceAtCurrentCycle)/100) /
+                Number(storagedata.data.value.cycleOperations[withdrawcycle.toString()].priceAtCurrentCycle)/100) /
               100;
             var urange =
             Math.trunc((100 + (Number(key.slice(key.indexOf("#")+1)) / 100)) *
-                Number(storagedata.data.value.cyclebettorsDetails[withdrawcycle.toString()].priceAtCurrentCycle)/100) /
+                Number(storagedata.data.value.cycleOperations[withdrawcycle.toString()].priceAtCurrentCycle)/100) /
               100;
             if((lrange==urange)&&(key[0]=="-")&&(wprice<lrange)){
               var negative=true;
-              var reward=Number(storagedata.data.value.cyclebettorsDetails[withdrawcycle.toString()].rangebettorsDetailsails[key].totalRewards)/1000000;
-              var camountInRange=Number(storagedata.data.value.cyclebettorsDetails[withdrawcycle.toString()].rangebettorsDetailsails[key].amountInRange)/1000000;
+              var reward=Number(storagedata.data.value.cycleOperations[withdrawcycle.toString()].rangebettorsDetailsails[key].totalRewards)/1000000;
+              var camountInRange=Number(storagedata.data.value.cycleOperations[withdrawcycle.toString()].rangebettorsDetailsails[key].amountInRange)/1000000;
               break;
             }
             if((lrange==urange)&&(key[0]!="-")&&(wprice>=urange)){
               var negative=false;
-              var reward=Number(storagedata.data.value.cyclebettorsDetails[withdrawcycle.toString()].rangebettorsDetailsails[key].totalRewards)/1000000;
-              var camountInRange=Number(storagedata.data.value.cyclebettorsDetails[withdrawcycle.toString()].rangebettorsDetailsails[key].amountInRange)/1000000;
+              var reward=Number(storagedata.data.value.cycleOperations[withdrawcycle.toString()].rangebettorsDetailsails[key].totalRewards)/1000000;
+              var camountInRange=Number(storagedata.data.value.cycleOperations[withdrawcycle.toString()].rangebettorsDetailsails[key].amountInRange)/1000000;
               break;
             }
             if((lrange!=urange)&&(wprice>=lrange)&&(wprice<urange)){
               var negative=false;
-              var reward=Number(storagedata.data.value.cyclebettorsDetails[withdrawcycle.toString()].rangebettorsDetailsails[key].totalRewards)/1000000;
-              var camountInRange=Number(storagedata.data.value.cyclebettorsDetails[withdrawcycle.toString()].rangebettorsDetailsails[key].amountInRange)/1000000;
+              var reward=Number(storagedata.data.value.cycleOperations[withdrawcycle.toString()].rangebettorsDetailsails[key].totalRewards)/1000000;
+              var camountInRange=Number(storagedata.data.value.cycleOperations[withdrawcycle.toString()].rangebettorsDetailsails[key].amountInRange)/1000000;
               break;
             }
           }
@@ -99,20 +99,20 @@ export default class setseller extends React.Component {
               currentCycle: cycle,
               announce: true,
               Rannounce:true,
-              TamountInRange:Number(storagedata.data.value.cyclebettorsDetails[withdrawcycle.toString()].cAmount)/1000000,
+              TamountInRange:Number(storagedata.data.value.cycleOperations[withdrawcycle.toString()].cAmount)/1000000,
               pool:Number(storagedata.data.value.interestPool)/1000000,
               winning:[lrange.toFixed(2),urange.toFixed(2),wprice,reward,camountInRange,negative]
             };
           });
 
         }else{
-          cycle=cycle+1-Number(storagedata.data.value.withdrawcycle)
+          cycle=cycle+1-Number(storagedata.data.value.currentReferenceRewardCycle)
           this.setState((state) => {
             return {
               currentCycle: cycle,
               announce: true,
               Rannounce:false,
-              TamountInRange:Number(storagedata.data.value.cyclebettorsDetails["1"].cAmount)/1000000
+              TamountInRange:Number(storagedata.data.value.cycleOperations["1"].cAmount)/1000000
             };
           });
         }

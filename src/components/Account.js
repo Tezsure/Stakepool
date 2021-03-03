@@ -75,9 +75,12 @@ export default class setseller extends React.Component {
         "https://api.delphi.tzstats.com/explorer/contract/KT1WvnSNdkM8MFnKFApuZLtZH5VUNYYSm6Nr/storage"
       );*/
       const storagedata = await axios.get(
-        "https://api.delphi.tzstats.com/explorer/contract/KT1WvnSNdkM8MFnKFApuZLtZH5VUNYYSm6Nr/storage"
+        "https://api.delphi.tzstats.com/explorer/contract/KT1LSLUHe9U4MqDuyrMhWThCWu7P6g61vs5k/storage"
       );
+
+      console.log({storagedata});
       var cycle = Math.trunc(storagedata.data.meta.height / 2048);
+      console.log({cycle});
       var find = JSONPath.nodes(storagedata, "$..bettor");
       find = find.filter((find) => find.value === accountPkh);
       var x;
@@ -87,36 +90,36 @@ export default class setseller extends React.Component {
         var roi;
         var lrange =
         Math.trunc((100 + Number(x.path[6].slice(0, x.path[6].indexOf("#"))) / 100) *
-            Number(storagedata.data.value.cyclebettorsDetails[x.path[4]].priceAtCurrentCycle)/100) /
+            Number(storagedata.data.value.cycleOperations[x.path[4]].priceAtCurrentCycle)/100) /
           100;
         var urange =
         Math.trunc((100 + Number(x.path[6].slice(x.path[6].indexOf("#") + 1)) / 100) *
-            Number(storagedata.data.value.cyclebettorsDetails[x.path[4]].priceAtCurrentCycle)/100) /
+            Number(storagedata.data.value.cycleOperations[x.path[4]].priceAtCurrentCycle)/100) /
           100;
         var wPrice;
         var winning =
           (parseFloat(
-            storagedata.data.value.cyclebettorsDetails[x.path[4]].rangebettorsDetailsails[x.path[6]].bettorsDetails[
+            storagedata.data.value.cycleOperations[x.path[4]].rangeDetails[x.path[6]].bettorsDetails[
               x.path[8]
             ].betAmount
           ) *
             parseFloat(
-              storagedata.data.value.cyclebettorsDetails[x.path[4]].rangebettorsDetailsails[x.path[6]]
+              storagedata.data.value.cycleOperations[x.path[4]].rangeDetails[x.path[6]]
                 .totalRewards
             )) /
           parseFloat(
-            storagedata.data.value.cyclebettorsDetails[x.path[4]].rangebettorsDetailsails[x.path[6]].amountInRange
+            storagedata.data.value.cycleOperations[x.path[4]].rangeDetails[x.path[6]].amountInRange
           );
         var ending = Number(x.path[4]) + 5 + 1;
         if (ending <= Number(storagedata.data.value.withdrawcycle)) {
           wPrice = (
-            Number(storagedata.data.value.cyclebettorsDetails[ending.toString()].priceAtCurrentCycle) /
+            Number(storagedata.data.value.cycleOperations[ending.toString()].priceAtCurrentCycle) /
               100
           ).toString();
           roi =
             (winning * 100) /
             parseFloat(
-              storagedata.data.value.cyclebettorsDetails[x.path[4]].rangebettorsDetailsails[x.path[6]].bettorsDetails[
+              storagedata.data.value.cycleOperations[x.path[4]].rangeDetails[x.path[6]].bettorsDetails[
                 x.path[8]
               ].betAmount
             );
@@ -124,8 +127,8 @@ export default class setseller extends React.Component {
           wPrice = "TBA";
           if (
             parseFloat(
-              storagedata.data.value.cyclebettorsDetails[x.path[4]].rangebettorsDetailsails[x.path[6]].amountInRange
-            ) == parseFloat(storagedata.data.value.cyclebettorsDetails[x.path[4]].cAmount)
+              storagedata.data.value.cycleOperations[x.path[4]].rangeDetails[x.path[6]].amountInRange
+            ) == parseFloat(storagedata.data.value.cycleOperations[x.path[4]].cAmount)
           ) {
             roi = Number(storagedata.data.value.rate) / 100;
           } else {
@@ -133,25 +136,25 @@ export default class setseller extends React.Component {
               ((100 - 2) *
                 parseFloat(storagedata.data.value.rate) *
                 parseFloat(
-                  storagedata.data.value.cyclebettorsDetails[x.path[4]].cAmount
+                  storagedata.data.value.cycleOperations[x.path[4]].cAmount
                 )) /
               (10000 *
                 parseFloat(
-                  storagedata.data.value.cyclebettorsDetails[x.path[4]].rangebettorsDetailsails[x.path[6]]
+                  storagedata.data.value.cycleOperations[x.path[4]].rangeDetails[x.path[6]]
                     .amountInRange
                 ));
           }
         }
         entry = [
           cycle -
-            Number(storagedata.data.value.withdrawcycle) +
+            Number(storagedata.data.value.currentReferenceRewardCycle) +
             Number(x.path[4]) +
             1,
           lrange.toFixed(2),
           urange.toFixed(2),
           wPrice,
           Number(
-            storagedata.data.value.cyclebettorsDetails[x.path[4]].rangebettorsDetailsails[x.path[6]].bettorsDetails[
+            storagedata.data.value.cycleOperations[x.path[4]].rangeDetails[x.path[6]].bettorsDetails[
               x.path[8]
             ].betAmount
           ),
