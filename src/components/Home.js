@@ -1,5 +1,5 @@
 import React from 'react';
-import { ThanosWallet } from '@thanos-wallet/dapp';
+import { TempleWallet } from '@temple-wallet/dapp';
 import { animateScroll as scroll } from 'react-scroll';
 import {
     Container,
@@ -146,7 +146,7 @@ export default class setseller extends React.Component {
             'https://api.coingecko.com/api/v3/coins/tezos?localization=false&tickers=false&community_data=false&developer_data=false&sparkline=false'
         );
         if (
-            this.state.currentprice !=
+            this.state.currentprice !==
             response.data.market_data.current_price.usd
         ) {
             this.setState((state) => {
@@ -250,7 +250,7 @@ export default class setseller extends React.Component {
 
     async betting() {
         try {
-            const available = await ThanosWallet.isAvailable();
+            const available = await TempleWallet.isAvailable();
             var amountInRange;
             if (!available) {
                 throw new Error('Please Install ');
@@ -379,7 +379,7 @@ export default class setseller extends React.Component {
             });
 
             if (val) {
-                const wallet = new ThanosWallet('Stakepool');
+                const wallet = new TempleWallet('Stakepool');
                 await wallet.connect('delphinet', { forcePermission: true });
                 const tezos = wallet.toTezos();
                 const accountPkh = await tezos.wallet.pkh();
@@ -393,7 +393,7 @@ export default class setseller extends React.Component {
                     );
                 }
                 const sell = await tezos.wallet.at(
-                    'KT1LSLUHe9U4MqDuyrMhWThCWu7P6g61vs5k'
+                    'KT1K4eLeqpbSYN9j4sMBw9vFvkCWFSVUm6F5'
                 );
                 const operation = await sell.methods
                     .placeBet(param1.toString(), param2.toString())
@@ -1216,7 +1216,7 @@ export default class setseller extends React.Component {
                                         {this.state.thanosError ? (
                                             <CardText>
                                                 Error: {this.state.errMsg}
-                                                <a href="https://thanoswallet.com/download">
+                                                <a href="https://templeWallet.com/download">
                                                     Thanos Wallet Browser Plugin
                                                 </a>{' '}
                                                 To Utilize The Services Of
