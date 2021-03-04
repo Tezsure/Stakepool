@@ -44,6 +44,7 @@ import det from './icons/details.svg';
 import axios from 'axios';
 import Countdown from 'react-countdown-now';
 import swal from '@sweetalert/with-react';
+import { Tezos } from '@taquito/taquito';
 
 export default class setseller extends React.Component {
     //tzstatsInterval;
@@ -250,6 +251,7 @@ export default class setseller extends React.Component {
 
     async betting() {
         try {
+            
             const available = await TempleWallet.isAvailable();
             var amountInRange;
             if (!available) {
@@ -379,11 +381,16 @@ export default class setseller extends React.Component {
             });
 
             if (val) {
+
+                await TempleWallet.isAvailable();
                 const wallet = new TempleWallet('Stakepool');
-                await wallet.connect('delphinet', { forcePermission: true });
+                await wallet.connect("delphinet", { forcePermission: true });
                 const tezos = wallet.toTezos();
+                
+                tezos.setRpcProvider("https://delphinet.smartpy.io");
                 const accountPkh = await tezos.wallet.pkh();
                 const accountBalance = await tezos.tz.getBalance(accountPkh);
+                //const accountBalance = await tezos.tz.getBalance("")
                 console.info(
                     `address: ${accountPkh}, balance: ${accountBalance}`
                 );
