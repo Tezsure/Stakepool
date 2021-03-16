@@ -29,6 +29,7 @@
     "react-scroll": "^1.8.1",
     "reactstrap": "^8.5.1",
     "sweetalert": "^2.1.2",
+    "sweetalert2": "^10.15.5",
     "websocket-extensions": "^0.1.4"
   },
   "scripts": {

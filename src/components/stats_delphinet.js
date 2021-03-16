@@ -29,6 +29,7 @@ import linkedin from './icons/linkedin.svg';
 import twitter from './icons/twitter.svg';
 import axios from 'axios';
 import { animateScroll as scroll } from 'react-scroll';
+import Footer from './footer';
 
 export default class setseller extends React.Component {
     tzInterval;
@@ -59,22 +60,31 @@ export default class setseller extends React.Component {
         const storagedata = await axios.get(
             'https://api.delphi.tzstats.com/explorer/contract/KT1K4eLeqpbSYN9j4sMBw9vFvkCWFSVUm6F5/storage'
         );
-        var withdrawcycle = Number(storagedata.data.value.withdrawcycle);
-        var cycle = Math.trunc(storagedata.data.meta.height / 2048);
-        if (storagedata.data.value.withdrawcycle != '1') {
-            if (Number(storagedata.data.value.withdrawcycle) > 6) {
+        const fetchHeight = await axios.get(
+            'https://api.delphi.tzkt.io/v1/cycles/count'
+        );
+        const height = fetchHeight.data;
+        var currentReferenceRewardCycle = Number(
+            storagedata.data.value.currentReferenceRewardCycle
+        );
+        var cycle = Math.trunc(height / 2048);
+        if (storagedata.data.value.currentReferenceRewardCycle !== '1') {
+            if (
+                Number(storagedata.data.value.currentReferenceRewardCycle) > 6
+            ) {
                 cycle = cycle - 6;
                 var wprice =
                     Number(
                         storagedata.data.value.cycleOperations[
-                            withdrawcycle.toString()
+                            currentReferenceRewardCycle.toString()
                         ].priceAtCurrentCycle
                     ) / 100;
-                withdrawcycle = withdrawcycle - 6;
+                currentReferenceRewardCycle = currentReferenceRewardCycle - 6;
+
                 for (var key of Object.keys(
                     storagedata.data.value.cycleOperations[
-                        withdrawcycle.toString()
-                    ].rangebettorsDetailsails
+                        currentReferenceRewardCycle.toString()
+                    ].rangeDetails
                 )) {
                     var lrange =
                         Math.trunc(
@@ -82,7 +92,7 @@ export default class setseller extends React.Component {
                                 Number(key.slice(0, key.indexOf('#'))) / 100) *
                                 Number(
                                     storagedata.data.value.cycleOperations[
-                                        withdrawcycle.toString()
+                                        currentReferenceRewardCycle.toString()
                                     ].priceAtCurrentCycle
                                 )) /
                                 100
@@ -93,7 +103,7 @@ export default class setseller extends React.Component {
                                 Number(key.slice(key.indexOf('#') + 1)) / 100) *
                                 Number(
                                     storagedata.data.value.cycleOperations[
-                                        withdrawcycle.toString()
+                                        currentReferenceRewardCycle.toString()
                                     ].priceAtCurrentCycle
                                 )) /
                                 100
@@ -103,14 +113,14 @@ export default class setseller extends React.Component {
                         var reward =
                             Number(
                                 storagedata.data.value.cycleOperations[
-                                    withdrawcycle.toString()
-                                ].rangebettorsDetailsails[key].totalRewards
+                                    currentReferenceRewardCycle.toString()
+                                ].rangeDetails[key].totalRewards
                             ) / 1000000;
                         var camountInRange =
                             Number(
                                 storagedata.data.value.cycleOperations[
-                                    withdrawcycle.toString()
-                                ].rangebettorsDetailsails[key].amountInRange
+                                    currentReferenceRewardCycle.toString()
+                                ].rangeDetails[key].amountInRange
                             ) / 1000000;
                         break;
                     }
@@ -119,14 +129,14 @@ export default class setseller extends React.Component {
                         var reward =
                             Number(
                                 storagedata.data.value.cycleOperations[
-                                    withdrawcycle.toString()
-                                ].rangebettorsDetailsails[key].totalRewards
+                                    currentReferenceRewardCycle.toString()
+                                ].rangeDetails[key].totalRewards
                             ) / 1000000;
                         var camountInRange =
                             Number(
                                 storagedata.data.value.cycleOperations[
-                                    withdrawcycle.toString()
-                                ].rangebettorsDetailsails[key].amountInRange
+                                    currentReferenceRewardCycle.toString()
+                                ].rangeDetails[key].amountInRange
                             ) / 1000000;
                         break;
                     }
@@ -139,14 +149,14 @@ export default class setseller extends React.Component {
                         var reward =
                             Number(
                                 storagedata.data.value.cycleOperations[
-                                    withdrawcycle.toString()
-                                ].rangebettorsDetailsails[key].totalRewards
+                                    currentReferenceRewardCycle.toString()
+                                ].rangeDetails[key].totalRewards
                             ) / 1000000;
                         var camountInRange =
                             Number(
                                 storagedata.data.value.cycleOperations[
-                                    withdrawcycle.toString()
-                                ].rangebettorsDetailsails[key].amountInRange
+                                    currentReferenceRewardCycle.toString()
+                                ].rangeDetails[key].amountInRange
                             ) / 1000000;
                         break;
                     }
@@ -159,7 +169,7 @@ export default class setseller extends React.Component {
                         TamountInRange:
                             Number(
                                 storagedata.data.value.cycleOperations[
-                                    withdrawcycle.toString()
+                                    currentReferenceRewardCycle.toString()
                                 ].cAmount
                             ) / 1000000,
                         pool:
@@ -203,7 +213,7 @@ export default class setseller extends React.Component {
         }
         this.tzInterval = setTimeout(
             this.stakingStats.bind(this),
-            (storagedata.data.meta.height % 2048) * 30000
+            (height % 2048) * 30000
         );
     }
 
@@ -321,7 +331,7 @@ export default class setseller extends React.Component {
                                             }}
                                         >
                                             <NavLink
-                                                href="/mainnet"
+                                                href="/statsmainnet"
                                                 style={{
                                                     'font-size':
                                                         '1.1111111111vmax',
@@ -490,25 +500,11 @@ export default class setseller extends React.Component {
                             </NavItem>
                         </Nav>
                     </Navbar>
-                    <p
-                        align="center"
-                        style={{
-                            'font-size': '3.888888889vmax',
-                            'font-family': 'OpenSans-Bold, sans-serif',
-                            'padding-top': '5vmax',
-                            'padding-bottom': '1.66666667vmax',
-                            'padding-left': '0.902777778vmax',
-                            color: '#FFFFFF',
-                            'letter-spacing': '0.049vmax',
-                            'line-height': '5.056vmax',
-                        }}
-                    >
-                        <strong>
-                            Previous Staking Period
-                            <br />
-                            Cycle {this.state.currentCycle + 1} -{' '}
-                            {this.state.currentCycle + 6} Stats
-                        </strong>
+                    <p align="center" className="header-stats">
+                        Previous Staking Period
+                        <br />
+                        Cycle {this.state.currentCycle + 1} -{' '}
+                        {this.state.currentCycle + 6} Stats
                     </p>
                     <Card
                         inverse={true}
@@ -527,10 +523,10 @@ export default class setseller extends React.Component {
                                     'padding-right': '9.5vmax',
                                     'padding-top': this.state.show
                                         ? '1.666666667vmax'
-                                        : '4vmax',
+                                        : '2vmax',
                                     'padding-bottom': this.state.show
                                         ? '1.66667vmax'
-                                        : '4vmax',
+                                        : '2vmax',
                                 }}
                             >
                                 <button
@@ -541,7 +537,7 @@ export default class setseller extends React.Component {
                                         'font-family':
                                             'OpenSans-Bold, sans-serif',
                                         'text-align': 'center',
-                                        'font-size': '1.805555556vmax',
+                                        fontSize: 'large',
                                         border: '0.06944vmax solid black',
                                         'border-radius': '0.5555556vmax',
                                         width: '24.5138888888889vmax',
@@ -574,10 +570,10 @@ export default class setseller extends React.Component {
                                     'padding-left': '9.5vmax',
                                     'padding-top': this.state.show
                                         ? '1.666666667vmax'
-                                        : '4vmax',
+                                        : '2vmax',
                                     'padding-bottom': this.state.show
                                         ? '1.66667vmax'
-                                        : '4vmax',
+                                        : '2vmax',
                                 }}
                             >
                                 <button
@@ -588,7 +584,7 @@ export default class setseller extends React.Component {
                                         'font-family':
                                             'OpenSans-Bold, sans-serif',
                                         'text-align': 'center',
-                                        'font-size': '1.805555556vmax',
+                                        fontSize: 'large',
                                         border: '0.06944vmax solid black',
                                         'border-radius': '0.5555556vmax',
                                         width: '24.5138888888889vmax',
@@ -615,10 +611,10 @@ export default class setseller extends React.Component {
                                     'padding-left': '9.5vmax',
                                     'padding-top': this.state.show
                                         ? '1.666666667vmax'
-                                        : '4vmax',
+                                        : '2vmax',
                                     'padding-bottom': this.state.show
                                         ? '1.66667vmax'
-                                        : '4vmax',
+                                        : '2vmax',
                                 }}
                             >
                                 <button
@@ -629,7 +625,7 @@ export default class setseller extends React.Component {
                                         'font-family':
                                             'OpenSans-Bold, sans-serif',
                                         'text-align': 'center',
-                                        'font-size': '1.805555556vmax',
+                                        fontSize: 'large',
                                         border: '0.06944vmax solid black',
                                         'border-radius': '0.5555556vmax',
                                         width: '24.5138888888889vmax',
@@ -658,10 +654,10 @@ export default class setseller extends React.Component {
                                     'padding-right': '9.5vmax',
                                     'padding-top': this.state.show
                                         ? '1.666666667vmax'
-                                        : '4vmax',
+                                        : '2vmax',
                                     'padding-bottom': this.state.show
                                         ? '1.66667vmax'
-                                        : '4vmax',
+                                        : '2vmax',
                                 }}
                             >
                                 <button
@@ -672,7 +668,7 @@ export default class setseller extends React.Component {
                                         'font-family':
                                             'OpenSans-Bold, sans-serif',
                                         'text-align': 'center',
-                                        'font-size': '1.805555556vmax',
+                                        fontSize: 'large',
                                         border: '0.06944vmax solid black',
                                         'border-radius': '0.5555556vmax',
                                         width: '24.5138888888889vmax',
@@ -699,10 +695,10 @@ export default class setseller extends React.Component {
                                     'padding-left': '9.5vmax',
                                     'padding-top': this.state.show
                                         ? '1.666666667vmax'
-                                        : '4vmax',
+                                        : '2vmax',
                                     'padding-bottom': this.state.show
                                         ? '1.66667vmax'
-                                        : '4vmax',
+                                        : '2vmax',
                                 }}
                             >
                                 <button
@@ -713,7 +709,7 @@ export default class setseller extends React.Component {
                                         'font-family':
                                             'OpenSans-Bold, sans-serif',
                                         'text-align': 'center',
-                                        'font-size': '1.805555556vmax',
+                                        fontSize: 'large',
                                         border: '0.06944vmax solid black',
                                         'border-radius': '0.5555556vmax',
                                         width: '24.5138888888889vmax',
@@ -738,10 +734,10 @@ export default class setseller extends React.Component {
                                     'padding-right': '9.5vmax',
                                     'padding-top': this.state.show
                                         ? '1.666666667vmax'
-                                        : '4vmax',
+                                        : '2vmax',
                                     'padding-bottom': this.state.show
                                         ? '1.66667vmax'
-                                        : '4vmax',
+                                        : '2vmax',
                                 }}
                             >
                                 <button
@@ -752,7 +748,7 @@ export default class setseller extends React.Component {
                                         'font-family':
                                             'OpenSans-Bold, sans-serif',
                                         'text-align': 'center',
-                                        'font-size': '1.805555556vmax',
+                                        fontSize: 'large',
                                         border: '0.06944vmax solid black',
                                         'border-radius': '0.5555556vmax',
                                         width: '24.5138888888889vmax',
@@ -774,158 +770,7 @@ export default class setseller extends React.Component {
                         </Row>
                     </Card>
                 </Container>
-                <Container
-                    fluid="xs"
-                    style={{
-                        backgroundColor: '#2C7DF7',
-                        'padding-left': '9.0888888889vmax',
-                        'padding-right': '7.6vmax',
-                        width: '100vmax',
-                    }}
-                >
-                    <Row
-                        xs="2"
-                        style={{
-                            'padding-top': '5vmax',
-                            'padding-bottom': '5vmax',
-                        }}
-                    >
-                        <Col>
-                            <label
-                                style={{
-                                    color: '#FFFFFF',
-                                    'letter-spacing': '0.0138888889vmax',
-                                    'font-family': 'OpenSans-Bold, sans-serif',
-                                    'font-size': '3.888888889vmax',
-                                }}
-                            >
-                                Try Stakepool now for smart prediction
-                            </label>
-                        </Col>
-                        <Col
-                            style={{
-                                'text-align': 'right',
-                                'padding-top': '4.2677777778vmax',
-                            }}
-                        >
-                            <NavLink href="/">
-                                <button
-                                    style={{
-                                        color: '#1565D8',
-                                        backgroundColor: '#F2F5F8',
-                                        'font-family':
-                                            'OpenSans-Bold, sans-serif',
-                                        'text-align': 'center',
-                                        'font-size': '2.0305555556vmax',
-                                        border: '0.06944vmax solid #1565D8',
-                                        'border-radius': '0.5555556vmax',
-                                        width: '24.5138888888889vmax',
-                                        height: '5.55555556vmax',
-                                        'line-height': '5.55555556vmax',
-                                    }}
-                                >
-                                    Stake
-                                </button>
-                            </NavLink>
-                        </Col>
-                    </Row>
-                </Container>
-                <Container
-                    fluid="xs"
-                    id="contact"
-                    align="center"
-                    style={{
-                        backgroundColor: '#F9FBFE',
-                        height: '100%',
-                        width: '100vmax',
-                        'padding-top': '3.333333vmax',
-                        'padding-bottom': '3.333333vmax',
-                    }}
-                >
-                    <img
-                        src={heart}
-                        style={{ width: '8.8vmax', height: '8.8vmax' }}
-                    />
-                    <p
-                        style={{
-                            color: '#5A7184',
-                            'font-family': 'OpenSans-SemiBold, sans-serif',
-                            'font-size': '1.34027778vmax',
-                        }}
-                    >
-                        <strong>Copyright © 2021. Crafted with love.</strong>
-                    </p>
-                    <a
-                        href="https://tezsure.com"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        <img
-                            src={tezsure}
-                            style={{
-                                width: '1.2vmax',
-                                height: '1.2vmax',
-                                'margin-left': '1.3888888889vmax',
-                            }}
-                        />
-                    </a>
-                    <a
-                        href="https://twitter.com/tezsure"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        <img
-                            src={twitter}
-                            style={{
-                                width: '1.25vmax',
-                                height: '1.25vmax',
-                                'margin-left': '1.3888888889vmax',
-                            }}
-                        />
-                    </a>
-                    <a
-                        href="https://www.linkedin.com/company/tezsure/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        <img
-                            src={linkedin}
-                            style={{
-                                width: '1.25vmax',
-                                height: '1.25vmax',
-                                'margin-left': '1.3888888889vmax',
-                            }}
-                        />
-                    </a>
-                    <a
-                        href="https://www.youtube.com/channel/UCZg7LT1bFWeFiKwGBLcLfLQ"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        <img
-                            src={youtube}
-                            style={{
-                                width: '1.25vmax',
-                                height: '1.25vmax',
-                                'margin-left': '1.3888888889vmax',
-                            }}
-                        />
-                    </a>
-                    <a
-                        href="https://web.telegram.org/#/im?p=@Indiatezos"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        <img
-                            src={telegram}
-                            style={{
-                                width: '1.25vmax',
-                                height: '1.25vmax',
-                                'margin-left': '1.3888888889vmax',
-                            }}
-                        />
-                    </a>
-                </Container>
+                <Footer />
             </Container>
         );
     }
