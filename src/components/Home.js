@@ -391,11 +391,15 @@ export default class setseller extends React.Component {
             });
 
             if (val) {
+                await TempleWallet.isAvailable();
                 const wallet = new TempleWallet('Stakepool');
                 await wallet.connect('delphinet', { forcePermission: true });
                 const tezos = wallet.toTezos();
+
+                tezos.setRpcProvider('https://delphinet.smartpy.io');
                 const accountPkh = await tezos.wallet.pkh();
                 const accountBalance = await tezos.tz.getBalance(accountPkh);
+                //const accountBalance = await tezos.tz.getBalance("")
                 console.info(
                     `address: ${accountPkh}, balance: ${accountBalance}`
                 );
