@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 import React from 'react';
 import { TempleWallet } from '@temple-wallet/dapp';
 import {
@@ -32,6 +33,7 @@ import axios from 'axios';
 import swal from '@sweetalert/with-react';
 import { JSONPath } from '@astronautlabs/jsonpath';
 import { animateScroll as scroll } from 'react-scroll';
+import Footer from './footer';
 
 export default class setseller extends React.Component {
     constructor(props) {
@@ -67,18 +69,27 @@ export default class setseller extends React.Component {
                 throw new Error('Please Install ');
             }
             const wallet = new TempleWallet('Stakepool');
-            await wallet.connect('delphinet', { forcePermission: true });
+            this.state.activeTab === 'mainnet'
+                ? await wallet.connect('mainnet', { forcePermission: true })
+                : await wallet.connect('delphinet', { forcePermission: true });
             const tezos = wallet.toTezos();
             const accountPkh = await tezos.wallet.pkh();
             /*const storagedata = await axios.get(
         "https://api.delphi.tzstats.com/explorer/contract/KT1WvnSNdkM8MFnKFApuZLtZH5VUNYYSm6Nr/storage"
       );*/
-            const storagedata = await axios.get(
-                'https://api.delphi.tzstats.com/explorer/contract/KT1K4eLeqpbSYN9j4sMBw9vFvkCWFSVUm6F5/storage'
-            );
+            const URL =
+                this.state.activeTab === 'mainnet'
+                    ? 'https://api.tzstats.com/explorer/contract/KT1DGHWbNCa57L9ctZXrD45P3XoDsHXAdgJK/storage'
+                    : 'https://api.delphi.tzstats.com/explorer/contract/KT1K4eLeqpbSYN9j4sMBw9vFvkCWFSVUm6F5/storage';
+            const storagedata = await axios.get(URL);
+            const HeightURL =
+                this.state.activeTab === 'mainnet'
+                    ? 'https://api.tzkt.io/v1/cycles/count'
+                    : 'https://api.delphi.tzkt.io/v1/cycles/count';
 
-            console.log({ storagedata });
-            var cycle = Math.trunc(storagedata.data.meta.height / 2048);
+            const fetchHeight = await axios.get(HeightURL);
+            const height = fetchHeight.data;
+            var cycle = Math.trunc(height / 2048);
             console.log({ cycle });
             var find = JSONPath.nodes(storagedata, '$..bettor');
             find = find.filter((find) => find.value === accountPkh);
@@ -372,7 +383,7 @@ export default class setseller extends React.Component {
                                             }}
                                         >
                                             <NavLink
-                                                href="/mainnet"
+                                                href="/statsmainnet"
                                                 style={{
                                                     'font-size':
                                                         '1.1111111111vmax',
@@ -544,21 +555,16 @@ export default class setseller extends React.Component {
                     <p
                         align="center"
                         style={{
-                            'font-size': '3.888888889vmax',
-                            'font-family': 'OpenSans-Bold, sans-serif',
-                            'padding-top': '5vmax',
+                            'font-size': '250%',
+                            'font-family': 'none !important',
+                            'padding-top': '5%',
                             'padding-bottom': '1.66666667vmax',
                             'padding-left': '0.902777778vmax',
                             color: '#FFFFFF',
-                            'letter-spacing': '0.049vmax',
-                            'line-height': '5.056vmax',
                         }}
+                        className="accounts-header"
                     >
-                        <strong>
-                            Your
-                            <br />
-                            Staking Orders
-                        </strong>
+                        Your staking orders
                     </p>
                     <Card
                         inverse={true}
@@ -573,7 +579,6 @@ export default class setseller extends React.Component {
                         <Nav tabs>
                             <NavItem style={{ width: '16vmax' }}>
                                 <NavLink
-                                    disabled
                                     className={classnames({
                                         active:
                                             this.state.activeTab === 'mainnet',
@@ -586,10 +591,15 @@ export default class setseller extends React.Component {
                                             this.state.activeTab === 'mainnet'
                                                 ? '#183B56'
                                                 : '#5A7184',
+                                        'box-shadow':
+                                            this.state.activeTab === 'mainnet'
+                                                ? 'rgb(204 204 204) 8px 0px 10px -4px'
+                                                : 'none',
                                         'font-family':
                                             'OpenSans-SemiBold, sans-serif',
                                         'text-align': 'Center',
-                                        'font-size': '1.7vmax',
+                                        'font-size': '1.4vmax',
+                                        cursor: 'pointer',
                                     }}
                                 >
                                     Mainnet
@@ -610,10 +620,15 @@ export default class setseller extends React.Component {
                                             this.state.activeTab === 'delphinet'
                                                 ? '#183B56'
                                                 : '#5A7184',
+                                        'box-shadow':
+                                            this.state.activeTab === 'delphinet'
+                                                ? 'rgb(204 204 204) -5px 0px 10px -4px'
+                                                : 'none',
                                         'font-family':
                                             'OpenSans-SemiBold, sans-serif',
                                         'text-align': 'Center',
-                                        'font-size': '1.7vmax',
+                                        'font-size': '1.4vmax',
+                                        cursor: 'pointer',
                                     }}
                                 >
                                     Delphinet
@@ -768,158 +783,7 @@ export default class setseller extends React.Component {
                         </Collapse>
                     </Card>
                 </Container>
-                <Container
-                    fluid="xs"
-                    style={{
-                        backgroundColor: '#2C7DF7',
-                        'padding-left': '9.0888888889vmax',
-                        'padding-right': '7.6vmax',
-                        width: '100vmax',
-                    }}
-                >
-                    <Row
-                        xs="2"
-                        style={{
-                            'padding-top': '5vmax',
-                            'padding-bottom': '5vmax',
-                        }}
-                    >
-                        <Col>
-                            <label
-                                style={{
-                                    color: '#FFFFFF',
-                                    'letter-spacing': '0.0138888889vmax',
-                                    'font-family': 'OpenSans-Bold, sans-serif',
-                                    'font-size': '3.888888889vmax',
-                                }}
-                            >
-                                Try Stakepool now for smart prediction
-                            </label>
-                        </Col>
-                        <Col
-                            style={{
-                                'text-align': 'right',
-                                'padding-top': '4.2677777778vmax',
-                            }}
-                        >
-                            <NavLink href="/">
-                                <button
-                                    style={{
-                                        color: '#1565D8',
-                                        backgroundColor: '#F2F5F8',
-                                        'font-family':
-                                            'OpenSans-Bold, sans-serif',
-                                        'text-align': 'center',
-                                        'font-size': '2.4305555556vmax',
-                                        border: '0.06944vmax solid #1565D8',
-                                        'border-radius': '0.5555556vmax',
-                                        width: '24.5138888888889vmax',
-                                        height: '5.55555556vmax',
-                                        'line-height': '5.55555556vmax',
-                                    }}
-                                >
-                                    Stake
-                                </button>
-                            </NavLink>
-                        </Col>
-                    </Row>
-                </Container>
-                <Container
-                    fluid="xs"
-                    id="contact"
-                    align="center"
-                    style={{
-                        backgroundColor: '#F9FBFE',
-                        height: '100%',
-                        width: '100vmax',
-                        'padding-top': '3.333333vmax',
-                        'padding-bottom': '3.333333vmax',
-                    }}
-                >
-                    <img
-                        src={heart}
-                        style={{ width: '8.8vmax', height: '8.8vmax' }}
-                    />
-                    <p
-                        style={{
-                            color: '#5A7184',
-                            'font-family': 'OpenSans-SemiBold, sans-serif',
-                            'font-size': '1.34027778vmax',
-                        }}
-                    >
-                        <strong>Copyright © 2021. Crafted with love.</strong>
-                    </p>
-                    <a
-                        href="https://tezsure.com"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        <img
-                            src={tezsure}
-                            style={{
-                                width: '1.2vmax',
-                                height: '1.2vmax',
-                                'margin-left': '1.3888888889vmax',
-                            }}
-                        />
-                    </a>
-                    <a
-                        href="https://twitter.com/tezsure"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        <img
-                            src={twitter}
-                            style={{
-                                width: '1.25vmax',
-                                height: '1.25vmax',
-                                'margin-left': '1.3888888889vmax',
-                            }}
-                        />
-                    </a>
-                    <a
-                        href="https://www.linkedin.com/company/tezsure/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        <img
-                            src={linkedin}
-                            style={{
-                                width: '1.25vmax',
-                                height: '1.25vmax',
-                                'margin-left': '1.3888888889vmax',
-                            }}
-                        />
-                    </a>
-                    <a
-                        href="https://www.youtube.com/channel/UCZg7LT1bFWeFiKwGBLcLfLQ"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        <img
-                            src={youtube}
-                            style={{
-                                width: '1.25vmax',
-                                height: '1.25vmax',
-                                'margin-left': '1.3888888889vmax',
-                            }}
-                        />
-                    </a>
-                    <a
-                        href="https://web.telegram.org/#/im?p=@Indiatezos"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        <img
-                            src={telegram}
-                            style={{
-                                width: '1.25vmax',
-                                height: '1.25vmax',
-                                'margin-left': '1.3888888889vmax',
-                            }}
-                        />
-                    </a>
-                </Container>
+                <Footer />
             </Container>
         );
     }
