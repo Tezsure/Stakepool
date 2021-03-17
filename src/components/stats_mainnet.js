@@ -63,11 +63,11 @@ export default class setseller extends React.Component {
         const fetchHeight = await axios.get(
             'https://api.tzkt.io/v1/cycles/count'
         );
-        const height = fetchHeight.data;
+        var cycle = fetchHeight.data;
         var currentReferenceRewardCycle = Number(
             storagedata.data.value.currentReferenceRewardCycle
         );
-        var cycle = Math.trunc(height / 2048);
+        //var cycle = Math.trunc(height / 2048);
         if (storagedata.data.value.currentReferenceRewardCycle != '1') {
             if (
                 Number(storagedata.data.value.currentReferenceRewardCycle) > 6
@@ -220,7 +220,7 @@ export default class setseller extends React.Component {
         }
         this.tzInterval = setTimeout(
             this.stakingStats.bind(this),
-            (height % 2048) * 30000
+            (cycle) * 30000
         );
     }
 
