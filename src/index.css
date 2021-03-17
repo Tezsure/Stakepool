@@ -97,4 +97,8 @@ input[type='number'] {
     border: 1px solid #e9ecef;
     border-radius: 4px;
     padding: 10px;
+    word-break: break-all;
+}
+.transaction-container p {
+    word-break: break-all;
 }
