@@ -82,3 +82,19 @@ input[type='number'] {
 .accounts-header {
     font-family: none !important;
 }
+.error-message-container {
+    padding-top: 2% !important;
+    border-radius: unset !important;
+    padding-bottom: 2% !important;
+    border: none !important;
+}
+.sweet-footer-container .swal-footer {
+    text-align: center !important;
+}
+.transaction-container {
+    display: block;
+    background: #e9ecef;
+    border: 1px solid #e9ecef;
+    border-radius: 4px;
+    padding: 10px;
+}

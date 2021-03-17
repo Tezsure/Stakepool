@@ -40,8 +40,14 @@ export default class setseller extends React.Component {
         super(props);
         this.state = {
             activeTab: 'delphinet',
-            result: [],
-            account: '',
+            result: {
+                mainnet: [],
+                delphinet: [],
+            },
+            account: {
+                mainnet: '',
+                delphinet: '',
+            },
             Cycle: null,
             show: false,
         };
@@ -55,9 +61,10 @@ export default class setseller extends React.Component {
 
     async setTab(tab) {
         if (this.state.activeTab !== tab) {
-            this.setState((state) => {
-                return { activeTab: tab, show: false };
-            });
+            const prevState = { ...this.state };
+            prevState.activeTab = tab;
+            prevState.show = true;
+            this.setState(prevState);
         }
     }
 
@@ -208,14 +215,14 @@ export default class setseller extends React.Component {
                 entries.push(entry);
             }
             if (entries.length != 0) {
-                this.setState((state) => {
-                    return {
-                        account: accountPkh,
-                        result: entries.reverse(),
-                        Cycle: cycle,
-                        show: true,
-                    };
-                });
+                const tableValues = {
+                    ...this.state,
+                    Cycle: cycle,
+                    show: true,
+                };
+                tableValues.result[this.state.activeTab] = entries.reverse();
+                tableValues.account[this.state.activeTab] = accountPkh;
+                this.setState(tableValues);
             } else {
                 await swal({
                     title: 'Error!!!',
@@ -666,7 +673,11 @@ export default class setseller extends React.Component {
                                 <strong>Connect Wallet</strong>
                             </button>
                         </Col>
-                        <Collapse isOpen={this.state.show}>
+                        <Collapse
+                            isOpen={
+                                this.state.account[this.state.activeTab].length
+                            }
+                        >
                             <Row
                                 sm="2"
                                 style={{
@@ -697,7 +708,11 @@ export default class setseller extends React.Component {
                                                 'font-size': '1.277778vmax',
                                             }}
                                         >
-                                            {this.state.account}
+                                            {
+                                                this.state.account[
+                                                    this.state.activeTab
+                                                ]
+                                            }
                                         </Badge>
                                     </label>{' '}
                                 </Col>
@@ -737,7 +752,9 @@ export default class setseller extends React.Component {
                                         'font-size': '1.277778vmax',
                                     }}
                                 >
-                                    {this.state.result.map((value) => (
+                                    {this.state.result[
+                                        this.state.activeTab
+                                    ].map((value) => (
                                         <tr>
                                             <td>
                                                 {value[0]} - {value[0] + 5}

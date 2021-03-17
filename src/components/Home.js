@@ -1,7 +1,6 @@
 import React from 'react';
 import { TempleWallet } from '@temple-wallet/dapp';
 import { animateScroll as scroll } from 'react-scroll';
-import swal from 'sweetalert';
 import {
     Container,
     Collapse,
@@ -44,7 +43,7 @@ import down from './icons/down.jpeg';
 import det from './icons/details.svg';
 import axios from 'axios';
 import Countdown from 'react-countdown-now';
-import Swal from 'sweetalert2';
+import swal from '@sweetalert/with-react';
 import Footer from './footer';
 
 export default class setseller extends React.Component {
@@ -122,17 +121,21 @@ export default class setseller extends React.Component {
         this.setState({ warningBarOpen: false });
     };
 
-    showAlert = () => {
-        Swal.fire({
+    alertWarning = () => {
+        swal({
             icon: 'warning',
             title: 'Welcome to stakepool',
-            text: `We're currently in beta, use it at your own risk.`,
-            confirmButtonText: 'I Understand',
+            text: `We're currently in beta use it at your own risk.`,
+            className: 'sweet-footer-container',
+            button: {
+                text: 'I understand',
+                className: 'sweet-warning-button',
+            },
         });
     };
 
     async componentDidMount() {
-        this.showAlert();
+        this.alertWarning();
         this.fetchContractData();
         this.fetchPrice();
         this.fetchCycleData();
@@ -194,9 +197,8 @@ export default class setseller extends React.Component {
 
     async fetchContractData() {
         const storagedata = await axios.get(
-            'https://api.delphi.tzstats.com/explorer/contract/KT1LSLUHe9U4MqDuyrMhWThCWu7P6g61vs5k/storage'
+            'https://api.delphi.tzstats.com/explorer/contract/KT1K4eLeqpbSYN9j4sMBw9vFvkCWFSVUm6F5/storage'
         );
-        console.log(storagedata);
         const withdrawcycle =
             storagedata.data.value.currentReferenceRewardCycle;
         this.countBettorsInCycle(
@@ -391,15 +393,14 @@ export default class setseller extends React.Component {
             });
 
             if (val) {
-                await TempleWallet.isAvailable();
                 const wallet = new TempleWallet('Stakepool');
                 await wallet.connect('delphinet', { forcePermission: true });
                 const tezos = wallet.toTezos();
-
-                tezos.setRpcProvider('https://delphinet.smartpy.io');
                 const accountPkh = await tezos.wallet.pkh();
-                const accountBalance = await tezos.tz.getBalance(accountPkh);
-                //const accountBalance = await tezos.tz.getBalance("")
+                const accountBalanceResponse = await tezos.tz.getBalance(
+                    accountPkh
+                );
+                const accountBalance = accountBalanceResponse.toNumber();
                 console.info(
                     `address: ${accountPkh}, balance: ${accountBalance}`
                 );
@@ -454,37 +455,45 @@ export default class setseller extends React.Component {
                 await swal({
                     title: 'Stake Order Successful',
                     content: (
-                        <Container fluid="xs" align="left">
+                        <Container
+                            fluid="xs"
+                            align="left"
+                            style={{ textAlign: 'center' }}
+                        >
                             <p
                                 style={{
                                     'padding-left': '1.12rem',
                                     'line-height': '2.11rem',
                                     color: '#748093',
+                                    textAlign: 'center',
                                 }}
                             >
                                 The amount will be considered for staking from
                                 the following cycle onwards.
                             </p>
-                            <br />
-                            <p
-                                style={{
-                                    'padding-left': '1.12rem',
-                                    'line-height': '1rem',
-                                    color: '#748093',
-                                }}
-                            >
-                                Tx Hash:
-                            </p>
-                            <p
-                                style={{
-                                    'padding-left': '1.61rem',
-                                    'font-size': '0.8rem',
-                                    'line-height': '1rem',
-                                    color: '#748093',
-                                }}
-                            >
-                                {operation.opHash.toString()}
-                            </p>
+                            <span className="transaction-container">
+                                <p
+                                    style={{
+                                        'padding-left': '1.12rem',
+                                        'line-height': '1rem',
+                                        color: '#748093',
+                                        textAlign: 'center',
+                                    }}
+                                >
+                                    Tx Hash:
+                                </p>
+                                <p
+                                    style={{
+                                        'padding-left': '1.61rem',
+                                        'font-size': '0.8rem',
+                                        'line-height': '1rem',
+                                        color: '#748093',
+                                        textAlign: 'center',
+                                    }}
+                                >
+                                    {operation.opHash.toString()}
+                                </p>
+                            </span>
                         </Container>
                     ),
                     icon: 'success',
@@ -492,7 +501,6 @@ export default class setseller extends React.Component {
                 });
                 const counterValue = await sell.storage();
                 console.info(`storage: ${counterValue}`);
-                window.location.reload(true);
             }
         } catch (err) {
             if (err.message == 'Please Install ') {
@@ -583,7 +591,7 @@ export default class setseller extends React.Component {
                                                     <strong>
                                                         Price Prediction
                                                         <br />
-                                                        {value[2] === value[3]
+                                                        {value[2] == value[3]
                                                             ? value[2] > 0
                                                                 ? 'Above $' +
                                                                   value[0].toString()
@@ -1090,7 +1098,7 @@ export default class setseller extends React.Component {
                                             }}
                                         >
                                             <NavLink
-                                                href="/mainnet"
+                                                href="/"
                                                 style={{
                                                     'font-size':
                                                         '1.1111111111vmax',
@@ -1147,38 +1155,42 @@ export default class setseller extends React.Component {
                         >
                             {this.state.warningBarOpen === true &&
                             this.state.error === false ? (
-                                <CardBody
-                                    style={{
-                                        'text-align': 'center',
-                                        'background-color': '#ffc107',
-                                        color: '#f8f9fa',
-                                        border: '0.06944vmax solid red',
-                                        'border-radius':
-                                            '0.833333vmax;box-shadow: rgb(239, 150, 150) 0vmax 0vmax 0.902778vmax 0.06944vmax;',
-                                    }}
-                                >
-                                    <CardText>
-                                        <button
-                                            onClick={() => {
-                                                this.closeWarningBar();
-                                            }}
-                                            style={{
-                                                position: 'absolute',
-                                                right: '0px',
-                                                top: '0px',
-                                                padding: '0vmax 0.556vmax',
-                                                border: '0.06944vmax solid red',
-                                                'border-radius': '1.38889vmax',
-                                            }}
-                                        >
-                                            X
-                                        </button>
-
-                                        {this.state.bettorsCount > 50
-                                            ? "Bettors beyond permissible limits, can't place bets in current"
-                                            : null}
-                                    </CardText>
-                                </CardBody>
+                                <div>
+                                    <CardBody
+                                        style={{
+                                            'text-align': 'center',
+                                            'background-color': '#ffc107',
+                                            color: '#f8f9fa',
+                                            border: '0.06944vmax solid red',
+                                            'border-radius':
+                                                '0.833333vmax;box-shadow: rgb(239, 150, 150) 0vmax 0vmax 0.902778vmax 0.06944vmax;',
+                                        }}
+                                        className="error-message-container"
+                                    >
+                                        <CardText>
+                                            <button
+                                                onClick={() => {
+                                                    this.closeWarningBar();
+                                                }}
+                                                style={{
+                                                    position: 'absolute',
+                                                    right: '0px',
+                                                    top: '0px',
+                                                    padding: '0vmax 0.556vmax',
+                                                    border:
+                                                        '0.06944vmax solid red',
+                                                    'border-radius':
+                                                        '1.38889vmax',
+                                                }}
+                                            >
+                                                X
+                                            </button>
+                                            {this.state.bettorsCount > 50
+                                                ? "Bettors beyond permissible limits, can't place bets in current"
+                                                : null}
+                                        </CardText>
+                                    </CardBody>
+                                </div>
                             ) : (
                                 <div>
                                     <CardBody
@@ -1191,6 +1203,7 @@ export default class setseller extends React.Component {
                                             'box-shadow':
                                                 '0vmax 0vmax 0.902778vmax 0.06944vmax #ef9696',
                                         }}
+                                        className="error-message-container"
                                     >
                                         <button
                                             onClick={() => {
@@ -1211,7 +1224,7 @@ export default class setseller extends React.Component {
                                             X
                                         </button>
                                         {this.state.thanosError ? (
-                                            <CardText>
+                                            <CardText className="error-message">
                                                 Error: {this.state.errMsg}
                                                 <a href="https://templeWallet.com/download">
                                                     Thanos Wallet Browser Plugin
@@ -1220,7 +1233,7 @@ export default class setseller extends React.Component {
                                                 Stakepool
                                             </CardText>
                                         ) : (
-                                            <CardText>
+                                            <CardText className="error-message">
                                                 Error: {this.state.errMsg}
                                             </CardText>
                                         )}

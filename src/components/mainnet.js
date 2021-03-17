@@ -384,7 +384,10 @@ export default class setseller extends React.Component {
                 await wallet.connect('mainnet', { forcePermission: true });
                 const tezos = wallet.toTezos();
                 const accountPkh = await tezos.wallet.pkh();
-                const accountBalance = await tezos.tz.getBalance(accountPkh);
+                const accountBalanceResponse = await tezos.tz.getBalance(
+                    accountPkh
+                );
+                const accountBalance = accountBalanceResponse.toNumber();
                 console.info(
                     `address: ${accountPkh}, balance: ${accountBalance}`
                 );
@@ -439,37 +442,45 @@ export default class setseller extends React.Component {
                 await swal({
                     title: 'Stake Order Successful',
                     content: (
-                        <Container fluid="xs" align="left">
+                        <Container
+                            fluid="xs"
+                            align="left"
+                            style={{ textAlign: 'center' }}
+                        >
                             <p
                                 style={{
                                     'padding-left': '1.12rem',
                                     'line-height': '2.11rem',
                                     color: '#748093',
+                                    textAlign: 'center',
                                 }}
                             >
                                 The amount will be considered for staking from
                                 the following cycle onwards.
                             </p>
-                            <br />
-                            <p
-                                style={{
-                                    'padding-left': '1.12rem',
-                                    'line-height': '1rem',
-                                    color: '#748093',
-                                }}
-                            >
-                                Tx Hash:
-                            </p>
-                            <p
-                                style={{
-                                    'padding-left': '1.61rem',
-                                    'font-size': '0.8rem',
-                                    'line-height': '1rem',
-                                    color: '#748093',
-                                }}
-                            >
-                                {operation.opHash.toString()}
-                            </p>
+                            <span className="transaction-container">
+                                <p
+                                    style={{
+                                        'padding-left': '1.12rem',
+                                        'line-height': '1rem',
+                                        color: '#748093',
+                                        textAlign: 'center',
+                                    }}
+                                >
+                                    Tx Hash:
+                                </p>
+                                <p
+                                    style={{
+                                        'padding-left': '1.61rem',
+                                        'font-size': '0.8rem',
+                                        'line-height': '1rem',
+                                        color: '#748093',
+                                        textAlign: 'center',
+                                    }}
+                                >
+                                    {operation.opHash.toString()}
+                                </p>
+                            </span>
                         </Container>
                     ),
                     icon: 'success',
@@ -1142,6 +1153,7 @@ export default class setseller extends React.Component {
                                             'border-radius':
                                                 '0.833333vmax;box-shadow: rgb(239, 150, 150) 0vmax 0vmax 0.902778vmax 0.06944vmax;',
                                         }}
+                                        className="error-message-container"
                                     >
                                         <CardText>
                                             <button
@@ -1179,6 +1191,7 @@ export default class setseller extends React.Component {
                                             'box-shadow':
                                                 '0vmax 0vmax 0.902778vmax 0.06944vmax #ef9696',
                                         }}
+                                        className="error-message-container"
                                     >
                                         <button
                                             onClick={() => {
@@ -1199,7 +1212,7 @@ export default class setseller extends React.Component {
                                             X
                                         </button>
                                         {this.state.thanosError ? (
-                                            <CardText>
+                                            <CardText className="error-message">
                                                 Error: {this.state.errMsg}
                                                 <a href="https://templeWallet.com/download">
                                                     Thanos Wallet Browser Plugin
@@ -1208,7 +1221,7 @@ export default class setseller extends React.Component {
                                                 Stakepool
                                             </CardText>
                                         ) : (
-                                            <CardText>
+                                            <CardText className="error-message">
                                                 Error: {this.state.errMsg}
                                             </CardText>
                                         )}
