@@ -94,6 +94,8 @@ export default class setseller extends React.Component {
                     ? 'https://api.tzkt.io/v1/cycles/count'
                     : 'https://api.delphi.tzkt.io/v1/cycles/count';
 
+            const addCycle = this.state.activeTab === 'mainnet' ? 7 : 5;
+
             const fetchHeight = await axios.get(HeightURL);
             const height = fetchHeight.data;
             var cycle = Math.trunc(height / 2048);
@@ -102,6 +104,7 @@ export default class setseller extends React.Component {
             find = find.filter((find) => find.value === accountPkh);
             var x;
             var entries = [];
+
             for (x of find) {
                 var entry = [];
                 var roi;
@@ -146,7 +149,8 @@ export default class setseller extends React.Component {
                         storagedata.data.value.cycleOperations[x.path[4]]
                             .rangeDetails[x.path[6]].amountInRange
                     );
-                var ending = Number(x.path[4]) + 5 + 1;
+
+                var ending = Number(x.path[4]) + addCycle + 1;
                 if (ending <= Number(storagedata.data.value.withdrawcycle)) {
                     wPrice = (
                         Number(
@@ -277,6 +281,7 @@ export default class setseller extends React.Component {
     }
 
     render() {
+        const addCycle = this.state.activeTab === 'mainnet' ? 7 : 5;
         return (
             <Container
                 fluid="xs"
@@ -390,7 +395,7 @@ export default class setseller extends React.Component {
                                             }}
                                         >
                                             <NavLink
-                                                href="/statsmainnet"
+                                                href="/statsdelphinet"
                                                 style={{
                                                     'font-size':
                                                         '1.1111111111vmax',
@@ -505,7 +510,7 @@ export default class setseller extends React.Component {
                                             }}
                                         >
                                             <NavLink
-                                                href="/mainnet"
+                                                href="/"
                                                 style={{
                                                     'font-size':
                                                         '1.1111111111vmax',
@@ -757,7 +762,8 @@ export default class setseller extends React.Component {
                                     ].map((value) => (
                                         <tr>
                                             <td>
-                                                {value[0]} - {value[0] + 5}
+                                                {value[0]} -{' '}
+                                                {value[0] + addCycle}
                                             </td>
                                             <td>
                                                 {value[1] == value[2]

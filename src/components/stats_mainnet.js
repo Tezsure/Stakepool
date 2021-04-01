@@ -70,16 +70,16 @@ export default class setseller extends React.Component {
         //var cycle = Math.trunc(height / 2048);
         if (storagedata.data.value.currentReferenceRewardCycle != '1') {
             if (
-                Number(storagedata.data.value.currentReferenceRewardCycle) > 6
+                Number(storagedata.data.value.currentReferenceRewardCycle) > 8
             ) {
-                cycle = cycle - 6;
+                cycle = cycle - 8;
                 var wprice =
                     Number(
                         storagedata.data.value.cycleOperations[
                             currentReferenceRewardCycle.toString()
                         ].priceAtCurrentCycle
                     ) / 100;
-                currentReferenceRewardCycle = currentReferenceRewardCycle - 6;
+                currentReferenceRewardCycle = currentReferenceRewardCycle - 8;
                 for (var key of Object.keys(
                     storagedata.data.value.cycleOperations[
                         currentReferenceRewardCycle.toString()
@@ -220,7 +220,7 @@ export default class setseller extends React.Component {
         }
         this.tzInterval = setTimeout(
             this.stakingStats.bind(this),
-            (cycle) * 30000
+            cycle * 30000
         );
     }
 
@@ -338,7 +338,7 @@ export default class setseller extends React.Component {
                                             }}
                                         >
                                             <NavLink
-                                                href="/statsmainnet"
+                                                href="/statsdelphinet"
                                                 style={{
                                                     'font-size':
                                                         '1.1111111111vmax',
@@ -453,7 +453,7 @@ export default class setseller extends React.Component {
                                             }}
                                         >
                                             <NavLink
-                                                href="/mainnet"
+                                                href="/"
                                                 style={{
                                                     'font-size':
                                                         '1.1111111111vmax',
@@ -511,7 +511,7 @@ export default class setseller extends React.Component {
                         Previous Staking Period
                         <br />
                         Cycle {this.state.currentCycle + 1} -{' '}
-                        {this.state.currentCycle + 6} Stats
+                        {this.state.currentCycle + 8} Stats
                     </p>
                     <Card
                         inverse={true}
