@@ -44,7 +44,7 @@ import det from './icons/details.svg';
 import axios from 'axios';
 import Countdown from 'react-countdown-now';
 import swal from '@sweetalert/with-react';
-import { Tezos } from '@taquito/taquito';
+import Footer from './footer';
 
 export default class setseller extends React.Component {
     //tzstatsInterval;
@@ -68,7 +68,7 @@ export default class setseller extends React.Component {
             cycletime: null,
             option: false,
             help: false,
-            warningBarOpen: true,
+            warningBarOpen: false,
             bettorsCount: 0,
         };
     }
@@ -121,7 +121,21 @@ export default class setseller extends React.Component {
         this.setState({ warningBarOpen: false });
     };
 
+    alertWarning = () => {
+        swal({
+            icon: 'warning',
+            title: 'Welcome to stakepool',
+            text: `We're currently in beta use it at your own risk.`,
+            className: 'sweet-footer-container',
+            button: {
+                text: 'I understand',
+                className: 'sweet-warning-button',
+            },
+        });
+    };
+
     async componentDidMount() {
+        this.alertWarning();
         this.fetchContractData();
         this.fetchPrice();
         this.fetchCycleData();
@@ -183,9 +197,8 @@ export default class setseller extends React.Component {
 
     async fetchContractData() {
         const storagedata = await axios.get(
-            'https://api.delphi.tzstats.com/explorer/contract/KT1LSLUHe9U4MqDuyrMhWThCWu7P6g61vs5k/storage'
+            'https://api.delphi.tzstats.com/explorer/contract/KT1K4eLeqpbSYN9j4sMBw9vFvkCWFSVUm6F5/storage'
         );
-        console.log(storagedata);
         const withdrawcycle =
             storagedata.data.value.currentReferenceRewardCycle;
         this.countBettorsInCycle(
@@ -251,7 +264,6 @@ export default class setseller extends React.Component {
 
     async betting() {
         try {
-            
             const available = await TempleWallet.isAvailable();
             var amountInRange;
             if (!available) {
@@ -381,16 +393,14 @@ export default class setseller extends React.Component {
             });
 
             if (val) {
-
-                await TempleWallet.isAvailable();
                 const wallet = new TempleWallet('Stakepool');
-                await wallet.connect("delphinet", { forcePermission: true });
+                await wallet.connect('delphinet', { forcePermission: true });
                 const tezos = wallet.toTezos();
-                
-                tezos.setRpcProvider("https://delphinet.smartpy.io");
                 const accountPkh = await tezos.wallet.pkh();
-                const accountBalance = await tezos.tz.getBalance(accountPkh);
-                //const accountBalance = await tezos.tz.getBalance("")
+                const accountBalanceResponse = await tezos.tz.getBalance(
+                    accountPkh
+                );
+                const accountBalance = accountBalanceResponse.toNumber();
                 console.info(
                     `address: ${accountPkh}, balance: ${accountBalance}`
                 );
@@ -445,37 +455,45 @@ export default class setseller extends React.Component {
                 await swal({
                     title: 'Stake Order Successful',
                     content: (
-                        <Container fluid="xs" align="left">
+                        <Container
+                            fluid="xs"
+                            align="left"
+                            style={{ textAlign: 'center' }}
+                        >
                             <p
                                 style={{
                                     'padding-left': '1.12rem',
                                     'line-height': '2.11rem',
                                     color: '#748093',
+                                    textAlign: 'center',
                                 }}
                             >
                                 The amount will be considered for staking from
                                 the following cycle onwards.
                             </p>
-                            <br />
-                            <p
-                                style={{
-                                    'padding-left': '1.12rem',
-                                    'line-height': '1rem',
-                                    color: '#748093',
-                                }}
-                            >
-                                Tx Hash:
-                            </p>
-                            <p
-                                style={{
-                                    'padding-left': '1.61rem',
-                                    'font-size': '0.8rem',
-                                    'line-height': '1rem',
-                                    color: '#748093',
-                                }}
-                            >
-                                {operation.opHash.toString()}
-                            </p>
+                            <span className="transaction-container">
+                                <p
+                                    style={{
+                                        'padding-left': '1.12rem',
+                                        'line-height': '1rem',
+                                        color: '#748093',
+                                        textAlign: 'center',
+                                    }}
+                                >
+                                    Tx Hash:
+                                </p>
+                                <p
+                                    style={{
+                                        'padding-left': '1.61rem',
+                                        'font-size': '0.8rem',
+                                        'line-height': '1rem',
+                                        color: '#748093',
+                                        textAlign: 'center',
+                                    }}
+                                >
+                                    {operation.opHash.toString()}
+                                </p>
+                            </span>
                         </Container>
                     ),
                     icon: 'success',
@@ -483,7 +501,6 @@ export default class setseller extends React.Component {
                 });
                 const counterValue = await sell.storage();
                 console.info(`storage: ${counterValue}`);
-                window.location.reload(true);
             }
         } catch (err) {
             if (err.message == 'Please Install ') {
@@ -948,7 +965,7 @@ export default class setseller extends React.Component {
                                             }}
                                         >
                                             <NavLink
-                                                href="/mainnet"
+                                                href="/statsdelphinet"
                                                 style={{
                                                     'font-size':
                                                         '1.1111111111vmax',
@@ -1063,7 +1080,7 @@ export default class setseller extends React.Component {
                                             }}
                                         >
                                             <NavLink
-                                                href="/mainnet"
+                                                href="/"
                                                 style={{
                                                     'font-size':
                                                         '1.1111111111vmax',
@@ -1081,7 +1098,7 @@ export default class setseller extends React.Component {
                                             }}
                                         >
                                             <NavLink
-                                                href="/mainnet"
+                                                href="/"
                                                 style={{
                                                     'font-size':
                                                         '1.1111111111vmax',
@@ -1117,24 +1134,10 @@ export default class setseller extends React.Component {
                             </NavItem>
                         </Nav>
                     </Navbar>
-                    <p
-                        align="center"
-                        style={{
-                            'font-size': '3.888888889vmax',
-                            'font-family': 'OpenSans-Bold, sans-serif',
-                            'padding-top': '5vmax',
-                            'padding-bottom': '1.66666667vmax',
-                            'padding-left': '0.902777778vmax',
-                            color: '#FFFFFF',
-                            'letter-spacing': '0.049vmax',
-                            'line-height': '5.056vmax',
-                        }}
-                    >
-                        <strong>
-                            Earn a little extra on your
-                            <br />
-                            staking rewards
-                        </strong>
+                    <p align="center" className="into-text">
+                        Earn a little extra on your
+                        <br />
+                        staking rewards
                     </p>
                     <Card
                         inverse={true}
@@ -1162,6 +1165,7 @@ export default class setseller extends React.Component {
                                             'border-radius':
                                                 '0.833333vmax;box-shadow: rgb(239, 150, 150) 0vmax 0vmax 0.902778vmax 0.06944vmax;',
                                         }}
+                                        className="error-message-container"
                                     >
                                         <CardText>
                                             <button
@@ -1181,8 +1185,6 @@ export default class setseller extends React.Component {
                                             >
                                                 X
                                             </button>
-                                            Warning: We're currently in beta
-                                            phase use it at your own risk!
                                             {this.state.bettorsCount > 50
                                                 ? "Bettors beyond permissible limits, can't place bets in current"
                                                 : null}
@@ -1201,6 +1203,7 @@ export default class setseller extends React.Component {
                                             'box-shadow':
                                                 '0vmax 0vmax 0.902778vmax 0.06944vmax #ef9696',
                                         }}
+                                        className="error-message-container"
                                     >
                                         <button
                                             onClick={() => {
@@ -1221,7 +1224,7 @@ export default class setseller extends React.Component {
                                             X
                                         </button>
                                         {this.state.thanosError ? (
-                                            <CardText>
+                                            <CardText className="error-message">
                                                 Error: {this.state.errMsg}
                                                 <a href="https://templeWallet.com/download">
                                                     Thanos Wallet Browser Plugin
@@ -1230,7 +1233,7 @@ export default class setseller extends React.Component {
                                                 Stakepool
                                             </CardText>
                                         ) : (
-                                            <CardText>
+                                            <CardText className="error-message">
                                                 Error: {this.state.errMsg}
                                             </CardText>
                                         )}
@@ -1321,7 +1324,7 @@ export default class setseller extends React.Component {
                                     </Badge>
                                 </Col>
 
-                                <Col xs="6" style={{ 'padding-top': '4vmax' }}>
+                                <Col xs="6" style={{ 'padding-top': '4%' }}>
                                     <label
                                         style={{
                                             color: '#5A7184',
@@ -1333,7 +1336,7 @@ export default class setseller extends React.Component {
                                         I want to stake:
                                     </label>
                                 </Col>
-                                <Col xs="6" style={{ 'padding-top': '4vmax' }}>
+                                <Col xs="6" style={{ 'padding-top': '4%' }}>
                                     <label
                                         style={{
                                             color: '#5A7184',
@@ -1421,7 +1424,7 @@ export default class setseller extends React.Component {
                                             <img
                                                 src={tz}
                                                 style={{
-                                                    height: '3.33333333vmax',
+                                                    height: '85%',
                                                     'padding-right':
                                                         '0.64444444vmax',
                                                 }}
@@ -1594,14 +1597,13 @@ export default class setseller extends React.Component {
                             <label
                                 align="left"
                                 style={{
-                                    'font-family': 'OpenSans-Bold, sans-serif',
                                     color: '#183B56',
                                     display: 'block',
                                     'font-size': '3.3333333333vmax',
-                                    'letter-spacing': '0.0138888889vmax',
                                 }}
+                                className="staking-options"
                             >
-                                <strong>Staking Options</strong>
+                                Staking Options
                             </label>
                         </Col>
                         <Col
@@ -2186,161 +2188,7 @@ export default class setseller extends React.Component {
                         ) : null}
                     </Collapse>
                 </Container>
-                <Container
-                    fluid="xs"
-                    style={{
-                        backgroundColor: '#2C7DF7',
-                        'padding-left': '9.0888888889vmax',
-                        'padding-right': '7.6vmax',
-                        width: '100vmax',
-                    }}
-                >
-                    <Row
-                        xs="2"
-                        style={{
-                            'padding-top': '5vmax',
-                            'padding-bottom': '5vmax',
-                        }}
-                    >
-                        <Col>
-                            <label
-                                style={{
-                                    color: '#FFFFFF',
-                                    'letter-spacing': '0.0138888889vmax',
-                                    'font-family': 'OpenSans-Bold, sans-serif',
-                                    'font-size': '3.888888889vmax',
-                                }}
-                            >
-                                Try Stakepool now for smart prediction
-                            </label>
-                        </Col>
-                        <Col
-                            style={{
-                                'text-align': 'right',
-                                'padding-top': '4.2677777778vmax',
-                            }}
-                        >
-                            <NavLink>
-                                <button
-                                    onClick={() => {
-                                        scroll.scrollToTop();
-                                    }}
-                                    style={{
-                                        color: '#1565D8',
-                                        backgroundColor: '#F2F5F8',
-                                        'font-family':
-                                            'OpenSans-Bold, sans-serif',
-                                        'text-align': 'center',
-                                        'font-size': '2.4305555556vmax',
-                                        border: '0.06944vmax solid #1565D8',
-                                        'border-radius': '0.5555556vmax',
-                                        width: '24.5138888888889vmax',
-                                        height: '5.55555556vmax',
-                                        'line-height': '5.55555556vmax',
-                                    }}
-                                >
-                                    Stake
-                                </button>
-                            </NavLink>
-                        </Col>
-                    </Row>
-                </Container>
-                <Container
-                    fluid="xs"
-                    id="contact"
-                    align="center"
-                    style={{
-                        backgroundColor: '#F9FBFE',
-                        height: '100%',
-                        width: '100vmax',
-                        'padding-top': '3.333333vmax',
-                        'padding-bottom': '3.333333vmax',
-                    }}
-                >
-                    <img
-                        src={heart}
-                        style={{ width: '8.8vmax', height: '8.8vmax' }}
-                    />
-                    <p
-                        style={{
-                            color: '#5A7184',
-                            'font-family': 'OpenSans-SemiBold, sans-serif',
-                            'font-size': '1.34027778vmax',
-                        }}
-                    >
-                        <strong>Copyright © 2021. Crafted with love.</strong>
-                    </p>
-                    <a
-                        href="https://tezsure.com"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        <img
-                            src={tezsure}
-                            style={{
-                                width: '1.2vmax',
-                                height: '1.2vmax',
-                                'margin-left': '1.3888888889vmax',
-                            }}
-                        />
-                    </a>
-                    <a
-                        href="https://twitter.com/tezsure"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        <img
-                            src={twitter}
-                            style={{
-                                width: '1.25vmax',
-                                height: '1.25vmax',
-                                'margin-left': '1.3888888889vmax',
-                            }}
-                        />
-                    </a>
-                    <a
-                        href="https://www.linkedin.com/company/tezsure/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        <img
-                            src={linkedin}
-                            style={{
-                                width: '1.25vmax',
-                                height: '1.25vmax',
-                                'margin-left': '1.3888888889vmax',
-                            }}
-                        />
-                    </a>
-                    <a
-                        href="https://www.youtube.com/channel/UCZg7LT1bFWeFiKwGBLcLfLQ"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        <img
-                            src={youtube}
-                            style={{
-                                width: '1.25vmax',
-                                height: '1.25vmax',
-                                'margin-left': '1.3888888889vmax',
-                            }}
-                        />
-                    </a>
-                    <a
-                        href="https://web.telegram.org/#/im?p=@Indiatezos"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        <img
-                            src={telegram}
-                            style={{
-                                width: '1.25vmax',
-                                height: '1.25vmax',
-                                'margin-left': '1.3888888889vmax',
-                            }}
-                        />
-                    </a>
-                </Container>
+                <Footer />
             </Container>
         );
     }

@@ -58,29 +58,28 @@ export default class setseller extends React.Component {
         "https://api.delphi.tzstats.com/explorer/contract/KT1WvnSNdkM8MFnKFApuZLtZH5VUNYYSm6Nr/storage"
       );*/
         const storagedata = await axios.get(
-            'https://api.delphi.tzstats.com/explorer/contract/KT1K4eLeqpbSYN9j4sMBw9vFvkCWFSVUm6F5/storage'
+            'https://api.tzstats.com/explorer/contract/KT1DGHWbNCa57L9ctZXrD45P3XoDsHXAdgJK/storage'
         );
         const fetchHeight = await axios.get(
-            'https://api.delphi.tzkt.io/v1/cycles/count'
+            'https://api.tzkt.io/v1/cycles/count'
         );
         var cycle = fetchHeight.data;
         var currentReferenceRewardCycle = Number(
             storagedata.data.value.currentReferenceRewardCycle
         );
-        //var cycle = height;
-        if (storagedata.data.value.currentReferenceRewardCycle !== '1') {
+        //var cycle = Math.trunc(height / 2048);
+        if (storagedata.data.value.currentReferenceRewardCycle != '1') {
             if (
-                Number(storagedata.data.value.currentReferenceRewardCycle) > 6
+                Number(storagedata.data.value.currentReferenceRewardCycle) > 8
             ) {
-                cycle = cycle - 6;
+                cycle = cycle - 8;
                 var wprice =
                     Number(
                         storagedata.data.value.cycleOperations[
                             currentReferenceRewardCycle.toString()
                         ].priceAtCurrentCycle
                     ) / 100;
-                currentReferenceRewardCycle = currentReferenceRewardCycle - 6;
-
+                currentReferenceRewardCycle = currentReferenceRewardCycle - 8;
                 for (var key of Object.keys(
                     storagedata.data.value.cycleOperations[
                         currentReferenceRewardCycle.toString()
@@ -108,7 +107,11 @@ export default class setseller extends React.Component {
                                 )) /
                                 100
                         ) / 100;
-                    if (lrange == urange && key[0] == '-' && wprice < lrange) {
+                    if (
+                        lrange === urange &&
+                        key[0] === '-' &&
+                        wprice < lrange
+                    ) {
                         var negative = true;
                         var reward =
                             Number(
@@ -124,7 +127,11 @@ export default class setseller extends React.Component {
                             ) / 1000000;
                         break;
                     }
-                    if (lrange == urange && key[0] != '-' && wprice >= urange) {
+                    if (
+                        lrange === urange &&
+                        key[0] !== '-' &&
+                        wprice >= urange
+                    ) {
                         var negative = false;
                         var reward =
                             Number(
@@ -504,7 +511,7 @@ export default class setseller extends React.Component {
                         Previous Staking Period
                         <br />
                         Cycle {this.state.currentCycle + 1} -{' '}
-                        {this.state.currentCycle + 6} Stats
+                        {this.state.currentCycle + 8} Stats
                     </p>
                     <Card
                         inverse={true}
