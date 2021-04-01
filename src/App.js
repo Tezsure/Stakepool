@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Mainnet from './components/mainnet';
 import StatsDelphinet from './components/stats_delphinet';
-import Home from './components/Home';
+import Home from './components/Home/Home';
 import FAQ from './components/FAQ';
 import Account from './components/Account';
 //import Wager from './components/Wager';
 import Error from './components/Error';
+
+import './App.scss';
 
 class App extends Component {
   render() {

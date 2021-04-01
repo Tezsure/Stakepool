@@ -1,0 +1,58 @@
+.stakeing-options-container {
+  margin-top: 100px;
+}
+.section-heading-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.section-heading {
+  color: #183B56;
+  font-size: 48px;
+  letter-spacing: 0.2px;
+  margin: 0;
+}
+.see-all-options-btn {
+  color: #36B37E;
+  padding: 12px 22px;
+  border: 2px solid #36B37E;
+  border-radius: 8px;
+  background-color: transparent;
+  font-size: 14px;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+.stakeing-options-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin: 0 -15px;
+  margin-top: 80px;
+}
+.stakeing-option-item {
+  padding: 0 15px;
+  flex: 0 0 25%;
+  margin-bottom: 30px;
+}
+.stakeing-option {
+  background-color: #FFFFFF;
+  border-radius: 4px;
+  padding: 24px;
+}
+.stakeing-option-img-container {
+  width: 64px;
+  height: 64px;
+}
+.stakeing-option-img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+.predicted-price {
+  font-size: 24px;
+  color: #183B56;
+  margin-top: 16px;
+}

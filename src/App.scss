@@ -1,0 +1,13 @@
+@import './scss/Banner/Banner';
+@import './scss/Header/Header';
+@import './scss/StakeingOptions/StakeingOptions';
+@import './scss/Footer/Footer';
+
+.main-page-container {
+  width: 100%;
+  background-color: #F9FBFE;
+}
+.home-container {
+  max-width: 1140px;
+  margin: 0 auto;
+}
