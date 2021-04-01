@@ -338,7 +338,7 @@ export default class setseller extends React.Component {
                                             }}
                                         >
                                             <NavLink
-                                                href="/statsmainnet"
+                                                href="/statsdelphinet"
                                                 style={{
                                                     'font-size':
                                                         '1.1111111111vmax',
@@ -453,7 +453,7 @@ export default class setseller extends React.Component {
                                             }}
                                         >
                                             <NavLink
-                                                href="/mainnet"
+                                                href="/"
                                                 style={{
                                                     'font-size':
                                                         '1.1111111111vmax',

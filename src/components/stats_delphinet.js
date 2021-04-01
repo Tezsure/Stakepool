@@ -213,7 +213,7 @@ export default class setseller extends React.Component {
         }
         this.tzInterval = setTimeout(
             this.stakingStats.bind(this),
-            (cycle) * 30000
+            cycle * 30000
         );
     }
 
@@ -331,7 +331,7 @@ export default class setseller extends React.Component {
                                             }}
                                         >
                                             <NavLink
-                                                href="/statsmainnet"
+                                                href="/statsdelphinet"
                                                 style={{
                                                     'font-size':
                                                         '1.1111111111vmax',
@@ -446,7 +446,7 @@ export default class setseller extends React.Component {
                                             }}
                                         >
                                             <NavLink
-                                                href="/mainnet"
+                                                href="/"
                                                 style={{
                                                     'font-size':
                                                         '1.1111111111vmax',

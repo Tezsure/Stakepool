@@ -18,12 +18,12 @@ class App extends Component {
                         <Route path="/" component={Home} exact />
                         <Route path="/account" component={Account} />
                         <Route path="/FAQ" component={FAQ} />
-                        <Route path="/mainnet" component={Mainnet} />
+                        {/* <Route path="/mainnet" component={Mainnet} /> */}
                         <Route
                             path="/statsdelphinet"
                             component={StatsDelphinet}
                         />
-                        <Route path="/statsmainnet" component={StatsMainnet} />
+                        {/* <Route path="/statsmainnet" component={StatsMainnet} /> */}
                         <Route component={Error} />
                     </Switch>
                 </div>
