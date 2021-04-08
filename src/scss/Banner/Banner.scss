@@ -6,7 +6,7 @@
 }
 .banner-content-container {
     max-width: 960px;
-    margin: 50px auto 0;
+    margin: 35px auto 0;
 }
 .banner-heading {
     max-width: 450px;
@@ -21,9 +21,11 @@
     background: #ffffff 0% 0% no-repeat padding-box;
     box-shadow: 0px 10px 35px #00000008;
     border-radius: 8px;
-    padding: 64px;
-    padding-bottom: 34px;
-    margin-top: 48px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    padding-right: 70px;
+    padding-left: 70px;
+    margin-top: 25px;
 }
 .stakepool-banner-form-container {
     display: flex;
@@ -37,7 +39,7 @@
     flex: 0 0 50%;
     padding-left: 30px;
     padding-right: 30px;
-    margin-bottom: 28px;
+    margin-bottom: 22px;
 }
 .stakepool-banner-input-label {
     color: #5a7184;
@@ -52,7 +54,7 @@
     padding: 16px 20px;
 }
 .stakepool-banner-input:disabled {
-    background-color: #cccccc47;
+    background-color: #dee2e6;
     pointer-events: none;
 }
 .form-footer-text {

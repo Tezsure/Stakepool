@@ -1,0 +1,119 @@
+.nav-link {
+    display: block;
+    padding: 0.5rem 4rem;
+}
+
+ul.nav.nav-tabs {
+    width: 100%;
+    // margin-left: 15px;
+    // margin-right: -13px;
+}
+.staking-orders-container {
+    .main-row {
+        height: fit-content;
+    }
+    min-height: 400px;
+    .row {
+        width: 100%;
+    }
+    .warning-badge {
+        height: 10px;
+        width: 10px;
+        background-color: #ffc107;
+        border-radius: 50%;
+        display: inline-block;
+    }
+    .error-badge {
+        height: 10px;
+        width: 10px;
+        background-color: #dc3545;
+        border-radius: 50%;
+        display: inline-block;
+    }
+    .sucess-badge {
+        height: 10px;
+        width: 10px;
+        background-color: rgba(12, 231, 12, 0.918);
+        border-radius: 50%;
+        display: inline-block;
+    }
+    .btn-primary {
+        background-color: #1664d8;
+        border-color: #1664d8;
+    }
+    .account-details {
+        position: relative;
+        width: 70%;
+        // border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+    .wallet-address {
+        background: #e9ecef;
+        padding: 10px;
+        border-radius: 5px;
+    }
+    .wallet-address-des {
+        position: absolute;
+        bottom: 0;
+        left: 5px;
+    }
+    .mainnet-active-tab {
+        color: #000 !important;
+        background-color: #fff !important;
+        border-color: #dee2e6 #fff #fff !important;
+        box-shadow: #cccc 8px 0px 10px -4px !important;
+    }
+    .testnet-active-tab {
+        color: #000 !important;
+        background-color: #fff !important;
+        border-color: #dee2e6 #dee2e6 #fff !important;
+        box-shadow: #cccccc -5px 0px 10px -4px !important;
+    }
+    .nav-tabs .nav-item.show .nav-link,
+    .nav-tabs .nav-link.active {
+        color: #7c8084;
+        background-color: unset;
+        border-color: #dee2e6 #f8f9fa #dee2e6;
+    }
+    a {
+        color: #7c8084;
+        text-decoration: none;
+        background-color: transparent;
+    }
+    .row {
+        margin: unset;
+    }
+    .order-form-container {
+        padding-top: 15px;
+        padding-bottom: 20px;
+    }
+    .container-account-details {
+        display: flex;
+        flex-direction: row;
+        margin-top: 10px;
+        margin-bottom: 15px;
+        justify-content: space-between;
+    }
+    .account-details-button {
+        text-align: end;
+    }
+    .table-head-container {
+        border: 1px solid #1664d8;
+    }
+    .table .thead-dark th {
+        color: #fff;
+        background-color: #1664d8;
+        border-color: #1664d8;
+    }
+    .table {
+        border: 1px solid #cccc !important;
+    }
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    background: #ffffff 0% 0% no-repeat padding-box;
+    box-shadow: 0px 10px 35px #00000008;
+    border-radius: 8px;
+    margin-top: 25px;
+    margin-bottom: 15%;
+}

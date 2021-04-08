@@ -5,12 +5,12 @@
 @font-face {
     font-family: 'Leelawadee UI';
     src: local('Leelawadee UI'),
-        url(./fonts/leelawadee-ui-bold.ttf) format('truetype');
+        url(../fonts/leelawadee-ui-bold.ttf) format('truetype');
 }
 @font-face {
     font-family: 'HKGrotesk-Bold';
     src: local('HKGrotesk-Bold'),
-        url(./fonts/hkgrotesk-bold.ttf) format('truetype');
+        url(../fonts/hkgrotesk-bold.ttf) format('truetype');
 }
 
 body {
