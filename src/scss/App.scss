@@ -1,0 +1,109 @@
+@import './Banner/Banner';
+@import './Header/Header';
+@import './StakeingOptions/StakeingOptions';
+@import './Footer/Footer';
+@import './Error/error.scss';
+@import './StakingOrders/Stakingorders.scss';
+
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Quicksand');
+
+.stakepool-banner-form-container {
+    .stakepool-banner-input-label {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
+            'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+            'Helvetica Neue', 'Quicksand', sans-serif !important;
+    }
+    .form-footer-text {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
+            'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+            'Helvetica Neue', 'Quicksand', sans-serif !important;
+    }
+}
+
+.dropdown-toggle::after {
+    content: none !important;
+}
+
+button:focus {
+    outline: 0;
+}
+
+.info-cards-stats {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.staking-options-button:hover {
+    color: #007bff !important;
+    border-color: #007bff !important;
+    background-color: #fff !important;
+}
+.staking-options-button:focus {
+    color: #007bff !important;
+    border-color: #007bff !important;
+    background-color: #fff !important;
+}
+
+.banner-button {
+    width: 215px;
+}
+
+.stats-container {
+    .row {
+        width: 100%;
+        justify-content: center;
+    }
+    margin-bottom: 15%;
+}
+
+.info-cards-stats {
+    .card {
+        border: none !important;
+        cursor: pointer;
+    }
+    .card-body {
+        background: #216cda;
+        border-radius: 0.25rem;
+        color: #fff;
+    }
+}
+
+.logo-image {
+    width: 150px;
+}
+
+.main-page-container {
+    width: 100%;
+    background-color: #f9fbfe;
+}
+.home-container {
+    max-width: 1140px;
+    margin: 0 auto;
+}
+.site-footer-2 {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    margin-top: 15px;
+}
+.footer-icons {
+    width: 18px;
+}
+.footer-image-conatiner {
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+.predicted-price {
+    display: flex;
+    justify-content: space-between;
+}
+.dropdown-image-container {
+    margin-top: 35px;
+}
+.stakeing-dropdown-img {
+    width: 15px;
+    cursor: pointer;
+}

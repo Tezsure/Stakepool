@@ -1,62 +1,65 @@
 .banner {
-  position: relative;
-  background: url('../../assets/images/banner.png');
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
+    position: relative;
+    background: url('../../assets/images/banner.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
 }
 .banner-content-container {
-  max-width: 960px;
-  margin: 100px auto 0;
+    max-width: 960px;
+    margin: 35px auto 0;
 }
 .banner-heading {
-  max-width: 690px;
-  margin: 0 auto;
-  text-align: center;
-  letter-spacing: 0.2px;
-  color: #FFFFFF;
-  font-size: 56px;
+    max-width: 450px;
+    margin: 0 auto;
+    text-align: center;
+    letter-spacing: 0.2px;
+    color: #ffffff;
+    font-size: 40px;
+    font-family: none;
 }
 .stakepool-banner-form-container {
-  background: #FFFFFF 0% 0% no-repeat padding-box;
-  box-shadow: 0px 10px 35px #00000008;
-  border-radius: 8px;
-  padding: 64px;
-  padding-bottom: 34px;
-  margin-top: 48px;
+    background: #ffffff 0% 0% no-repeat padding-box;
+    box-shadow: 0px 10px 35px #00000008;
+    border-radius: 8px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    padding-right: 70px;
+    padding-left: 70px;
+    margin-top: 25px;
 }
 .stakepool-banner-form-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  margin-left: -15px;
-  margin-right: -15px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin-left: -15px;
+    margin-right: -15px;
 }
 .stakepool-banner-input-wrapper {
-  position: relative;
-  flex: 0 0 50%;
-  padding-left: 30px;
-  padding-right: 30px;
-  margin-bottom: 28px;
+    position: relative;
+    flex: 0 0 50%;
+    padding-left: 30px;
+    padding-right: 30px;
+    margin-bottom: 22px;
 }
 .stakepool-banner-input-label {
-  color: #5A7184;
-  display: block;
-  font-size: 16px;
+    color: #5a7184;
+    display: block;
+    font-size: 16px;
 }
 .stakepool-banner-input {
-  width: 100%;
-  border: 1px solid #C3CAD9;
-  border-radius: 8px;
-  outline: none;
-  padding: 16px 20px;
+    width: 100%;
+    border: 1px solid #cccccc47;
+    border-radius: 8px;
+    outline: none;
+    padding: 16px 20px;
 }
 .stakepool-banner-input:disabled {
-  background-color: #C3CAD9;
-  pointer-events: none;
+    background-color: #dee2e6;
+    pointer-events: none;
 }
 .form-footer-text {
-  color: #5A7184;
-  font-size: 16px;
-  padding-left: 30px;
-  padding-right: 30px;
+    color: #5a7184;
+    font-size: 16px;
+    padding-left: 30px;
+    padding-right: 30px;
 }
