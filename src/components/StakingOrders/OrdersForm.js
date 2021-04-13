@@ -23,6 +23,9 @@ export default class OrdersForm extends Component {
                         <button
                             type="button"
                             className="btn btn-dark"
+                            onClick={() =>
+                                this.props.withdrawAmount(elem.cycle, activeTab)
+                            }
                             disabled={elem.withdrawn}
                         >
                             withdraw

@@ -5,7 +5,7 @@ import Footer from '../Footer/Footer';
 import Header from '../Header/Header';
 import OrdersForm from './OrdersForm';
 import { TempleWallet } from '@temple-wallet/dapp';
-import { getBetsByBettor } from '../../apis/stackingOrdersApis';
+import { getBetsByBettor, withdrawAmount } from '../../apis/stackingOrdersApis';
 
 export default class Stats extends Component {
     constructor(props) {
@@ -43,9 +43,10 @@ export default class Stats extends Component {
         if (getBetsResponse.sucess) {
             stakingOrders[activeTab] = getBetsResponse.bets;
             this.setState({ stakingOrders, buttonSpinnerState });
+        } else {
+            stakingOrders[activeTab] = [];
+            this.setState({ buttonSpinnerState, stakingOrders });
         }
-        stakingOrders[activeTab] = [];
-        this.setState({ buttonSpinnerState });
     };
 
     async ConnectWallet() {
@@ -139,6 +140,7 @@ export default class Stats extends Component {
                                         <OrdersForm
                                             {...this.state}
                                             ConnectWallet={this.ConnectWallet}
+                                            withdrawAmount={withdrawAmount}
                                         />
                                     </div>
                                 </div>

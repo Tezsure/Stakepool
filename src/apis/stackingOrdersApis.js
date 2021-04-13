@@ -40,6 +40,7 @@ export const getCycleData = async (cycle, network) => {
     try {
         const cycleDetails = {};
         const tezos = new TezosToolkit(CONFIG.RPC_NODES[network]);
+        tezos.setRpcProvider(CONFIG.RPC_NODES[network]);
         const contract = await tezos.contract.at(CONFIG.CONTRACT[network]);
         const storage = await contract.storage();
         const cycleData = await storage.cycleData.get('' + cycle);
@@ -49,6 +50,26 @@ export const getCycleData = async (cycle, network) => {
         return {
             sucess: true,
             cycleDetails,
+        };
+    } catch (error) {
+        return {
+            sucess: false,
+            error,
+        };
+    }
+};
+
+export const withdrawAmount = async (cycle, network) => {
+    try {
+        const tezos = new TezosToolkit(CONFIG.RPC_NODES[network]);
+        tezos.setRpcProvider(CONFIG.RPC_NODES[network]);
+        const contract = await tezos.contract.at(CONFIG.CONTRACT[network]);
+        const withdrawOp = await contract.methods.withdrawAmount(cycle).send();
+        await withdrawOp
+            .confirmation(process.env.TAQUITO_CHECK_CONF_NUM)
+            .then(() => withdrawOp.hash);
+        return {
+            sucess: true,
         };
     } catch (error) {
         return {
