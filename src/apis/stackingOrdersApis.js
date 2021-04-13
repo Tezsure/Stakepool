@@ -1,53 +1,56 @@
-import Tezos from '@taquito/taquito';
-import CONFIG from './config';
-const tezos = new Tezos.TezosToolkit(CONFIG.RPC_NODES.TESTNET);
+import { TezosToolkit } from '@taquito/taquito';
+const CONFIG = require('./config');
 
-export const getBetsByBettor = async (address) => {
+export const getBetsByBettor = async (address, network) => {
     try {
-
-        const bets = []
-        const contract = await tezos.contract.at(CONFIG.CONTRACT.TESTNET);
+        const bets = [];
+        const tezos = new TezosToolkit(CONFIG.RPC_NODES[network]);
+        const contract = await tezos.contract.at(CONFIG.CONTRACT[network]);
         const storage = await contract.storage();
         const betByCycle = await storage.bettors.get(address);
         betByCycle.keyMap.forEach(async (element) => {
             let cycleValue = await betByCycle.get(element);
-            bets.push({cycle : parseInt(element) , stakedAt : cycleValue.stakedAt.c[0] , withdrawn : cycleValue.withdrawn ,withdrawnAmount : cycleValue.withdrawnAmount.c[0] , range : {low : cycleValue.range["1"].c[0] , high : cycleValue.range["2"].c[0]}});
-            
+            bets.push({
+                cycle: parseInt(element),
+                stakedAt: cycleValue.stakedAt.c[0],
+                withdrawn: cycleValue.withdrawn,
+                withdrawnAmount: cycleValue.withdrawnAmount.c[0],
+                range: {
+                    low: cycleValue.range['1'].c[0],
+                    high: cycleValue.range['2'].c[0],
+                },
+            });
         });
         return {
-            sucess : true,
-            bets
-        }
-    }
-    catch(error)
-    {
+            sucess: true,
+            bets,
+        };
+    } catch (error) {
         return {
             sucess: false,
             error,
-        }
+        };
     }
-}
+};
 
-export const getCycleData = async (cycle) => {
+export const getCycleData = async (cycle, network) => {
     try {
-
-        const cycleDetails = {}
-        const contract = await tezos.contract.at(CONFIG.CONTRACT.TESTNET);
+        const cycleDetails = {};
+        const tezos = new TezosToolkit(CONFIG.RPC_NODES[network]);
+        const contract = await tezos.contract.at(CONFIG.CONTRACT[network]);
         const storage = await contract.storage();
-        const cycleData = await storage.cycleData.get(""+cycle);
+        const cycleData = await storage.cycleData.get('' + cycle);
         cycleDetails.concluded = cycleData.concluded;
         cycleDetails.endingPrice = cycleData.endingPrice.c[0];
         cycleDetails.referencePrice = cycleData.referencePrice.c[0];
         return {
-            sucess : true,
-            cycleDetails
-        }
-    }
-    catch(error)
-    {
+            sucess: true,
+            cycleDetails,
+        };
+    } catch (error) {
         return {
             sucess: false,
             error,
-        }
+        };
     }
-}
+};

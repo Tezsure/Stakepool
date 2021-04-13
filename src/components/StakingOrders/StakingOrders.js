@@ -4,21 +4,54 @@ import { NavLink } from 'react-router-dom';
 import Footer from '../Footer/Footer';
 import Header from '../Header/Header';
 import OrdersForm from './OrdersForm';
+import { TempleWallet } from '@temple-wallet/dapp';
+import { getBetsByBettor } from '../../apis/stackingOrdersApis';
 
 export default class Stats extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            activeTab: 'mainnet',
+            activeTab: 'testnet',
             accountAddress: {
                 mainnet: '',
                 testnet: '',
             },
         };
+        this.ConnectWallet = this.ConnectWallet.bind(this);
     }
+
+    GetStakingData = async () => {
+        const { accountAddress, activeTab } = this.state;
+        const Bets = await getBetsByBettor(accountAddress, activeTab);
+        console.log('======= Bets =========', Bets);
+    };
+
+    async ConnectWallet() {
+        try {
+            const { accountAddress, activeTab } = this.state;
+            const available = await TempleWallet.isAvailable();
+            if (!available) {
+                throw new Error('Please Install ');
+            }
+            const wallet = new TempleWallet('Stakepool');
+            activeTab === 'mainnet'
+                ? await wallet.connect('mainnet', { forcePermission: true })
+                : await wallet.connect('edo2net', { forcePermission: true });
+            const tezos = wallet.toTezos();
+            const accountPkh = await tezos.wallet.pkh();
+            accountAddress[activeTab] = accountPkh;
+            this.setState({ accountAddress }, () => {
+                this.GetStakingData();
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     toggleTabs = (activeTab) => {
         this.setState({ activeTab });
     };
+
     render() {
         const { activeTab } = this.state;
         return (
@@ -71,7 +104,10 @@ export default class Stats extends Component {
                                         </ul>
                                     </div>
                                     <div className="row order-form-container">
-                                        <OrdersForm {...this.state} />
+                                        <OrdersForm
+                                            {...this.state}
+                                            ConnectWallet={this.ConnectWallet}
+                                        />
                                     </div>
                                 </div>
                             </div>

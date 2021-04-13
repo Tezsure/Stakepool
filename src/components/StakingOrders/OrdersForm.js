@@ -3,21 +3,27 @@ import React, { Component } from 'react';
 export default class OrdersForm extends Component {
     render() {
         const { accountAddress, activeTab } = this.props;
+        const currentAddress = accountAddress[activeTab];
         return (
             <div className="container-fluid">
                 <div className="container-account-details">
                     <div className="account-details">
-                        <span className="wallet-address-des">
-                            Account address: {accountAddress[activeTab]}
-                            <span className="wallet-address">
-                                tz1N2dozNmbT8Ds8NAH8TLQTXfuxJoHPT3hp
+                        {currentAddress ? (
+                            <span className="wallet-address-des">
+                                Account address: &nbsp;
+                                <span className="wallet-address">
+                                    {currentAddress}
+                                </span>
                             </span>
-                        </span>
+                        ) : (
+                            ''
+                        )}
                     </div>
                     <div className="account-details-button">
                         <button
                             type="button"
                             className="btn btn-primary shadow-sm rounded"
+                            onClick={() => this.props.ConnectWallet()}
                         >
                             Connect wallet
                         </button>

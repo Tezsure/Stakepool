@@ -1,7 +1,6 @@
 import axios from 'axios';
 import CONFIG from './config';
-import Tezos from '@taquito/taquito';
-const tezos = new Tezos.TezosToolkit(CONFIG.RPC_NODES.TESTNET);
+import { TezosToolkit } from '@taquito/taquito';
 
 export const getCurrentCycle = async (network) => {
     try {
@@ -62,31 +61,31 @@ export const fetchContractStorage = async (network) => {
     }
 };
 
-export const getReferencePriceAndRanges = async (currentCycle) => {
+export const getReferencePriceAndRanges = async (currentCycle, network) => {
     try {
-        let data ={}
-        let ranges = []
+        let data = {};
+        let ranges = [];
         let cycle = currentCycle + 2;
-        const contract = await tezos.contract.at(CONFIG.CONTRACT.TESTNET);
+        const tezos = new TezosToolkit(CONFIG.RPC_NODES[network]);
+        const contract = await tezos.contract.at(CONFIG.CONTRACT[network]);
         const storage = await contract.storage();
-        const cycleData = await storage.cycleData.get(""+cycle);
-        console.log(cycleData.amountByRange);
-        cycleData.amountByRange.keyMap.forEach(element => {
-            ranges.push({low : element["0"].c[0]*element["0"].s , high : element["1"].c[0]*element["1"].s})
+        const cycleData = await storage.cycleData.get('' + cycle);
+        cycleData.amountByRange.keyMap.forEach((element) => {
+            ranges.push({
+                low: element['0'].c[0] * element['0'].s,
+                high: element['1'].c[0] * element['1'].s,
+            });
         });
-        data.referencePrice = cycleData.referencePrice.c[0]
-        data.ranges = ranges
+        data.referencePrice = cycleData.referencePrice.c[0];
+        data.ranges = ranges;
         return {
-            sucess : true,
-            data
-        }
-    }
-    catch(error)
-    {
+            sucess: true,
+            data,
+        };
+    } catch (error) {
         return {
-            success : false,
-            error
-        }
+            success: false,
+            error,
+        };
     }
-
-}
+};
