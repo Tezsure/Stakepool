@@ -22,7 +22,8 @@ export default class Stats extends Component {
 
     GetStakingData = async () => {
         const { accountAddress, activeTab } = this.state;
-        const Bets = await getBetsByBettor(accountAddress, activeTab);
+        console.log(this.state);
+        const Bets = await getBetsByBettor(accountAddress.testnet, activeTab);
         console.log('======= Bets =========', Bets);
     };
 
@@ -38,6 +39,8 @@ export default class Stats extends Component {
                 ? await wallet.connect('mainnet', { forcePermission: true })
                 : await wallet.connect('edo2net', { forcePermission: true });
             const tezos = wallet.toTezos();
+            tezos.setProvider("https://testnet.tezster.tech");
+            tezos.setRpcProvider("https://testnet.tezster.tech");
             const accountPkh = await tezos.wallet.pkh();
             accountAddress[activeTab] = accountPkh;
             this.setState({ accountAddress }, () => {

@@ -4,7 +4,7 @@ module.exports = {
         mainnet: 'https://api.tzstats.com',
     },
     RPC_NODES: {
-        testnet: 'https://testnet.tezster.tech',
+        testnet: 'https://edonet.smartpy.io',
         mainnet: 'https://mainnet.tezster.tech',
     },
     CONTRACT: {

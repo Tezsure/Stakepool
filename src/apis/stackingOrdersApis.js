@@ -5,6 +5,7 @@ export const getBetsByBettor = async (address, network) => {
     try {
         const bets = [];
         const tezos = new TezosToolkit(CONFIG.RPC_NODES[network]);
+        tezos.setRpcProvider(CONFIG.RPC_NODES[network]);
         const contract = await tezos.contract.at(CONFIG.CONTRACT[network]);
         const storage = await contract.storage();
         const betByCycle = await storage.bettors.get(address);
@@ -26,6 +27,7 @@ export const getBetsByBettor = async (address, network) => {
             bets,
         };
     } catch (error) {
+        console.log(error);
         return {
             sucess: false,
             error,
