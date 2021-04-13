@@ -16,34 +16,60 @@ export default class Stats extends Component {
                 mainnet: '',
                 testnet: '',
             },
+            buttonSpinnerState: {
+                mainnet: false,
+                testnet: false,
+            },
+            stakingOrders: {
+                mainnet: [],
+                testnet: [],
+            },
         };
         this.ConnectWallet = this.ConnectWallet.bind(this);
     }
 
     GetStakingData = async () => {
-        const { accountAddress, activeTab } = this.state;
-        console.log(this.state);
-        const Bets = await getBetsByBettor(accountAddress.testnet, activeTab);
-        console.log('======= Bets =========', Bets);
+        const {
+            accountAddress,
+            activeTab,
+            buttonSpinnerState,
+            stakingOrders,
+        } = this.state;
+        buttonSpinnerState[activeTab] = !buttonSpinnerState[activeTab];
+        const getBetsResponse = await getBetsByBettor(
+            accountAddress.testnet,
+            activeTab
+        );
+        if (getBetsResponse.sucess) {
+            stakingOrders[activeTab] = getBetsResponse.bets;
+            this.setState({ stakingOrders, buttonSpinnerState });
+        }
+        stakingOrders[activeTab] = [];
+        this.setState({ buttonSpinnerState });
     };
 
     async ConnectWallet() {
         try {
-            const { accountAddress, activeTab } = this.state;
+            const {
+                accountAddress,
+                activeTab,
+                buttonSpinnerState,
+            } = this.state;
             const available = await TempleWallet.isAvailable();
             if (!available) {
-                throw new Error('Please Install ');
+                throw new Error('Please Install');
             }
+            buttonSpinnerState[activeTab] = !buttonSpinnerState[activeTab];
             const wallet = new TempleWallet('Stakepool');
             activeTab === 'mainnet'
                 ? await wallet.connect('mainnet', { forcePermission: true })
                 : await wallet.connect('edo2net', { forcePermission: true });
             const tezos = wallet.toTezos();
-            tezos.setProvider("https://testnet.tezster.tech");
-            tezos.setRpcProvider("https://testnet.tezster.tech");
+            tezos.setProvider('https://testnet.tezster.tech');
+            tezos.setRpcProvider('https://testnet.tezster.tech');
             const accountPkh = await tezos.wallet.pkh();
             accountAddress[activeTab] = accountPkh;
-            this.setState({ accountAddress }, () => {
+            this.setState({ accountAddress, buttonSpinnerState }, () => {
                 this.GetStakingData();
             });
         } catch (error) {
@@ -106,7 +132,10 @@ export default class Stats extends Component {
                                             </li>
                                         </ul>
                                     </div>
-                                    <div className="row order-form-container">
+                                    <div
+                                        className="row order-form-container"
+                                        style={{ marginTop: '-15%' }}
+                                    >
                                         <OrdersForm
                                             {...this.state}
                                             ConnectWallet={this.ConnectWallet}
