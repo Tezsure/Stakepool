@@ -8,7 +8,7 @@ module.exports = {
         mainnet: 'https://mainnet.tezster.tech',
     },
     CONTRACT: {
-        testnet: 'KT1GzyyEqH4VccKCNF1724nboddMTj9hAo6T',
+        testnet: 'KT1DDnjzQhA25Vjm3AwqVWGFskzoW3QARKsE',
         mainnet: '',
     },
     COINGECKO_API: `https://api.coingecko.com/api/v3/coins/tezos?localization=false&tickers=false&community_data=false&developer_data=false&sparkline=false`,

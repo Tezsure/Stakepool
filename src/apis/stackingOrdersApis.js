@@ -14,6 +14,7 @@ export const getBetsByBettor = async (address, network) => {
             bets.push({
                 cycle: parseInt(element),
                 stakedAt: cycleValue.stakedAt.c[0],
+                stakedAmount : cycleValue.amount.c[0],
                 withdrawn: cycleValue.withdrawn,
                 withdrawnAmount: cycleValue.withdrawnAmount.c[0],
                 range: {
