@@ -1,6 +1,6 @@
 module.exports = {
     TZSTATS: {
-        testnet: 'https://api.delphi.tzstats.com',
+        testnet: 'https://api.edo.tzstats.com',
         mainnet: 'https://api.tzstats.com',
     },
     RPC_NODES: {

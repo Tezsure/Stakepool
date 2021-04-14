@@ -32,11 +32,12 @@ export default class Banner extends Component {
     };
     getReferencePriceAndRanges = async () => {
         const { currentCycle, network } = this.state;
+        console.log(currentCycle[network].cycletime);
         const API_RESPONSE = await getReferencePriceAndRanges(
-            currentCycle[network].cycletime,
+            currentCycle[network],
             network
         );
-        debugger;
+        console.log(API_RESPONSE);
     };
     getCurrentCycle = async (network) => {
         const { currentCycle } = this.state;
@@ -44,15 +45,18 @@ export default class Banner extends Component {
             getCurrentCycle(network),
             fetchCurrentTzPrice(),
         ]);
-        currentCycle[network] = API_RESPONSE[0];
-        const currentXTZPrice = API_RESPONSE[1].currentprice;
-        this.setState(
-            {
-                currentCycle,
-                currentXTZPrice,
-            },
-            () => this.getReferencePriceAndRanges()
-        );
+        console.log(API_RESPONSE);
+        // currentCycle[network] = API_RESPONSE[0].currentCycle;
+        // const currentXTZPrice = API_RESPONSE[1].currentprice;
+        // this.setState(
+        //     {
+        //         currentCycle,
+        //         currentXTZPrice,
+        //     },
+        //     () => this.getReferencePriceAndRanges()
+        // );
+        this.setState({currentCycle : {mainnet :  0 , testnet : API_RESPONSE[0].currentCycle} , currentXTZPrice : API_RESPONSE[1].currentprice})
+        this.getReferencePriceAndRanges();
     };
     componentDidMount() {
         const { network } = this.state;
