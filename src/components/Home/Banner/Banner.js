@@ -5,6 +5,7 @@ import Countdown from 'react-countdown-now';
 export default class Banner extends Component {
     render() {
         const {
+            onGoingBet,
             currentCycle,
             network,
             currentXTZPrice,
@@ -54,6 +55,21 @@ export default class Banner extends Component {
                             Earn a little extra on your staking rewards
                         </h1>
                         <div className="stakepool-banner-form-container ">
+                            <div className="network-container">
+                                <div
+                                    className="network-tab "
+                                    style={{ textAlign: 'center' }}
+                                >
+                                    <span
+                                        className={
+                                            network === 'mainnet'
+                                                ? 'sucess-badge'
+                                                : 'warning-badge'
+                                        }
+                                    />
+                                    &nbsp; current network: {network}
+                                </div>
+                            </div>
                             <div className="stakepool-banner-input-wrapper">
                                 <label className="stakepool-banner-input-label">
                                     The current Cycle{' '}
@@ -103,9 +119,14 @@ export default class Banner extends Component {
                                     I want to stake:
                                 </label>
                                 <input
+                                    name="betAmount"
                                     className="stakepool-banner-input"
-                                    type="text"
+                                    type="number"
                                     placeholder="Enter your stake price"
+                                    value={this.props.betAmount}
+                                    onChange={(e) =>
+                                        this.props.handlePriceChange(e)
+                                    }
                                 />
                             </div>
 
@@ -114,6 +135,7 @@ export default class Banner extends Component {
                                     I predict the price of XTZ to be:
                                 </label>
                                 <select
+                                    name="stakedPriceRange"
                                     className="stakepool-banner-input"
                                     type="select"
                                     placeholder="Price of XTZ"
@@ -163,10 +185,24 @@ export default class Banner extends Component {
                                     <button
                                         type="button"
                                         className="btn btn-primary btn-lg banner-button"
-                                        disabled={fetchingCurrentPriceRanges}
-                                        onClick={() => (this.props.placeBet())}
+                                        disabled={
+                                            fetchingCurrentPriceRanges ||
+                                            onGoingBet
+                                        }
+                                        onClick={() => this.props.placeBet()}
                                     >
-                                        Stake now
+                                        {onGoingBet ? (
+                                            <>
+                                                <span
+                                                    className="spinner-grow spinner-grow-sm"
+                                                    role="status"
+                                                    aria-hidden="true"
+                                                />
+                                                &nbsp;Please wait...
+                                            </>
+                                        ) : (
+                                            'Stake now'
+                                        )}
                                     </button>
                                 </div>
                             </div>

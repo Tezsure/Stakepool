@@ -66,7 +66,7 @@ export const withdrawAmount = async (cycle, network, wallet) => {
         const contract = await tezos.wallet.at(CONFIG.CONTRACT[network]);
         const withdrawOp = await contract.methods.withdrawAmount(cycle).send();
         await withdrawOp
-            .confirmation(process.env.TAQUITO_CHECK_CONF_NUM)
+            .confirmation(CONFIG.TAQUITO_CHECK_CONF_NUM)
             .then(() => withdrawOp.hash);
         return {
             sucess: true,

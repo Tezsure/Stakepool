@@ -175,24 +175,24 @@ export default class Header extends Component {
                                     margin: '1.125rem 0px 0',
                                 }}
                             >
-                                <Link
+                                <a
                                     className="dropdown-item"
-                                    to="/mainnet"
+                                    href="/mainnet"
                                     onClick={() =>
                                         this.toggleSettingsDropdown()
                                     }
                                 >
                                     mainnet
-                                </Link>
-                                <Link
+                                </a>
+                                <a
                                     className="dropdown-item"
-                                    to="/"
+                                    href="/"
                                     onClick={() =>
                                         this.toggleSettingsDropdown()
                                     }
                                 >
                                     testnet
-                                </Link>
+                                </a>
                                 <div className="dropdown-divider"></div>
                                 <Link
                                     className="dropdown-item"

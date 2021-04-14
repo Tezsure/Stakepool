@@ -1,7 +1,39 @@
 import axios from 'axios';
 import { TezosToolkit } from '@taquito/taquito';
+import { TempleWallet } from '@temple-wallet/dapp';
 
 const CONFIG = require('./config');
+
+export const placeBetAPI = async (network, BetAmount, RANGE) => {
+    try {
+        const highRange = RANGE.split('~')[1];
+        const lowRange = RANGE.split('~')[0];
+        const wallet = new TempleWallet('Stakepool');
+        const walletNetwork = network === 'mainnet' ? 'mainnet' : 'edo2net';
+        await wallet.connect(walletNetwork, { forcePermission: true });
+        const tezos = wallet.toTezos();
+        const contractInstance = await tezos.wallet.at(
+            CONFIG.CONTRACT[network]
+        );
+        const operation = await contractInstance.methods
+            .placeBet(highRange, lowRange)
+            .send({ amount: parseInt(BetAmount, 10), mutez: false });
+        const confirmOperationHash = await operation
+            .confirmation(CONFIG.TAQUITO_CHECK_CONF_NUM)
+            .then(() => operation.hash);
+        debugger;
+        return {
+            sucess: true,
+            operationId: confirmOperationHash,
+        };
+    } catch (error) {
+        console.log(error);
+        return {
+            sucess: false,
+            error,
+        };
+    }
+};
 
 export const getCurrentCycle = async (network) => {
     try {

@@ -1,6 +1,34 @@
 import React, { Component } from 'react';
 
 export default class OrdersForm extends Component {
+    calculateRange = (elem) => {
+        debugger;
+        const { currentXTZPrice } = this.props;
+        let range;
+        if (elem.low !== elem.high) {
+            range = `In the range of $ ${(
+                (currentXTZPrice * 100 + elem.low / 100) /
+                100
+            ).toFixed(2)} - $ ${(
+                (currentXTZPrice * 100 + elem.high / 100) /
+                100
+            ).toFixed(2)}`;
+        }
+        if (elem.low === elem.high && elem.low < 0) {
+            range = `Below $ ${(
+                (currentXTZPrice * 100 + elem.low / 100) /
+                100
+            ).toFixed(2)}`;
+        }
+        if (elem.low === elem.high && elem.low > 0) {
+            range = `Above $ ${(
+                (currentXTZPrice * 100 + elem.low / 100) /
+                100
+            ).toFixed(2)}`;
+        }
+        return range;
+    };
+
     render() {
         const {
             accountAddress,
@@ -13,9 +41,7 @@ export default class OrdersForm extends Component {
         const currentAddress = accountAddress[activeTab];
         const stakingOrdersJSX = stakingOrders[activeTab].map((elem, index) => {
             const stakingPeriod = `${elem.stakedAt} - ${elem.cycle}`;
-            const range = `${parseInt(elem.range.low, 10) / 100} - ${
-                parseInt(elem.range.high, 10) / 100
-            }`;
+            const range = this.calculateRange(elem.range);
             let rewadsText = '';
             let buttonStatusDisabled = false;
             if (currentCycle[activeTab] <= elem.cycle) {

@@ -16,27 +16,6 @@ ul.nav.nav-tabs {
     .row {
         width: 100%;
     }
-    .warning-badge {
-        height: 10px;
-        width: 10px;
-        background-color: #ffc107;
-        border-radius: 50%;
-        display: inline-block;
-    }
-    .error-badge {
-        height: 10px;
-        width: 10px;
-        background-color: #dc3545;
-        border-radius: 50%;
-        display: inline-block;
-    }
-    .sucess-badge {
-        height: 10px;
-        width: 10px;
-        background-color: rgba(12, 231, 12, 0.918);
-        border-radius: 50%;
-        display: inline-block;
-    }
     .btn-primary {
         background-color: #1664d8;
         border-color: #1664d8;
@@ -116,4 +95,26 @@ ul.nav.nav-tabs {
     border-radius: 8px;
     margin-top: 25px;
     margin-bottom: 15%;
+}
+
+.warning-badge {
+    height: 10px;
+    width: 10px;
+    background-color: #ffc107;
+    border-radius: 50%;
+    display: inline-block;
+}
+.error-badge {
+    height: 10px;
+    width: 10px;
+    background-color: #dc3545;
+    border-radius: 50%;
+    display: inline-block;
+}
+.sucess-badge {
+    height: 10px;
+    width: 10px;
+    background-color: rgba(12, 231, 12, 0.918);
+    border-radius: 50%;
+    display: inline-block;
 }

@@ -1,8 +1,6 @@
 /* eslint-disable jsx-a11y/heading-has-content */
 import React, { Component } from 'react';
-import staking from '../../../assets/images/stakeing.png';
-import dropdown from '../../../assets/images/down.jpeg';
-import Skeleton from 'react-loading-skeleton';
+import StakingCards from './StakingCards';
 
 export default class StakeingOptions extends Component {
     constructor(props) {
@@ -10,7 +8,6 @@ export default class StakeingOptions extends Component {
         this.state = {
             showOptions: 4,
         };
-        this.getCards = this.getCards.bind(this);
     }
     handleShowMore = () => {
         const { showOptions } = this.state;
@@ -25,93 +22,6 @@ export default class StakeingOptions extends Component {
             this.setState({ showOptions: 4 });
         }
     };
-    getCards() {
-        const {
-            network,
-            currentXTZPrice,
-            currentPriceRanges,
-            fetchingCurrentPriceRanges,
-        } = this.props;
-        let cards = [];
-        let i = 0;
-        if (!fetchingCurrentPriceRanges) {
-            while (
-                i < currentPriceRanges[network].length &&
-                i < this.state.showOptions
-            ) {
-                let elem = currentPriceRanges[network][i];
-                let innerText;
-                if (elem.low !== elem.high) {
-                    innerText = `Price prediction between $ ${(
-                        (currentXTZPrice * 100 + elem.low / 100) /
-                        100
-                    ).toFixed(2)} - $ ${(
-                        (currentXTZPrice * 100 + elem.high / 100) /
-                        100
-                    ).toFixed(2)}`;
-                }
-                if (elem.low === elem.high && elem.low < 0) {
-                    innerText = `Price prediction below $ ${(
-                        (currentXTZPrice * 100 + elem.low / 100) /
-                        100
-                    ).toFixed(2)}`;
-                }
-                if (elem.low === elem.high && elem.low > 0) {
-                    innerText = `Price prediction above $ ${(
-                        (currentXTZPrice * 100 + elem.low / 100) /
-                        100
-                    ).toFixed(2)}`;
-                }
-                cards.push(
-                    <li className="stakeing-option-item" key={innerText}>
-                        <div
-                            className="stakeing-option shadow-sm bg-white rounded"
-                            style={{ height: '100%' }}
-                        >
-                            <div className="stakeing-option-img-container">
-                                <img
-                                    src={staking}
-                                    className="stakeing-option-img"
-                                    alt="Stakeing Option"
-                                />
-                            </div>
-                            <div className="predicted-price">
-                                <p className="pridicted-price-text">
-                                    {innerText}
-                                </p>
-                                <span className="dropdown-image-container">
-                                    <img
-                                        src={dropdown}
-                                        className="stakeing-dropdown-img"
-                                        alt="Stakeing Dropdown"
-                                    />
-                                </span>
-                            </div>
-                        </div>
-                    </li>
-                );
-                ++i;
-            }
-        } else {
-            while (i < this.state.showOptions) {
-                cards.push(
-                    <li className="stakeing-option-item" key={i}>
-                        <div
-                            className="stakeing-option shadow-sm bg-white rounded"
-                            style={{ height: '100%' }}
-                        >
-                            <div className="stakeing-option-img-container">
-                                <Skeleton />
-                            </div>
-                            <Skeleton count={5} />
-                        </div>
-                    </li>
-                );
-                ++i;
-            }
-        }
-        return cards;
-    }
     render() {
         const { showOptions } = this.state;
         const {
@@ -138,7 +48,9 @@ export default class StakeingOptions extends Component {
                             : 'Show Less'}
                     </button>
                 </div>
-                <ul className="stakeing-options-list">{this.getCards()}</ul>
+                <ul className="stakeing-options-list">
+                    <StakingCards {...this.state} {...this.props} />
+                </ul>
             </section>
         );
     }

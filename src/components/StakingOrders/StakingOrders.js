@@ -6,7 +6,8 @@ import Header from '../Header/Header';
 import OrdersForm from './OrdersForm';
 import { TempleWallet } from '@temple-wallet/dapp';
 import { getBetsByBettor, withdrawAmount } from '../../apis/stackingOrdersApis';
-import { getCurrentCycle } from '../../apis/homepageApis';
+import { getCurrentCycle, fetchCurrentTzPrice } from '../../apis/homepageApis';
+const CONFIG = require('../../apis/config');
 
 export default class Stats extends Component {
     constructor(props) {
@@ -31,6 +32,7 @@ export default class Stats extends Component {
                 mainnet: 0,
                 testnet: 0,
             },
+            currentXTZPrice: 0,
         };
         this.ConnectWallet = this.ConnectWallet.bind(this);
         this.handleWithdrawAmount = this.handleWithdrawAmount.bind(this);
@@ -61,13 +63,15 @@ export default class Stats extends Component {
         const API_RESPONSE = await Promise.all([
             getCurrentCycle('mainnet'),
             getCurrentCycle('testnet'),
+            fetchCurrentTzPrice(),
         ]);
         if (API_RESPONSE[0].sucess) {
             currentCycle = {
                 mainnet: API_RESPONSE[0].currentCycle,
                 testnet: API_RESPONSE[1].currentCycle,
             };
-            this.setState({ currentCycle });
+            const currentXTZPrice = API_RESPONSE[2].currentprice;
+            this.setState({ currentCycle, currentXTZPrice });
         }
     };
 
@@ -109,8 +113,8 @@ export default class Stats extends Component {
                 ? await wallet.connect('mainnet', { forcePermission: true })
                 : await wallet.connect('edo2net', { forcePermission: true });
             const tezos = wallet.toTezos();
-            tezos.setProvider('https://testnet.tezster.tech');
-            tezos.setRpcProvider('https://testnet.tezster.tech');
+            tezos.setProvider(CONFIG.RPC_NODES[activeTab]);
+            tezos.setRpcProvider(CONFIG.RPC_NODES[activeTab]);
             const accountPkh = await tezos.wallet.pkh();
             accountAddress[activeTab] = accountPkh;
             this.setState(
