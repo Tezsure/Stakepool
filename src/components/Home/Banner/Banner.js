@@ -1,93 +1,46 @@
 import React, { Component } from 'react';
 import Header from '../../Header/Header';
 import Countdown from 'react-countdown-now';
-import {
-    doScrolling,
-    getCurrentCycle,
-    fetchCurrentTzPrice,
-    getReferencePriceAndRanges,
-} from '../../../apis/homepageApis';
 
 export default class Banner extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            currentCycle: {
-                mainnet: '',
-                testnet: '',
-            },
-            network: this.setNetwork(),
-            currentXTZPrice: '00',
-            currentPriceRanges: {
-                mainnet: [],
-                testnet: [],
-            },
-        };
-    }
-    setNetwork = () => {
-        const path = this.props.location.pathname;
-        const network = path === '/mainnet' ? 'mainnet' : 'testnet';
-        console.log(network);
-        return network;
-    };
-    getReferencePriceAndRanges = async () => {
-        const { currentCycle, network, currentPriceRanges } = this.state;
-        const API_RESPONSE = await getReferencePriceAndRanges(
-            currentCycle[network].currentCycle,
-            network
-        );
-        console.log(API_RESPONSE);
-        currentPriceRanges[network] = API_RESPONSE.data.ranges;
-        this.setState({ currentPriceRanges });
-    };
-    getCurrentCycle = async (network) => {
-        const { currentCycle } = this.state;
-        const API_RESPONSE = await Promise.all([
-            getCurrentCycle(network),
-            fetchCurrentTzPrice(),
-        ]);
-        currentCycle[network] = API_RESPONSE[0];
-        const currentXTZPrice = API_RESPONSE[1].currentprice;
-        this.setState(
-            {
-                currentCycle,
-                currentXTZPrice,
-            },
-            () => this.getReferencePriceAndRanges()
-        );
-    };
-    componentDidMount() {
-        const { network } = this.state;
-        this.getCurrentCycle(network);
-    }
-    handleScolling = (element, duration) => {
-        doScrolling(element, duration);
-    };
     render() {
         const {
             currentCycle,
             network,
             currentXTZPrice,
             currentPriceRanges,
-        } = this.state;
-        console.log(currentCycle[network].cycletime);
+            stakedPriceRange,
+            fetchingCurrentPriceRanges,
+        } = this.props;
         const ranges = currentPriceRanges[network].map((elem) => {
             let range;
             if (elem.low !== elem.high) {
-                range = `In the range of $ ${
-                    (currentXTZPrice * 100 + elem.low / 100) / 100
-                } - $ ${(currentXTZPrice * 100 + elem.high / 100) / 100}`;
+                range = `In the range of $ ${(
+                    (currentXTZPrice * 100 + elem.low / 100) /
+                    100
+                ).toFixed(2)} - $ ${(
+                    (currentXTZPrice * 100 + elem.high / 100) /
+                    100
+                ).toFixed(2)}`;
             }
             if (elem.low === elem.high && elem.low < 0) {
-                range = `Below $ ${
-                    (currentXTZPrice * 100 + elem.low / 100) / 100
-                }`;
+                range = `Below $ ${(
+                    (currentXTZPrice * 100 + elem.low / 100) /
+                    100
+                ).toFixed(2)}`;
             }
             if (elem.low === elem.high && elem.low > 0) {
-                range = `Above $ ${currentXTZPrice + elem.low}`;
+                range = `Above $ ${(
+                    (currentXTZPrice * 100 + elem.low / 100) /
+                    100
+                ).toFixed(2)}`;
             }
             return (
-                <option className="selector" key={range}>
+                <option
+                    className="selector"
+                    key={range}
+                    value={`${elem.low}~${elem.high}`}
+                >
                     {range}
                 </option>
             );
@@ -125,7 +78,7 @@ export default class Banner extends Component {
                                             '000000'
                                         }
                                         onComplete={() => {
-                                            this.getCurrentCycle();
+                                            this.props.getCurrentCycle();
                                         }}
                                         className="stakepool-banner-input"
                                         disabled="disabled"
@@ -164,8 +117,16 @@ export default class Banner extends Component {
                                     className="stakepool-banner-input"
                                     type="select"
                                     placeholder="Price of XTZ"
+                                    value={stakedPriceRange}
+                                    onChange={(e) =>
+                                        this.props.handlePriceChange(e)
+                                    }
                                 >
-                                    <option className="selector" disabled>
+                                    <option
+                                        className="selector"
+                                        disabled
+                                        value="0"
+                                    >
                                         ---- Please Select the stake price----
                                     </option>
                                     {ranges}
@@ -189,7 +150,7 @@ export default class Banner extends Component {
                                         type="button"
                                         className="btn btn-outline-primary btn-lg staking-options-button banner-button"
                                         onClick={() =>
-                                            this.handleScolling(
+                                            this.props.handleScolling(
                                                 'stakeing-options',
                                                 1000
                                             )
@@ -202,6 +163,7 @@ export default class Banner extends Component {
                                     <button
                                         type="button"
                                         className="btn btn-primary btn-lg banner-button"
+                                        disabled={fetchingCurrentPriceRanges}
                                     >
                                         Stake now
                                     </button>

@@ -67,7 +67,7 @@ export const getReferencePriceAndRanges = async (currentCycle, network) => {
     try {
         let data = {};
         let ranges = [];
-        let cycle = currentCycle + 2;
+        let cycle = currentCycle;
         const tezos = new TezosToolkit(CONFIG.RPC_NODES[network]);
         tezos.setRpcProvider(CONFIG.RPC_NODES[network]);
         console.log(CONFIG.CONTRACT[network]);
