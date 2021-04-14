@@ -6,6 +6,7 @@ import Header from '../Header/Header';
 import OrdersForm from './OrdersForm';
 import { TempleWallet } from '@temple-wallet/dapp';
 import { getBetsByBettor, withdrawAmount } from '../../apis/stackingOrdersApis';
+import { getCurrentCycle } from '../../apis/homepageApis';
 
 export default class Stats extends Component {
     constructor(props) {
@@ -26,9 +27,17 @@ export default class Stats extends Component {
             },
             wallet: '',
             ongoingWithdraw: '',
+            currentCycle: {
+                mainnet: 0,
+                testnet: 0,
+            },
         };
         this.ConnectWallet = this.ConnectWallet.bind(this);
         this.handleWithdrawAmount = this.handleWithdrawAmount.bind(this);
+    }
+
+    componentDidMount() {
+        this.getCurrentCycle();
     }
 
     async handleWithdrawAmount(cycle, network, wallet, index) {
@@ -46,6 +55,21 @@ export default class Stats extends Component {
             console.log(error);
         }
     }
+
+    getCurrentCycle = async () => {
+        let { currentCycle } = this.state;
+        const API_RESPONSE = await Promise.all([
+            getCurrentCycle('mainnet'),
+            getCurrentCycle('testnet'),
+        ]);
+        if (API_RESPONSE[0].sucess) {
+            currentCycle = {
+                mainnet: API_RESPONSE[0].currentCycle,
+                testnet: API_RESPONSE[1].currentCycle,
+            };
+            this.setState({ currentCycle });
+        }
+    };
 
     GetStakingData = async () => {
         const {

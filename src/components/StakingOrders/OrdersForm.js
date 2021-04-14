@@ -8,6 +8,7 @@ export default class OrdersForm extends Component {
             stakingOrders,
             wallet,
             ongoingWithdraw,
+            currentCycle,
         } = this.props;
         const currentAddress = accountAddress[activeTab];
         const stakingOrdersJSX = stakingOrders[activeTab].map((elem, index) => {
@@ -15,6 +16,16 @@ export default class OrdersForm extends Component {
             const range = `${parseInt(elem.range.low, 10) / 100} - ${
                 parseInt(elem.range.high, 10) / 100
             }`;
+            let rewadsText = '';
+            let buttonStatusDisabled = false;
+            if (currentCycle[activeTab] <= elem.cycle) {
+                buttonStatusDisabled = true;
+                rewadsText = 'Ongoing cycle';
+            }
+            if (elem.withdrawn || ongoingWithdraw === index) {
+                buttonStatusDisabled = true;
+                rewadsText = 'Withdawn';
+            }
             return (
                 <tr key={stakingPeriod}>
                     <td className="staking-period">{stakingPeriod}</td>
@@ -26,11 +37,12 @@ export default class OrdersForm extends Component {
                         <span
                             className={
                                 elem.withdrawn
-                                    ? 'warning-badge'
-                                    : 'success-badge'
+                                    ? 'sucess-badge'
+                                    : 'warning-badge'
                             }
                         />
-                        {elem.withdrawn}
+                        {'  '}
+                        {rewadsText}
                     </td>
                     <td className="staked-status">
                         <button
@@ -44,9 +56,7 @@ export default class OrdersForm extends Component {
                                     index
                                 )
                             }
-                            disabled={
-                                elem.withdrawn || ongoingWithdraw === index
-                            }
+                            disabled={buttonStatusDisabled}
                         >
                             {ongoingWithdraw !== index ? (
                                 'withdraw'

@@ -7,6 +7,7 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Quicksand');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
 
 .stakepool-banner-form-container {
     .stakepool-banner-input-label {
@@ -106,4 +107,16 @@ button:focus {
 .stakeing-dropdown-img {
     width: 15px;
     cursor: pointer;
+}
+p.faq-answer {
+    background: #e9ecef;
+    border-radius: 10px;
+    padding-top: 4%;
+    padding-bottom: 4%;
+    padding-left: 2%;
+    font-family: 'Quicksand', sans-serif;
+    padding-right: 1%;
+}
+h4.faq-header {
+    font-family: 'Quicksand', sans-serif;
 }
