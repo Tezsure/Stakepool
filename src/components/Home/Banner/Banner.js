@@ -31,12 +31,14 @@ export default class Banner extends Component {
         return network;
     };
     getReferencePriceAndRanges = async () => {
-        const { currentCycle, network } = this.state;
+        const { currentCycle, network, currentPriceRanges } = this.state;
         const API_RESPONSE = await getReferencePriceAndRanges(
-            currentCycle[network].cycletime,
+            currentCycle[network].currentCycle,
             network
         );
-        debugger;
+        console.log(API_RESPONSE);
+        currentPriceRanges[network] = API_RESPONSE.data.ranges;
+        this.setState({ currentPriceRanges });
     };
     getCurrentCycle = async (network) => {
         const { currentCycle } = this.state;
@@ -62,9 +64,34 @@ export default class Banner extends Component {
         doScrolling(element, duration);
     };
     render() {
-        const { currentCycle, network, currentXTZPrice } = this.state;
+        const {
+            currentCycle,
+            network,
+            currentXTZPrice,
+            currentPriceRanges,
+        } = this.state;
         console.log(currentCycle[network].cycletime);
-
+        const ranges = currentPriceRanges[network].map((elem) => {
+            let range;
+            if (elem.low !== elem.high) {
+                range = `In the range of $ ${
+                    (currentXTZPrice * 100 + elem.low / 100) / 100
+                } - $ ${(currentXTZPrice * 100 + elem.high / 100) / 100}`;
+            }
+            if (elem.low === elem.high && elem.low < 0) {
+                range = `Below $ ${
+                    (currentXTZPrice * 100 + elem.low / 100) / 100
+                }`;
+            }
+            if (elem.low === elem.high && elem.low > 0) {
+                range = `Above $ ${currentXTZPrice + elem.low}`;
+            }
+            return (
+                <option className="selector" key={range}>
+                    {range}
+                </option>
+            );
+        });
         return (
             <div className="banner">
                 <div className="container">
@@ -141,6 +168,7 @@ export default class Banner extends Component {
                                     <option className="selector" disabled>
                                         ---- Please Select the stake price----
                                     </option>
+                                    {ranges}
                                 </select>
                             </div>
 
