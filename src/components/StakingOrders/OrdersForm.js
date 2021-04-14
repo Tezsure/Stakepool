@@ -57,7 +57,7 @@ export default class OrdersForm extends Component {
                     <td className="staking-period">{stakingPeriod}</td>
                     <td className="range">{range}</td>
                     <td className="staked-amount">
-                        {elem.stakedAmount / Math.pow(10, 6)}
+                        {elem.stakedAmount / Math.pow(10, 6)} ꜩ
                     </td>
                     <td>
                         <span
@@ -152,8 +152,8 @@ export default class OrdersForm extends Component {
                             <th scope="col">Staking period</th>
                             <th scope="col">Staked range</th>
                             <th scope="col">Staked amount</th>
-                            <th scope="col">Staking reward won</th>
-                            <th scope="col">Staked status</th>
+                            <th scope="col">Staked reward status</th>
+                            <th scope="col">Action</th>
                         </tr>
                     </thead>
                     {stakingOrdersJSX.length > 0 ? (
