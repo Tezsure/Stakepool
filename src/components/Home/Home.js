@@ -1,6 +1,7 @@
 import React, { Fragment, Component } from 'react';
 import Banner from './Banner/Banner';
 import StackeingOptions from './StakeingOptions/StakeingOptions';
+import { TempleWallet } from '@temple-wallet/dapp';
 import Footer from '../Footer/Footer';
 import {
     doScrolling,
@@ -51,6 +52,25 @@ export default class Home extends Component {
             });
         }
     };
+    placeBet = async () => {
+        //const available = await TempleWallet.isAvailable();
+        console.log('Clicked');
+        const wallet = new TempleWallet('Stakepool');
+        await wallet.connect('edo2net', { forcePermission: true });
+        const tezos = wallet.toTezos();
+        const contractInstance = await tezos.wallet.at(
+            'KT1DDnjzQhA25Vjm3AwqVWGFskzoW3QARKsE'
+        );
+
+        // .placeBet (high,low)
+        // .send (amount)
+        const operation = await contractInstance.methods
+                    .placeBet(250, 0)
+                    .send({ amount: 8, mutez: false });
+        console.log('Operation Injected awaiting confirmation');
+        const confirmation = await operation.confirmation();
+        console.log(operation , confirmation);
+    }
     getCurrentCycle = async (network) => {
         const { currentCycle } = this.state;
         const API_RESPONSE = await Promise.all([
@@ -86,6 +106,7 @@ export default class Home extends Component {
                         handlePriceChange={this.handlePriceChange}
                         handleScolling={this.handleScolling}
                         getCurrentCycle={this.getCurrentCycle}
+                        placeBet = {this.placeBet}
                     />
                     <StackeingOptions {...this.props} {...this.state} />
                     <Footer {...this.props} />

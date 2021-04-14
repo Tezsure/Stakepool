@@ -164,6 +164,7 @@ export default class Banner extends Component {
                                         type="button"
                                         className="btn btn-primary btn-lg banner-button"
                                         disabled={fetchingCurrentPriceRanges}
+                                        onClick={() => (this.props.placeBet())}
                                     >
                                         Stake now
                                     </button>
