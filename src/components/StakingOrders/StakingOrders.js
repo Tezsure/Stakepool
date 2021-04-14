@@ -24,8 +24,27 @@ export default class Stats extends Component {
                 mainnet: [],
                 testnet: [],
             },
+            wallet: '',
+            ongoingWithdraw: '',
         };
         this.ConnectWallet = this.ConnectWallet.bind(this);
+        this.handleWithdrawAmount = this.handleWithdrawAmount.bind(this);
+    }
+
+    async handleWithdrawAmount(cycle, network, wallet, index) {
+        try {
+            this.setState({ ongoingWithdraw: index });
+            // eslint-disable-next-line no-unused-vars
+            const withdrawAmountResponse = await withdrawAmount(
+                cycle,
+                network,
+                wallet
+            );
+            this.setState({ ongoingWithdraw: '' });
+        } catch (error) {
+            this.setState({ ongoingWithdraw: '' });
+            console.log(error);
+        }
     }
 
     GetStakingData = async () => {
@@ -70,9 +89,12 @@ export default class Stats extends Component {
             tezos.setRpcProvider('https://testnet.tezster.tech');
             const accountPkh = await tezos.wallet.pkh();
             accountAddress[activeTab] = accountPkh;
-            this.setState({ accountAddress, buttonSpinnerState }, () => {
-                this.GetStakingData();
-            });
+            this.setState(
+                { accountAddress, buttonSpinnerState, wallet },
+                () => {
+                    this.GetStakingData();
+                }
+            );
         } catch (error) {
             console.log(error);
         }
@@ -140,7 +162,9 @@ export default class Stats extends Component {
                                         <OrdersForm
                                             {...this.state}
                                             ConnectWallet={this.ConnectWallet}
-                                            withdrawAmount={withdrawAmount}
+                                            withdrawAmount={
+                                                this.handleWithdrawAmount
+                                            }
                                         />
                                     </div>
                                 </div>

@@ -79,7 +79,7 @@ export default class Footer extends Component {
                     </div>
                 </section>
 
-                <footer className="site-footer">
+                <footer className="site-footer" id="contact">
                     <div>
                         <img src={heart} alt="heart" />
                     </div>

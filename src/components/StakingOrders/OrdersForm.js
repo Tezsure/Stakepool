@@ -2,9 +2,15 @@ import React, { Component } from 'react';
 
 export default class OrdersForm extends Component {
     render() {
-        const { accountAddress, activeTab, stakingOrders } = this.props;
+        const {
+            accountAddress,
+            activeTab,
+            stakingOrders,
+            wallet,
+            ongoingWithdraw,
+        } = this.props;
         const currentAddress = accountAddress[activeTab];
-        const stakingOrdersJSX = stakingOrders[activeTab].map((elem) => {
+        const stakingOrdersJSX = stakingOrders[activeTab].map((elem, index) => {
             const stakingPeriod = `${elem.stakedAt} - ${elem.cycle}`;
             const range = `${parseInt(elem.range.low, 10) / 100} - ${
                 parseInt(elem.range.high, 10) / 100
@@ -17,18 +23,43 @@ export default class OrdersForm extends Component {
                         {elem.stakedAmount / Math.pow(10, 6)}
                     </td>
                     <td>
-                        <span className="warning-badge" />
+                        <span
+                            className={
+                                elem.withdrawn
+                                    ? 'warning-badge'
+                                    : 'success-badge'
+                            }
+                        />
+                        {elem.withdrawn}
                     </td>
                     <td className="staked-status">
                         <button
                             type="button"
                             className="btn btn-dark"
                             onClick={() =>
-                                this.props.withdrawAmount(elem.cycle, activeTab)
+                                this.props.withdrawAmount(
+                                    elem.cycle,
+                                    activeTab,
+                                    wallet,
+                                    index
+                                )
                             }
-                            disabled={elem.withdrawn}
+                            disabled={
+                                elem.withdrawn || ongoingWithdraw === index
+                            }
                         >
-                            withdraw
+                            {ongoingWithdraw !== index ? (
+                                'withdraw'
+                            ) : (
+                                <>
+                                    <span
+                                        className="spinner-grow spinner-grow-sm"
+                                        role="status"
+                                        aria-hidden="true"
+                                    />
+                                    &nbsp; processing...
+                                </>
+                            )}
                         </button>
                     </td>
                 </tr>
@@ -40,7 +71,7 @@ export default class OrdersForm extends Component {
                     <div className="account-details">
                         {currentAddress ? (
                             <span className="wallet-address-des">
-                                Account address: &nbsp;
+                                Wallet address: &nbsp;
                                 <span className="wallet-address">
                                     {currentAddress}
                                 </span>

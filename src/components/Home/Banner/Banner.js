@@ -1,53 +1,70 @@
 import React, { Component } from 'react';
 import Header from '../../Header/Header';
+import Countdown from 'react-countdown-now';
+import {
+    doScrolling,
+    getCurrentCycle,
+    fetchCurrentTzPrice,
+    getReferencePriceAndRanges,
+} from '../../../apis/homepageApis';
 
 export default class Banner extends Component {
-    getElementY = (query) => {
-        return (
-            window.pageYOffset +
-            document.getElementById(query).getBoundingClientRect().top
+    constructor(props) {
+        super(props);
+        this.state = {
+            currentCycle: {
+                mainnet: '',
+                testnet: '',
+            },
+            network: this.setNetwork(),
+            currentXTZPrice: '00',
+            currentPriceRanges: {
+                mainnet: [],
+                testnet: [],
+            },
+        };
+    }
+    setNetwork = () => {
+        const path = this.props.location.pathname;
+        const network = path === '/mainnet' ? 'mainnet' : 'testnet';
+        console.log(network);
+        return network;
+    };
+    getReferencePriceAndRanges = async () => {
+        const { currentCycle, network } = this.state;
+        const API_RESPONSE = await getReferencePriceAndRanges(
+            currentCycle[network].cycletime,
+            network
+        );
+        debugger;
+    };
+    getCurrentCycle = async (network) => {
+        const { currentCycle } = this.state;
+        const API_RESPONSE = await Promise.all([
+            getCurrentCycle(network),
+            fetchCurrentTzPrice(),
+        ]);
+        currentCycle[network] = API_RESPONSE[0];
+        const currentXTZPrice = API_RESPONSE[1].currentprice;
+        this.setState(
+            {
+                currentCycle,
+                currentXTZPrice,
+            },
+            () => this.getReferencePriceAndRanges()
         );
     };
-
-    doScrolling = (element, duration) => {
-        var startingY = window.pageYOffset;
-        var elementY = this.getElementY(element);
-        // If element is close to page's bottom then window will scroll only to some position above the element.
-        var targetY =
-            document.body.scrollHeight - elementY < window.innerHeight
-                ? document.body.scrollHeight - window.innerHeight
-                : elementY;
-        var diff = targetY - startingY;
-
-        var easing = function (t) {
-            return t < 0.5
-                ? 4 * t * t * t
-                : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
-        };
-        var start;
-
-        if (!diff) return;
-
-        // Bootstrap our animation - it will get called right before next frame shall be rendered.
-        window.requestAnimationFrame(function step(timestamp) {
-            if (!start) start = timestamp;
-            // Elapsed miliseconds since start of scrolling.
-            var time = timestamp - start;
-            // Get percent of completion in range [0, 1].
-            var percent = Math.min(time / duration, 1);
-            // Apply the easing.
-            // It can cause bad-looking slow frames in browser performance tool, so be careful.
-            percent = easing(percent);
-
-            window.scrollTo(0, startingY + diff * percent);
-
-            // Proceed with animation as long as we wanted it to.
-            if (time < duration) {
-                window.requestAnimationFrame(step);
-            }
-        });
+    componentDidMount() {
+        const { network } = this.state;
+        this.getCurrentCycle(network);
+    }
+    handleScolling = (element, duration) => {
+        doScrolling(element, duration);
     };
     render() {
+        const { currentCycle, network, currentXTZPrice } = this.state;
+        console.log(currentCycle[network].cycletime);
+
         return (
             <div className="banner">
                 <div className="container">
@@ -59,14 +76,34 @@ export default class Banner extends Component {
                         <div className="stakepool-banner-form-container ">
                             <div className="stakepool-banner-input-wrapper">
                                 <label className="stakepool-banner-input-label">
-                                    The current Cycle 333 will be concluded in:
+                                    The current Cycle{' '}
+                                    {currentCycle[network].currentCycle || '00'}{' '}
+                                    will be concluded in:
                                 </label>
-                                <input
+                                <div
                                     className="stakepool-banner-input"
                                     disabled="disabled"
-                                    type="text"
-                                    placeholder="00:03:17"
-                                />
+                                    style={{
+                                        backgroundColor: '#dee2e6',
+                                        color: '#7d7e7e',
+                                    }}
+                                >
+                                    <Countdown
+                                        date={
+                                            currentCycle[network].cycletime ||
+                                            '000000'
+                                        }
+                                        key={
+                                            currentCycle[network].cycletime ||
+                                            '000000'
+                                        }
+                                        onComplete={() => {
+                                            this.getCurrentCycle();
+                                        }}
+                                        className="stakepool-banner-input"
+                                        disabled="disabled"
+                                    />
+                                </div>
                             </div>
 
                             <div className="stakepool-banner-input-wrapper">
@@ -77,7 +114,7 @@ export default class Banner extends Component {
                                     className="stakepool-banner-input"
                                     type="text"
                                     disabled="disabled"
-                                    placeholder="$3.35"
+                                    value={`$ ${currentXTZPrice}`}
                                 />
                             </div>
 
@@ -88,7 +125,7 @@ export default class Banner extends Component {
                                 <input
                                     className="stakepool-banner-input"
                                     type="text"
-                                    placeholder="000010"
+                                    placeholder="Enter your stake price"
                                 />
                             </div>
 
@@ -96,11 +133,15 @@ export default class Banner extends Component {
                                 <label className="stakepool-banner-input-label">
                                     I predict the price of XTZ to be:
                                 </label>
-                                <input
+                                <select
                                     className="stakepool-banner-input"
-                                    type="text"
+                                    type="select"
                                     placeholder="Price of XTZ"
-                                />
+                                >
+                                    <option className="selector" disabled>
+                                        ---- Please Select the stake price----
+                                    </option>
+                                </select>
                             </div>
 
                             <p className="form-footer-text">
@@ -120,7 +161,7 @@ export default class Banner extends Component {
                                         type="button"
                                         className="btn btn-outline-primary btn-lg staking-options-button banner-button"
                                         onClick={() =>
-                                            this.doScrolling(
+                                            this.handleScolling(
                                                 'stakeing-options',
                                                 1000
                                             )

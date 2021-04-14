@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import logo from '../../assets/images/Group 35964@2x.png';
 import settingsLogo from '../../assets/images/setting.46141fb1.png';
+import { doScrolling } from '../../apis/homepageApis';
 
 export default class Header extends Component {
     constructor(props) {
@@ -13,6 +14,9 @@ export default class Header extends Component {
             displayDropdownSetting: false,
         };
     }
+    handleScolling = (element, duration) => {
+        doScrolling(element, duration);
+    };
     componentDidMount() {
         window.onclick = (e) => {
             const { displayDropdownStats, displayDropdownSetting } = this.state;
@@ -133,7 +137,12 @@ export default class Header extends Component {
                         </Link>
                     </li>
                     <li className="site-menu-item">
-                        <button className="contact-btn">Get in Touch</button>
+                        <button
+                            className="contact-btn"
+                            onClick={() => this.handleScolling('contact', 1000)}
+                        >
+                            Get in Touch
+                        </button>
                     </li>
                     <li className="site-menu-item">
                         <span className="dropdown">
