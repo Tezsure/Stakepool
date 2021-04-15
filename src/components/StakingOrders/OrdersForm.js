@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 
 export default class OrdersForm extends Component {
     calculateRange = (elem) => {
-        debugger;
         const { currentXTZPrice } = this.props;
         let range;
         if (elem.low !== elem.high) {
