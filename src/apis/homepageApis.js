@@ -21,13 +21,11 @@ export const placeBetAPI = async (network, BetAmount, RANGE) => {
         const confirmOperationHash = await operation
             .confirmation(CONFIG.TAQUITO_CHECK_CONF_NUM)
             .then(() => operation.hash);
-        debugger;
         return {
             sucess: true,
             operationId: confirmOperationHash,
         };
     } catch (error) {
-        console.log(error);
         return {
             sucess: false,
             error,
@@ -63,7 +61,6 @@ export const fetchCurrentTzPrice = async () => {
     try {
         const URL = CONFIG.COINGECKO_API;
         const PRICE_RESPONSE = await axios.get(`${URL}`);
-        console.log(PRICE_RESPONSE.data.market_data.current_price.usd);
         return {
             sucess: true,
             currentprice: PRICE_RESPONSE.data.market_data.current_price.usd,
@@ -102,7 +99,6 @@ export const getReferencePriceAndRanges = async (currentCycle, network) => {
         let cycle = currentCycle;
         const tezos = new TezosToolkit(CONFIG.RPC_NODES[network]);
         tezos.setRpcProvider(CONFIG.RPC_NODES[network]);
-        console.log(CONFIG.CONTRACT[network]);
         const contract = await tezos.contract.at(CONFIG.CONTRACT[network]);
         const storage = await contract.storage();
         const cycleData = await storage.cycleData.get('' + cycle);

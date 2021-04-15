@@ -16,9 +16,6 @@ export default class Stats extends Component {
             winners_roi: '0',
         };
     }
-    componentDidMount() {
-        console.log(this.props.location.pathname);
-    }
     render() {
         const {
             total_bet_amount,

@@ -54,7 +54,6 @@ export default class Stats extends Component {
             this.setState({ ongoingWithdraw: '' });
         } catch (error) {
             this.setState({ ongoingWithdraw: '' });
-            console.log(error);
         }
     }
 

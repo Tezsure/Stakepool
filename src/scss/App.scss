@@ -101,8 +101,14 @@ button:focus {
     display: flex;
     justify-content: space-between;
 }
+.stakeing-option {
+    position: relative;
+}
 .dropdown-image-container {
     text-align: right;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
 }
 .stakeing-dropdown-img {
     width: 15px;

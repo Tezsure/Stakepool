@@ -28,7 +28,6 @@ export const getBetsByBettor = async (address, network) => {
             bets,
         };
     } catch (error) {
-        console.log(error);
         return {
             sucess: false,
             error,
@@ -113,7 +112,6 @@ export const calculateRewards = async (
             lowAmount = lowAmount + cycleDetails.referencePrice;
             let highAmount = (cycleDetails.referencePrice * highPercent) / 100;
             highAmount = highAmount + cycleDetails.referencePrice;
-            console.log(lowAmount, highAmount);
             if (lowAmount === highAmount) {
                 if (low < 0 && cycleDetails.endingPrice < lowAmount) {
                     cycleData.amountByRange.keyMap.forEach(async (element) => {
@@ -123,11 +121,6 @@ export const calculateRewards = async (
                         ) {
                             const valueByRange = await cycleData.amountByRange.get(
                                 element
-                            );
-                            console.log(
-                                element['0'].c[0] * element['0'].s,
-                                element['1'].c[0] * element['1'].s,
-                                valueByRange
                             );
                             let rewardWon =
                                 (stakedAmount * cycleDetails.totalRewards) /
@@ -144,11 +137,6 @@ export const calculateRewards = async (
                         ) {
                             const valueByRange = await cycleData.amountByRange.get(
                                 element
-                            );
-                            console.log(
-                                element['0'].c[0] * element['0'].s,
-                                element['1'].c[0] * element['1'].s,
-                                valueByRange
                             );
                             let rewardWon =
                                 (stakedAmount * cycleDetails.totalRewards) /
@@ -173,11 +161,6 @@ export const calculateRewards = async (
                         ) {
                             const valueByRange = await cycleData.amountByRange.get(
                                 element
-                            );
-                            console.log(
-                                element['0'].c[0] * element['0'].s,
-                                element['1'].c[0] * element['1'].s,
-                                valueByRange
                             );
                             let rewardWon =
                                 (stakedAmount * cycleDetails.totalRewards) /

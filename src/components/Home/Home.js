@@ -40,7 +40,6 @@ export default class Home extends Component {
     setNetwork = () => {
         const path = this.props.location.pathname;
         const network = path === '/mainnet' ? 'mainnet' : 'testnet';
-        console.log(network);
         return network;
     };
     getReferencePriceAndRanges = async () => {
