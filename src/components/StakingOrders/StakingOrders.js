@@ -132,7 +132,7 @@ export default class Stats extends Component {
     };
 
     render() {
-        const { activeTab } = this.state;
+        const { activeTab, stakingOrders } = this.state;
         return (
             <Fragment>
                 <div className="main-page-container">
@@ -143,7 +143,10 @@ export default class Stats extends Component {
                                 <h1 className="banner-heading">
                                     Your staking orders
                                 </h1>
-                                <div className="staking-orders-container">
+                                <div
+                                    className="staking-orders-container"
+                                    style={{ flexDirection: 'column' }}
+                                >
                                     <div className="row main-row">
                                         <ul className="nav nav-tabs">
                                             <li className="nav-item">
@@ -182,10 +185,7 @@ export default class Stats extends Component {
                                             </li>
                                         </ul>
                                     </div>
-                                    <div
-                                        className="row order-form-container"
-                                        style={{ marginTop: '-15%' }}
-                                    >
+                                    <div className="row order-form-container">
                                         <OrdersForm
                                             {...this.state}
                                             ConnectWallet={this.ConnectWallet}

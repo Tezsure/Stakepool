@@ -88,6 +88,9 @@ export default class StakingCards extends Component {
                         100
                     ).toFixed(2)}`;
                 }
+                const cycleEndDate = new Date(
+                    currentCycle[network].cycletime
+                ).toDateString();
                 cards.push(
                     <React.Fragment key={innerText}>
                         <li
@@ -169,12 +172,12 @@ export default class StakingCards extends Component {
                                         }}
                                     >
                                         If, at the completion of your staking
-                                        period on Fri Apr 09 2021,the price of
+                                        period on {cycleEndDate}, the price of
                                         XTZ is in this range, then you get back
-                                        your returns along with your staking
-                                        betAmountment.Else you would lose your
-                                        staking returns and only get back your
-                                        staking betAmountment.
+                                        your returns along with your staking bet
+                                        amount. Else you would lose your staking
+                                        returns and only get back your staking
+                                        amount.
                                     </li>
                                     <li
                                         style={{
@@ -184,7 +187,7 @@ export default class StakingCards extends Component {
                                         You shall get back your staked amount
                                         (plus the winning rewards if applicable)
                                         at the conclusion of cycle{' '}
-                                        {currentCycle[network].currentCycle}
+                                        {currentCycle[network].currentCycle + 2}
                                     </li>
                                     <div align="center">
                                         <button
