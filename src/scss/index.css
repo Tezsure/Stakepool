@@ -36,3 +36,69 @@ input::-webkit-inner-spin-button {
 input[type='number'] {
     -moz-appearance: textfield !important;
 }
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Secular+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Piazzolla:wght@200&display=swap');
+
+:root {
+    --text-font: 'Poppins', sans-serif;
+}
+* {
+    font-family: var(--text-font) !important;
+}
+.into-text {
+    font-weight: inherit;
+    font-size: 250%;
+    color: #fff;
+    font-family: none !important;
+    padding-top: 5% !important;
+}
+.card-body {
+    padding-top: 5% !important;
+    padding-bottom: 5% !important;
+}
+.staking-options {
+    font-family: none !important;
+    color: rgb(24, 59, 86);
+    display: block;
+    font-size: 250%;
+    font-weight: bolder;
+}
+.try-stakepool {
+    color: rgb(255, 255, 255);
+    font-family: none !important;
+    font-size: 250%;
+}
+.stake-button {
+    font-family: none !important;
+}
+.header-stats {
+    font-size: 250%;
+    font-family: none !important;
+    padding-top: 5%;
+    color: rgb(255, 255, 255);
+}
+.accounts-header {
+    font-family: none !important;
+}
+.error-message-container {
+    padding-top: 2% !important;
+    border-radius: unset !important;
+    padding-bottom: 2% !important;
+    border: none !important;
+}
+.sweet-footer-container .swal-footer {
+    text-align: center !important;
+}
+.transaction-container {
+    display: block;
+    background: #e9ecef;
+    border: 1px solid #e9ecef;
+    border-radius: 4px;
+    padding: 10px;
+    word-break: break-all;
+}
+.transaction-container p {
+    word-break: break-all;
+}
