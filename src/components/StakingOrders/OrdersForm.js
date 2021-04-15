@@ -57,7 +57,7 @@ export default class OrdersForm extends Component {
                     <td className="staking-period">{stakingPeriod}</td>
                     <td className="range">{range}</td>
                     <td className="staked-amount">
-                        {elem.stakedAmount / Math.pow(10, 6)} ꜩ
+                        {elem.stakedAmount / Math.pow(10, 6)} xꜩ
                     </td>
                     <td>
                         <span
@@ -103,6 +103,18 @@ export default class OrdersForm extends Component {
         });
         return (
             <div className="container-fluid">
+                <div
+                    className="network-container"
+                    style={{ marginBottom: '0px', marginTop: '25px' }}
+                >
+                    <div
+                        className="network-tab "
+                        style={{ textAlign: 'center' }}
+                    >
+                        <span className={'sucess-badge'} />
+                        &nbsp; Ongoing current cycle: {currentCycle[activeTab]}
+                    </div>
+                </div>
                 <div className="container-account-details">
                     <div className="account-details">
                         {currentAddress ? (

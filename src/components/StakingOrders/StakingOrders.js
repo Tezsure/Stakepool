@@ -157,7 +157,7 @@ export default class Stats extends Component {
                                                     to="#"
                                                     onClick={() =>
                                                         this.toggleTabs(
-                                                            'mainnet'
+                                                            'testnet'
                                                         )
                                                     }
                                                 >

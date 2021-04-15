@@ -177,7 +177,7 @@ export default class Header extends Component {
                             >
                                 <a
                                     className="dropdown-item"
-                                    href="/mainnet"
+                                    href="/"
                                     onClick={() =>
                                         this.toggleSettingsDropdown()
                                     }
