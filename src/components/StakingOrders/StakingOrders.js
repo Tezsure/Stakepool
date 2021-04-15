@@ -7,6 +7,8 @@ import OrdersForm from './OrdersForm';
 import { TempleWallet } from '@temple-wallet/dapp';
 import { getBetsByBettor, withdrawAmount } from '../../apis/stackingOrdersApis';
 import { getCurrentCycle, fetchCurrentTzPrice } from '../../apis/homepageApis';
+import swal from 'sweetalert';
+
 const CONFIG = require('../../apis/config');
 
 export default class Stats extends Component {
@@ -51,6 +53,22 @@ export default class Stats extends Component {
                 network,
                 wallet
             );
+            if (withdrawAmountResponse.sucess) {
+                swal({
+                    title: 'Bet placed sucessfully',
+                    text:
+                        'Operation id: \n' + withdrawAmountResponse.operationId,
+                    icon: 'success',
+                    button: 'Okay',
+                });
+            } else {
+                swal({
+                    title: 'Cannot place bet',
+                    text: withdrawAmountResponse.error.message,
+                    icon: 'error',
+                    button: 'Okay',
+                });
+            }
             this.setState({ ongoingWithdraw: '' });
         } catch (error) {
             this.setState({ ongoingWithdraw: '' });
@@ -132,7 +150,7 @@ export default class Stats extends Component {
     };
 
     render() {
-        const { activeTab, stakingOrders } = this.state;
+        const { activeTab } = this.state;
         return (
             <Fragment>
                 <div className="main-page-container">

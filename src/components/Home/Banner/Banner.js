@@ -51,8 +51,12 @@ export default class Banner extends Component {
                 <div className="container">
                     <Header />
                     <div className="banner-content-container">
-                        <h1 className="banner-heading">
-                            Earn a little extra on your staking rewards
+                        <h1
+                            className="banner-heading"
+                            style={{ maxWidth: '550px' }}
+                        >
+                            Predict and win great rewards <br /> without losing
+                            your tez
                         </h1>
                         <div className="stakepool-banner-form-container ">
                             <div className="network-container">
@@ -72,7 +76,7 @@ export default class Banner extends Component {
                             </div>
                             <div className="stakepool-banner-input-wrapper">
                                 <label className="stakepool-banner-input-label">
-                                    The current Cycle{' '}
+                                    The current cycle{' '}
                                     {currentCycle[network].currentCycle || '00'}{' '}
                                     will be concluded in:
                                 </label>
@@ -149,19 +153,18 @@ export default class Banner extends Component {
                                         disabled
                                         value="0"
                                     >
-                                        ---- Please Select the stake price----
+                                        ---- Please Select the stake price ----
                                     </option>
                                     {ranges}
                                 </select>
                             </div>
 
-                            <p className="form-footer-text">
-                                By submitting this form you agree to our terms
-                                and conditions and our Privacy Policy which
-                                explains how we may collect, use and disclose
-                                your personal information including to third
-                                parties.
-                            </p>
+                            <span className="banner-footer-container">
+                                <p className="form-footer-text">
+                                    *Caution: Underlying smart-contracts have
+                                    not been audited by a third party.
+                                </p>
+                            </span>
 
                             <div className="row" style={{ width: '100%' }}>
                                 <div

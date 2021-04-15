@@ -6,7 +6,7 @@
 }
 .banner-content-container {
     max-width: 960px;
-    margin: 35px auto 0;
+    margin: 50px auto 0;
 }
 .banner-heading {
     max-width: 450px;
@@ -14,10 +14,8 @@
     text-align: center;
     letter-spacing: 0.2px;
     color: #ffffff;
-    font-size: 40px;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
-        'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
-        'Helvetica Neue', 'Quicksand', sans-serif !important;
+    font-size: 35px;
+    font-family: sans-sarif !important;
 }
 .stakepool-banner-form-container {
     background: #ffffff 0% 0% no-repeat padding-box;
@@ -62,7 +60,7 @@
 }
 .form-footer-text {
     color: #5a7184;
-    font-size: 16px;
+    font-size: 12px;
     padding-left: 30px;
     padding-right: 30px;
 }
@@ -131,4 +129,8 @@
 }
 .swal-text {
     text-align: center;
+}
+span.banner-footer-container {
+    text-align: center;
+    width: 100%;
 }
