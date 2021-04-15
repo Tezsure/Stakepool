@@ -197,8 +197,12 @@ export default class Banner extends Component {
                                                     className="spinner-grow spinner-grow-sm"
                                                     role="status"
                                                     aria-hidden="true"
+                                                    style={{
+                                                        verticalAlign:
+                                                            'baseline',
+                                                    }}
                                                 />
-                                                &nbsp;Please wait...
+                                                &nbsp;&nbsp;Please wait...
                                             </>
                                         ) : (
                                             'Stake now'
