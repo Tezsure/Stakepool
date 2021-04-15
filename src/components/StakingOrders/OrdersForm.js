@@ -45,7 +45,7 @@ export default class OrdersForm extends Component {
             let buttonStatusDisabled = false;
             if (currentCycle[activeTab] <= elem.cycle) {
                 buttonStatusDisabled = true;
-                rewadsText = 'Ongoing cycle';
+                rewadsText = 'Pending';
             }
             if (elem.withdrawn || ongoingWithdraw === index) {
                 buttonStatusDisabled = true;
@@ -57,6 +57,9 @@ export default class OrdersForm extends Component {
                     <td className="range">{range}</td>
                     <td className="staked-amount">
                         {elem.stakedAmount / Math.pow(10, 6)} xꜩ
+                    </td>
+                    <td className="staked-amount">
+                        {elem.withdrawnAmount / Math.pow(10, 6)} xꜩ
                     </td>
                     <td>
                         <span
@@ -102,10 +105,7 @@ export default class OrdersForm extends Component {
         });
         return (
             <div className="container-fluid">
-                <div
-                    className="network-container"
-                    style={{ marginBottom: '0px', marginTop: '25px' }}
-                >
+                <div className="network-container" style={{ marginTop: '0px' }}>
                     <div
                         className="network-tab "
                         style={{ textAlign: 'center' }}
@@ -163,6 +163,7 @@ export default class OrdersForm extends Component {
                             <th scope="col">Staking period</th>
                             <th scope="col">Staked range</th>
                             <th scope="col">Staked amount</th>
+                            <th scope="col">Withdraw amount</th>
                             <th scope="col">Staked reward status</th>
                             <th scope="col">Action</th>
                         </tr>
@@ -172,7 +173,7 @@ export default class OrdersForm extends Component {
                     ) : (
                         <tbody>
                             <tr>
-                                <td colSpan="5">No data available</td>
+                                <td colSpan="6">No data available</td>
                             </tr>
                         </tbody>
                     )}
