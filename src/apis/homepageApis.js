@@ -18,12 +18,13 @@ export const placeBetAPI = async (network, BetAmount, RANGE) => {
         const operation = await contractInstance.methods
             .placeBet(highRange, lowRange)
             .send({ amount: parseInt(BetAmount, 10), mutez: false });
-        const confirmOperationHash = await operation
+        await operation
             .confirmation(CONFIG.TAQUITO_CHECK_CONF_NUM)
-            .then(() => operation.hash);
+            .then(() => operation.opHash);
+        debugger;
         return {
             sucess: true,
-            operationId: confirmOperationHash,
+            operationId: operation.opHash,
         };
     } catch (error) {
         return {
