@@ -1,5 +1,5 @@
 module.exports = {
-    TAQUITO_CHECK_CONF_NUM:'2',
+    TAQUITO_CHECK_CONF_NUM: '2',
     TZSTATS: {
         testnet: 'https://api.edo.tzstats.com',
         mainnet: 'https://api.tzstats.com',

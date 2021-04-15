@@ -27,7 +27,7 @@ export default class Home extends Component {
             },
             stakedPriceRange: '0',
             betAmount: '1',
-            fetchingCurrentPriceRanges: false,
+            fetchingCurrentPriceRanges: true,
             onGoingBet: false,
         };
     }
