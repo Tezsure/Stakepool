@@ -21,7 +21,6 @@ export const placeBetAPI = async (network, BetAmount, RANGE) => {
         await operation
             .confirmation(CONFIG.TAQUITO_CHECK_CONF_NUM)
             .then(() => operation.opHash);
-        debugger;
         return {
             sucess: true,
             operationId: operation.opHash,

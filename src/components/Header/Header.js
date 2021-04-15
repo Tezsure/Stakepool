@@ -56,28 +56,7 @@ export default class Header extends Component {
                         <img src={logo} alt="logo" className="logo-image" />
                     </a>
                 </div>
-
                 <ul className="site-menu-wrapper">
-                    <li className="site-menu-item">
-                        <a
-                            href="https://www.notion.so/Stakepool-A-no-loss-price-prediction-experiment-38bc2c0e0fe540aaaa1bc91ebcdcf5c4"
-                            className="site-menu-item-link"
-                            rel="noopener noreferrer"
-                            target="_blank"
-                        >
-                            Documentation
-                        </a>
-                    </li>
-                    <li className="site-menu-item">
-                        <a
-                            href="https://github.com/Tezsure/Stakepool-Contracts/tree/development/stakepool-contract"
-                            className="site-menu-item-link"
-                            rel="noopener noreferrer"
-                            target="_blank"
-                        >
-                            Github
-                        </a>
-                    </li>
                     <li className="site-menu-item">
                         <div className="btn-group">
                             <button
@@ -125,6 +104,24 @@ export default class Header extends Component {
                                 </Link>
                             </div>
                         </div>
+                    </li>
+                    <li className="site-menu-item">
+                        <Link
+                            className="site-menu-item-link"
+                            to="staking-orders"
+                        >
+                            Staking-orders
+                        </Link>
+                    </li>
+                    <li className="site-menu-item">
+                        <a
+                            href="https://github.com/Tezsure/Stakepool-Contracts/tree/development/stakepool-contract"
+                            className="site-menu-item-link"
+                            rel="noopener noreferrer"
+                            target="_blank"
+                        >
+                            Github
+                        </a>
                     </li>
                     <li className="site-menu-item">
                         <Link
@@ -182,7 +179,7 @@ export default class Header extends Component {
                                         this.toggleSettingsDropdown()
                                     }
                                 >
-                                    mainnet
+                                    Mainnet
                                 </a>
                                 <a
                                     className="dropdown-item"
@@ -191,18 +188,8 @@ export default class Header extends Component {
                                         this.toggleSettingsDropdown()
                                     }
                                 >
-                                    testnet
+                                    Testnet
                                 </a>
-                                <div className="dropdown-divider"></div>
-                                <Link
-                                    className="dropdown-item"
-                                    to="staking-orders"
-                                    onClick={() =>
-                                        this.toggleSettingsDropdown()
-                                    }
-                                >
-                                    staking orders
-                                </Link>
                             </div>
                         </span>
                     </li>

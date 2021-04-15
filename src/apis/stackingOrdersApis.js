@@ -66,9 +66,10 @@ export const withdrawAmount = async (cycle, network, wallet) => {
         const withdrawOp = await contract.methods.withdrawAmount(cycle).send();
         await withdrawOp
             .confirmation(CONFIG.TAQUITO_CHECK_CONF_NUM)
-            .then(() => withdrawOp.hash);
+            .then(() => withdrawOp.opHash);
         return {
             sucess: true,
+            operationId: withdrawOp.opHash,
         };
     } catch (error) {
         return {
