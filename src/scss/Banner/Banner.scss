@@ -1,0 +1,129 @@
+.banner {
+    position: relative;
+    background: url('../../assets/images/banner.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+.banner-content-container {
+    max-width: 960px;
+    margin: 35px auto 0;
+}
+.banner-heading {
+    max-width: 450px;
+    margin: 0 auto;
+    text-align: center;
+    letter-spacing: 0.2px;
+    color: #ffffff;
+    font-size: 40px;
+    font-family: none;
+}
+.stakepool-banner-form-container {
+    background: #ffffff 0% 0% no-repeat padding-box;
+    box-shadow: 0px 10px 35px #00000008;
+    border-radius: 8px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    padding-right: 70px;
+    padding-left: 70px;
+    margin-top: 25px;
+}
+.stakepool-banner-form-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin-left: -15px;
+    margin-right: -15px;
+}
+.stakepool-banner-input-wrapper {
+    position: relative;
+    flex: 0 0 50%;
+    padding-left: 30px;
+    padding-right: 30px;
+    margin-bottom: 22px;
+}
+.stakepool-banner-input-label {
+    color: #5a7184;
+    display: block;
+    font-size: 16px;
+}
+.stakepool-banner-input {
+    width: 100%;
+    border: 1px solid #cccccc47;
+    border-radius: 8px;
+    outline: none;
+    padding: 16px 20px;
+    color: #757575;
+}
+.stakepool-banner-input:disabled {
+    background-color: #dee2e6;
+    pointer-events: none;
+}
+.form-footer-text {
+    color: #5a7184;
+    font-size: 16px;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.animation-card {
+    margin: 10px;
+    width: 300px;
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+
+    .content {
+        padding: 20px 30px;
+    }
+
+    @keyframes shine {
+        to {
+            background-position-x: -200%;
+        }
+    }
+    .card.is-loading {
+        .image,
+        h2,
+        p {
+            background: #eee;
+            background: linear-gradient(
+                110deg,
+                #ececec 8%,
+                #f5f5f5 18%,
+                #ececec 33%
+            );
+            border-radius: 5px;
+            background-size: 200% 100%;
+            animation: 1.5s shine linear infinite;
+        }
+
+        .image {
+            height: 200px;
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        h2 {
+            height: 30px;
+        }
+
+        p {
+            height: 70px;
+        }
+    }
+}
+.network-tab {
+    width: 30%;
+    background: #fff;
+    border: 1px solid #cccc;
+    border-radius: 40px;
+    color: #757575;
+}
+.network-container {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 20px;
+    margin-top: -15px;
+}
