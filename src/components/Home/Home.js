@@ -7,7 +7,6 @@ import {
     placeBetAPI,
     doScrolling,
     getCurrentCycle,
-    fetchCurrentTzPrice,
     getReferencePriceAndRanges,
 } from '../../apis/homepageApis';
 
@@ -51,7 +50,10 @@ export default class Home extends Component {
         );
         if (API_RESPONSE.sucess) {
             currentPriceRanges[network] = API_RESPONSE.data.ranges;
+            const currentXTZPrice =
+                API_RESPONSE.data.referencePrice / Math.pow(10, 3);
             this.setState({
+                currentXTZPrice,
                 currentPriceRanges,
                 fetchingCurrentPriceRanges: false,
             });
@@ -101,19 +103,11 @@ export default class Home extends Component {
     };
     getCurrentCycle = async (network) => {
         const { currentCycle } = this.state;
-        const API_RESPONSE = await Promise.all([
-            getCurrentCycle(network),
-            fetchCurrentTzPrice(),
-        ]);
-        if (API_RESPONSE[0].sucess && API_RESPONSE[1].sucess) {
-            currentCycle[network] = API_RESPONSE[0];
-            const currentXTZPrice = API_RESPONSE[1].currentprice;
-            this.setState(
-                {
-                    currentCycle,
-                    currentXTZPrice,
-                },
-                () => this.getReferencePriceAndRanges()
+        const API_RESPONSE = await getCurrentCycle(network);
+        if (API_RESPONSE.sucess) {
+            currentCycle[network] = API_RESPONSE;
+            this.setState({ currentCycle }, () =>
+                this.getReferencePriceAndRanges()
             );
         }
     };

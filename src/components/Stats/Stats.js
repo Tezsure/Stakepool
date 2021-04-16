@@ -69,10 +69,7 @@ export default class Stats extends Component {
 
     getCurrentCycle = async () => {
         const { currentCycleData, network } = this.state;
-        const API_RESPONSE = await Promise.all([
-            getCurrentCycle(network),
-            fetchCurrentTzPrice(),
-        ]);
+        const API_RESPONSE = await getCurrentCycle(network);
         if (API_RESPONSE[0].sucess && API_RESPONSE[1].sucess) {
             currentCycleData[network] = API_RESPONSE[0];
             const currentXTZPrice = API_RESPONSE[1].currentprice;
@@ -189,7 +186,7 @@ export default class Stats extends Component {
                                                                 {
                                                                     total_bet_amount
                                                                 }{' '}
-                                                                xꜩ
+                                                                ꜩ
                                                             </p>
                                                         </>
                                                     )}
@@ -278,7 +275,7 @@ export default class Stats extends Component {
                                                                 {
                                                                     total_amount_in_winning_range
                                                                 }{' '}
-                                                                xꜩ
+                                                                ꜩ
                                                             </p>
                                                         </>
                                                     )}

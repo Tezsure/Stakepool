@@ -6,7 +6,11 @@ import Header from '../Header/Header';
 import OrdersForm from './OrdersForm';
 import { TempleWallet } from '@temple-wallet/dapp';
 import { getBetsByBettor, withdrawAmount } from '../../apis/stackingOrdersApis';
-import { getCurrentCycle, fetchCurrentTzPrice } from '../../apis/homepageApis';
+import {
+    getCurrentCycle,
+    fetchCurrentTzPrice,
+    getReferencePriceAndRanges,
+} from '../../apis/homepageApis';
 import swal from 'sweetalert';
 
 const CONFIG = require('../../apis/config');
@@ -98,15 +102,26 @@ export default class Stats extends Component {
             activeTab,
             buttonSpinnerState,
             stakingOrders,
+            currentCycle,
         } = this.state;
         buttonSpinnerState[activeTab] = !buttonSpinnerState[activeTab];
-        const getBetsResponse = await getBetsByBettor(
-            accountAddress.testnet,
-            activeTab
-        );
-        if (getBetsResponse.sucess) {
+        const API_RESPONSE = await Promise.all([
+            getBetsByBettor(accountAddress.testnet, activeTab),
+            getReferencePriceAndRanges(
+                currentCycle[activeTab].currentCycle,
+                activeTab
+            ),
+        ]);
+        const getBetsResponse = API_RESPONSE[0];
+        if (API_RESPONSE[0].sucess && API_RESPONSE[1].sucess) {
             stakingOrders[activeTab] = getBetsResponse.bets;
-            this.setState({ stakingOrders, buttonSpinnerState });
+            const currentXTZPrice =
+                API_RESPONSE[1].data.referencePrice / Math.pow(10, 3);
+            this.setState({
+                stakingOrders,
+                buttonSpinnerState,
+                currentXTZPrice,
+            });
         } else {
             stakingOrders[activeTab] = [];
             this.setState({ buttonSpinnerState, stakingOrders });

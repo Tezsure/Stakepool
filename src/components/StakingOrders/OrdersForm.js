@@ -56,10 +56,10 @@ export default class OrdersForm extends Component {
                     <td className="staking-period">{stakingPeriod}</td>
                     <td className="range">{range}</td>
                     <td className="staked-amount">
-                        {elem.stakedAmount / Math.pow(10, 6)} xꜩ
+                        {elem.stakedAmount / Math.pow(10, 6)} ꜩ
                     </td>
                     <td className="staked-amount">
-                        {elem.withdrawnAmount / Math.pow(10, 6)} xꜩ
+                        {elem.withdrawnAmount / Math.pow(10, 6)} ꜩ
                     </td>
                     <td>
                         <span
