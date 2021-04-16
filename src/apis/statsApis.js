@@ -47,7 +47,7 @@ export const getLastCycleStats = async (currentCycle, network) => {
                         (data.totalPoolRewardWon /
                             data.totalAmountInWinningRange) *
                         100;
-                        data.aggregateROIPercent = isNaN(aggregateROIPercent) ? 0 : aggregateROIPercent
+                        data.aggregateROIPercent = isNaN(aggregateROIPercent) || !isFinite(aggregateROIPercent) ? 0 : aggregateROIPercent
                 }
             } else if (low === high) {
                 if (low < 0 && changePercent < low) {
@@ -64,7 +64,7 @@ export const getLastCycleStats = async (currentCycle, network) => {
                         (data.totalPoolRewardWon /
                             data.totalAmountInWinningRange) *
                         100;
-                        data.aggregateROIPercent = isNaN(aggregateROIPercent) ? 0 : aggregateROIPercent
+                        data.aggregateROIPercent = isNaN(aggregateROIPercent) || !isFinite(aggregateROIPercent)? 0 : aggregateROIPercent
                 } else if (high > 0 && changePercent >= high) {
                     let valueByRange = await cycleData.amountByRange.get(
                         element
@@ -79,7 +79,7 @@ export const getLastCycleStats = async (currentCycle, network) => {
                         (data.totalPoolRewardWon /
                             data.totalAmountInWinningRange) *
                         100;
-                        data.aggregateROIPercent = isNaN(aggregateROIPercent) ? 0 : aggregateROIPercent
+                        data.aggregateROIPercent = isNaN(aggregateROIPercent) || !isFinite(aggregateROIPercent) ? 0 : aggregateROIPercent
                 }
             }
         });
