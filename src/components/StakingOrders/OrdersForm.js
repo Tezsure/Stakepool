@@ -5,22 +5,22 @@ export default class OrdersForm extends Component {
         const { currentXTZPrice } = this.props;
         let range;
         if (elem.low !== elem.high) {
-            range = `In the range of $ ${(
+            range = `In the range of $${(
                 (currentXTZPrice * 100 + elem.low / 100) /
                 100
-            ).toFixed(2)} - $ ${(
+            ).toFixed(2)} - $${(
                 (currentXTZPrice * 100 + elem.high / 100) /
                 100
             ).toFixed(2)}`;
         }
         if (elem.low === elem.high && elem.low < 0) {
-            range = `Below $ ${(
+            range = `Below $${(
                 (currentXTZPrice * 100 + elem.low / 100) /
                 100
             ).toFixed(2)}`;
         }
         if (elem.low === elem.high && elem.low > 0) {
-            range = `Above $ ${(
+            range = `Above $${(
                 (currentXTZPrice * 100 + elem.low / 100) /
                 100
             ).toFixed(2)}`;

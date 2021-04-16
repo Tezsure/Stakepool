@@ -265,6 +265,7 @@ export default class Stats extends Component {
                                                                 {
                                                                     total_pool_rewards_won
                                                                 }
+                                                                &nbsp;ꜩ
                                                             </p>
                                                         </>
                                                     )}
