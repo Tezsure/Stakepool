@@ -11,6 +11,10 @@ export const getLastCycleStats = async (currentCycle, network) => {
         const contract = await tezos.contract.at(CONFIG.CONTRACT[network]);
         const storage = await contract.storage();
         const cycleData = await storage.cycleData.get('' + cycle);
+        if(cycleData.concluded === false)
+        {
+            throw new Error("Cycle has not concluded yet.");
+        }
         data.totalBetAmount = cycleData.totalAmount.c[0];
 
         let referencePrice = cycleData.referencePrice.c[0];
@@ -43,7 +47,7 @@ export const getLastCycleStats = async (currentCycle, network) => {
                         (data.totalPoolRewardWon /
                             data.totalAmountInWinningRange) *
                         100;
-                    data.aggregateROIPercent = aggregateROIPercent;
+                        data.aggregateROIPercent = isNaN(aggregateROIPercent) ? 0 : aggregateROIPercent
                 }
             } else if (low === high) {
                 if (low < 0 && changePercent < low) {
@@ -60,7 +64,7 @@ export const getLastCycleStats = async (currentCycle, network) => {
                         (data.totalPoolRewardWon /
                             data.totalAmountInWinningRange) *
                         100;
-                    data.aggregateROIPercent = aggregateROIPercent;
+                        data.aggregateROIPercent = isNaN(aggregateROIPercent) ? 0 : aggregateROIPercent
                 } else if (high > 0 && changePercent >= high) {
                     let valueByRange = await cycleData.amountByRange.get(
                         element
@@ -75,7 +79,7 @@ export const getLastCycleStats = async (currentCycle, network) => {
                         (data.totalPoolRewardWon /
                             data.totalAmountInWinningRange) *
                         100;
-                    data.aggregateROIPercent = aggregateROIPercent;
+                        data.aggregateROIPercent = isNaN(aggregateROIPercent) ? 0 : aggregateROIPercent
                 }
             }
         });
