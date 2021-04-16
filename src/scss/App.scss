@@ -9,11 +9,14 @@
 @import url('https://fonts.googleapis.com/css?family=Quicksand');
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
 
+@font-face {
+    font-family: leelawadee;
+    src: url('../fonts/leelawadee-ui-bold.ttf');
+}
+
 .stakepool-banner-form-container {
     .stakepool-banner-input-label {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
-            'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
-            'Helvetica Neue', 'Quicksand', sans-serif !important;
+        font-family: 'Open Sans', sans-serif !important;
     }
     .form-footer-text {
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
@@ -48,6 +51,7 @@ button:focus {
 
 .banner-button {
     width: 215px;
+    font-weight: 500;
 }
 
 .stats-container {

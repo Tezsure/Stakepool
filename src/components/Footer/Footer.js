@@ -113,18 +113,6 @@ export default class Footer extends Component {
                             />
                         </a>
                         <a
-                            href="https://www.linkedin.com/company/tezsure"
-                            className={'footer-image-conatiner'}
-                            rel="noopener noreferrer"
-                            target="_blank"
-                        >
-                            <img
-                                src={linkedInIcon}
-                                alt="none"
-                                className="footer-icons"
-                            />
-                        </a>
-                        <a
                             href="https://www.youtube.com/channel/UCZg7LT1bFWeFiKwGBLcLfLQ"
                             className={'footer-image-conatiner'}
                             rel="noopener noreferrer"
@@ -144,6 +132,18 @@ export default class Footer extends Component {
                         >
                             <img
                                 src={telegramIcon}
+                                alt="none"
+                                className="footer-icons"
+                            />
+                        </a>
+                        <a
+                            href="https://www.linkedin.com/company/tezsure"
+                            className={'footer-image-conatiner'}
+                            rel="noopener noreferrer"
+                            target="_blank"
+                        >
+                            <img
+                                src={linkedInIcon}
                                 alt="none"
                                 className="footer-icons"
                             />
