@@ -129,8 +129,6 @@ export default class Banner extends Component {
                                     <span
                                         className="info-icon"
                                         style={{ cursor: 'pointer' }}
-                                        dataToggle="tooltip"
-                                        dataPlacement="bottom"
                                         id={'info-icon-tooltip'}
                                     >
                                         &#9432;

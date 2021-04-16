@@ -8,7 +8,6 @@ import { TempleWallet } from '@temple-wallet/dapp';
 import { getBetsByBettor, withdrawAmount } from '../../apis/stackingOrdersApis';
 import {
     getCurrentCycle,
-    fetchCurrentTzPrice,
     getReferencePriceAndRanges,
 } from '../../apis/homepageApis';
 import swal from 'sweetalert';
@@ -84,15 +83,13 @@ export default class Stats extends Component {
         const API_RESPONSE = await Promise.all([
             getCurrentCycle('mainnet'),
             getCurrentCycle('testnet'),
-            fetchCurrentTzPrice(),
         ]);
         if (API_RESPONSE[0].sucess) {
             currentCycle = {
                 mainnet: API_RESPONSE[0].currentCycle,
                 testnet: API_RESPONSE[1].currentCycle,
             };
-            const currentXTZPrice = API_RESPONSE[2].currentprice;
-            this.setState({ currentCycle, currentXTZPrice });
+            this.setState({ currentCycle });
         }
     };
 
@@ -107,10 +104,7 @@ export default class Stats extends Component {
         buttonSpinnerState[activeTab] = !buttonSpinnerState[activeTab];
         const API_RESPONSE = await Promise.all([
             getBetsByBettor(accountAddress.testnet, activeTab),
-            getReferencePriceAndRanges(
-                currentCycle[activeTab].currentCycle,
-                activeTab
-            ),
+            getReferencePriceAndRanges(currentCycle[activeTab], activeTab),
         ]);
         const getBetsResponse = API_RESPONSE[0];
         if (API_RESPONSE[0].sucess && API_RESPONSE[1].sucess) {
