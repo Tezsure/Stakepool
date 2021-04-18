@@ -131,3 +131,14 @@ p.faq-answer {
 h4.faq-header {
     font-family: 'Quicksand', sans-serif;
 }
+.processing-button {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    text-align: center;
+    width: 150px;
+}
+.processing-text {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}

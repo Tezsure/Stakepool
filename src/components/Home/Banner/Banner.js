@@ -5,7 +5,7 @@ import { Tooltip } from 'reactstrap';
 const tzIcon = require('../../../assets/images/Path 453@2x.png');
 
 const Title =
-    'Reference price is deduced at the starting of the cycle and all bets are placed against that reference price';
+    'Reference price is the price of xtz in USD deduced at the starting of each cycle and all bets are placed against this reference price';
 
 export default class Banner extends Component {
     constructor(props) {
@@ -31,22 +31,22 @@ export default class Banner extends Component {
         const ranges = currentPriceRanges[network].map((elem) => {
             let range;
             if (elem.low !== elem.high) {
-                range = `In the range of $ ${(
+                range = `In the range of $${(
                     (currentXTZPrice * 100 + elem.low / 100) /
                     100
-                ).toFixed(2)} - $ ${(
+                ).toFixed(2)} - $${(
                     (currentXTZPrice * 100 + elem.high / 100) /
                     100
                 ).toFixed(2)}`;
             }
             if (elem.low === elem.high && elem.low < 0) {
-                range = `Below $ ${(
+                range = `Below $${(
                     (currentXTZPrice * 100 + elem.low / 100) /
                     100
                 ).toFixed(2)}`;
             }
             if (elem.low === elem.high && elem.low > 0) {
-                range = `Above $ ${(
+                range = `Above $${(
                     (currentXTZPrice * 100 + elem.low / 100) /
                     100
                 ).toFixed(2)}`;

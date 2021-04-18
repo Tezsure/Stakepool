@@ -41,7 +41,7 @@ export default class OrdersForm extends Component {
         const stakingOrdersJSX = stakingOrders[activeTab].map((elem, index) => {
             const stakingPeriod = `${elem.stakedAt} - ${elem.cycle}`;
             const range = this.calculateRange(elem.range);
-            let rewadsText = '';
+            let rewadsText = 'Withdraw';
             let buttonStatusDisabled = false;
             if (currentCycle[activeTab] <= elem.cycle) {
                 buttonStatusDisabled = true;
@@ -59,7 +59,10 @@ export default class OrdersForm extends Component {
                         {elem.stakedAmount / Math.pow(10, 6)} ꜩ
                     </td>
                     <td className="staked-amount">
-                        {elem.withdrawnAmount / Math.pow(10, 6)} ꜩ
+                        {(elem.withdrawnAmount === 0
+                            ? elem.stakedAmount
+                            : elem.withdrawnAmount) / Math.pow(10, 6)}{' '}
+                        ꜩ
                     </td>
                     <td>
                         <span
@@ -75,7 +78,7 @@ export default class OrdersForm extends Component {
                     <td className="staked-status">
                         <button
                             type="button"
-                            className="btn btn-dark"
+                            className="btn btn-dark processing-button"
                             onClick={() =>
                                 this.props.withdrawAmount(
                                     elem.cycle,
@@ -85,6 +88,11 @@ export default class OrdersForm extends Component {
                                 )
                             }
                             disabled={buttonStatusDisabled}
+                            style={{
+                                cursor: buttonStatusDisabled
+                                    ? 'not-allowed'
+                                    : 'pointer',
+                            }}
                         >
                             {ongoingWithdraw !== index ? (
                                 'withdraw'
@@ -94,8 +102,13 @@ export default class OrdersForm extends Component {
                                         className="spinner-grow spinner-grow-sm"
                                         role="status"
                                         aria-hidden="true"
+                                        style={{
+                                            marginTop: '5px',
+                                        }}
                                     />
-                                    &nbsp; processing...
+                                    <p className="processing-text">
+                                        &nbsp; processing...
+                                    </p>
                                 </>
                             )}
                         </button>
