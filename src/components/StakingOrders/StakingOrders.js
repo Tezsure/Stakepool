@@ -6,7 +6,10 @@ import Header from '../Header/Header';
 import OrdersForm from './OrdersForm';
 import { TempleWallet } from '@temple-wallet/dapp';
 import { getBetsByBettor, withdrawAmount } from '../../apis/stackingOrdersApis';
-import { getCurrentCycle, fetchCurrentTzPrice } from '../../apis/homepageApis';
+import {
+    getCurrentCycle,
+    getReferencePriceAndRanges,
+} from '../../apis/homepageApis';
 import swal from 'sweetalert';
 
 const CONFIG = require('../../apis/config');
@@ -55,21 +58,26 @@ export default class Stats extends Component {
             );
             if (withdrawAmountResponse.sucess) {
                 swal({
-                    title: 'Bet placed sucessfully',
+                    title: 'Amount withdrawal sucessfull',
                     text:
                         'Operation id: \n' + withdrawAmountResponse.operationId,
                     icon: 'success',
                     button: 'Okay',
                 });
+                this.setState({ ongoingWithdraw: '' }, () =>
+                    this.GetStakingData()
+                );
             } else {
                 swal({
-                    title: 'Cannot place bet',
+                    title: 'Error while placing withdrawl request',
                     text: withdrawAmountResponse.error.message,
                     icon: 'error',
                     button: 'Okay',
                 });
+                this.setState({ ongoingWithdraw: '' }, () =>
+                    this.GetStakingData()
+                );
             }
-            this.setState({ ongoingWithdraw: '' });
         } catch (error) {
             this.setState({ ongoingWithdraw: '' });
         }
@@ -80,15 +88,13 @@ export default class Stats extends Component {
         const API_RESPONSE = await Promise.all([
             getCurrentCycle('mainnet'),
             getCurrentCycle('testnet'),
-            fetchCurrentTzPrice(),
         ]);
         if (API_RESPONSE[0].sucess) {
             currentCycle = {
                 mainnet: API_RESPONSE[0].currentCycle,
                 testnet: API_RESPONSE[1].currentCycle,
             };
-            const currentXTZPrice = API_RESPONSE[2].currentprice;
-            this.setState({ currentCycle, currentXTZPrice });
+            this.setState({ currentCycle });
         }
     };
 
@@ -98,15 +104,25 @@ export default class Stats extends Component {
             activeTab,
             buttonSpinnerState,
             stakingOrders,
+            currentCycle,
         } = this.state;
-        buttonSpinnerState[activeTab] = !buttonSpinnerState[activeTab];
-        const getBetsResponse = await getBetsByBettor(
-            accountAddress.testnet,
-            activeTab
-        );
-        if (getBetsResponse.sucess) {
+        buttonSpinnerState[activeTab] = true;
+        this.setState({ buttonSpinnerState });
+        const API_RESPONSE = await Promise.all([
+            getBetsByBettor(accountAddress.testnet, activeTab),
+            getReferencePriceAndRanges(currentCycle[activeTab], activeTab),
+        ]);
+        const getBetsResponse = API_RESPONSE[0];
+        buttonSpinnerState[activeTab] = false;
+        if (API_RESPONSE[0].sucess && API_RESPONSE[1].sucess) {
             stakingOrders[activeTab] = getBetsResponse.bets;
-            this.setState({ stakingOrders, buttonSpinnerState });
+            const currentXTZPrice =
+                API_RESPONSE[1].data.referencePrice / Math.pow(10, 3);
+            this.setState({
+                stakingOrders,
+                buttonSpinnerState,
+                currentXTZPrice,
+            });
         } else {
             stakingOrders[activeTab] = [];
             this.setState({ buttonSpinnerState, stakingOrders });
@@ -115,16 +131,11 @@ export default class Stats extends Component {
 
     async ConnectWallet() {
         try {
-            const {
-                accountAddress,
-                activeTab,
-                buttonSpinnerState,
-            } = this.state;
+            const { accountAddress, activeTab } = this.state;
             const available = await TempleWallet.isAvailable();
             if (!available) {
                 throw new Error('Please Install');
             }
-            buttonSpinnerState[activeTab] = !buttonSpinnerState[activeTab];
             const wallet = new TempleWallet('Stakepool');
             activeTab === 'mainnet'
                 ? await wallet.connect('mainnet', { forcePermission: true })
@@ -134,12 +145,9 @@ export default class Stats extends Component {
             tezos.setRpcProvider(CONFIG.RPC_NODES[activeTab]);
             const accountPkh = await tezos.wallet.pkh();
             accountAddress[activeTab] = accountPkh;
-            this.setState(
-                { accountAddress, buttonSpinnerState, wallet },
-                () => {
-                    this.GetStakingData();
-                }
-            );
+            this.setState({ accountAddress, wallet }, () => {
+                this.GetStakingData();
+            });
         } catch (error) {
             console.log(error);
         }
