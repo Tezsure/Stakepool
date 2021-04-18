@@ -3,7 +3,8 @@ import Footer from '../Footer/Footer';
 import Header from '../Header/Header';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import { getLastCycleStats } from '../../apis/statsApis';
-import { getCurrentCycle, fetchCurrentTzPrice } from '../../apis/homepageApis';
+import { getCurrentCycle } from '../../apis/homepageApis';
+import { getReferencePriceAndRanges } from '../../apis/homepageApis';
 
 export default class Stats extends Component {
     constructor(props) {
@@ -21,13 +22,34 @@ export default class Stats extends Component {
                 testnet: 0,
             },
             fetchingData: true,
+            currentXTZPrice: 0,
         };
     }
 
-    getLastCycleStats = async (currentCycleData, network) => {
-        const { currentXTZPrice } = this.state;
+    getReferencePriceAndRanges = async () => {
+        const { currentCycleData, network, currentPriceRanges } = this.state;
+        this.setState({ fetchingCurrentPriceRanges: true });
+        const API_RESPONSE = await getReferencePriceAndRanges(
+            currentCycleData[network].currentCycle,
+            network
+        );
+        if (API_RESPONSE.sucess) {
+            currentPriceRanges[network] = API_RESPONSE.data.ranges;
+            const currentXTZPrice =
+                API_RESPONSE.data.referencePrice / Math.pow(10, 3);
+            this.setState(
+                {
+                    currentXTZPrice,
+                },
+                () => this.getLastCycleStats()
+            );
+        }
+    };
+
+    getLastCycleStats = async () => {
+        const { currentCycleData, network, currentXTZPrice } = this.state;
         const API_RESPONSE = await getLastCycleStats(
-            currentCycleData.currentCycle,
+            currentCycleData[network].currentCycle,
             network
         );
         if (API_RESPONSE.success) {
@@ -69,17 +91,12 @@ export default class Stats extends Component {
 
     getCurrentCycle = async () => {
         const { currentCycleData, network } = this.state;
-        const API_RESPONSE = await Promise.all([
-            getCurrentCycle(network),
-            fetchCurrentTzPrice(),
-        ]);
-        if (API_RESPONSE[0].sucess && API_RESPONSE[1].sucess) {
-            currentCycleData[network] = API_RESPONSE[0];
-            const currentXTZPrice = API_RESPONSE[1].currentprice;
+        const API_RESPONSE = await getCurrentCycle(network);
+        if (API_RESPONSE.sucess) {
+            currentCycleData[network] = API_RESPONSE;
             this.setState(
                 {
                     currentCycleData,
-                    currentXTZPrice,
                 },
                 () => this.getLastCycleStats(currentCycleData[network], network)
             );
@@ -189,7 +206,7 @@ export default class Stats extends Component {
                                                                 {
                                                                     total_bet_amount
                                                                 }{' '}
-                                                                xꜩ
+                                                                ꜩ
                                                             </p>
                                                         </>
                                                     )}
@@ -248,6 +265,7 @@ export default class Stats extends Component {
                                                                 {
                                                                     total_pool_rewards_won
                                                                 }
+                                                                &nbsp;ꜩ
                                                             </p>
                                                         </>
                                                     )}
@@ -278,7 +296,7 @@ export default class Stats extends Component {
                                                                 {
                                                                     total_amount_in_winning_range
                                                                 }{' '}
-                                                                xꜩ
+                                                                ꜩ
                                                             </p>
                                                         </>
                                                     )}

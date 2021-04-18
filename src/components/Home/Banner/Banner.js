@@ -1,8 +1,23 @@
 import React, { Component } from 'react';
 import Header from '../../Header/Header';
 import Countdown from 'react-countdown-now';
+import { Tooltip } from 'reactstrap';
+const tzIcon = require('../../../assets/images/Path 453@2x.png');
+
+const Title =
+    'Reference price is the price of xtz in USD deduced at the starting of each cycle and all bets are placed against this reference price';
 
 export default class Banner extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            tooltipOpen: false,
+        };
+    }
+    toggleTooltip = () => {
+        const { tooltipOpen } = this.state;
+        this.setState({ tooltipOpen: !tooltipOpen });
+    };
     render() {
         const {
             onGoingBet,
@@ -16,22 +31,22 @@ export default class Banner extends Component {
         const ranges = currentPriceRanges[network].map((elem) => {
             let range;
             if (elem.low !== elem.high) {
-                range = `In the range of $ ${(
+                range = `In the range of $${(
                     (currentXTZPrice * 100 + elem.low / 100) /
                     100
-                ).toFixed(2)} - $ ${(
+                ).toFixed(2)} - $${(
                     (currentXTZPrice * 100 + elem.high / 100) /
                     100
                 ).toFixed(2)}`;
             }
             if (elem.low === elem.high && elem.low < 0) {
-                range = `Below $ ${(
+                range = `Below $${(
                     (currentXTZPrice * 100 + elem.low / 100) /
                     100
                 ).toFixed(2)}`;
             }
             if (elem.low === elem.high && elem.low > 0) {
-                range = `Above $ ${(
+                range = `Above $${(
                     (currentXTZPrice * 100 + elem.low / 100) /
                     100
                 ).toFixed(2)}`;
@@ -71,7 +86,10 @@ export default class Banner extends Component {
                                                 : 'warning-badge'
                                         }
                                     />
-                                    &nbsp; current network: {network}
+                                    &nbsp; Current network:{' '}
+                                    <span className="network-name">
+                                        {network}
+                                    </span>
                                 </div>
                             </div>
                             <div className="stakepool-banner-input-wrapper">
@@ -108,7 +126,22 @@ export default class Banner extends Component {
 
                             <div className="stakepool-banner-input-wrapper">
                                 <label className="stakepool-banner-input-label">
-                                    Current price of XTZ/USD:
+                                    <span
+                                        className="info-icon"
+                                        style={{ cursor: 'pointer' }}
+                                        id={'info-icon-tooltip'}
+                                    >
+                                        &#9432;
+                                    </span>
+                                    <Tooltip
+                                        placement="bottom"
+                                        isOpen={this.state.tooltipOpen}
+                                        target="info-icon-tooltip"
+                                        toggle={() => this.toggleTooltip()}
+                                    >
+                                        {Title}
+                                    </Tooltip>
+                                    &nbsp;&nbsp;Reference price of XTZ/USD:
                                 </label>
                                 <input
                                     className="stakepool-banner-input"
@@ -122,16 +155,23 @@ export default class Banner extends Component {
                                 <label className="stakepool-banner-input-label">
                                     I want to stake:
                                 </label>
-                                <input
-                                    name="betAmount"
-                                    className="stakepool-banner-input"
-                                    type="number"
-                                    placeholder="Enter your stake price"
-                                    value={this.props.betAmount}
-                                    onChange={(e) =>
-                                        this.props.handlePriceChange(e)
-                                    }
-                                />
+                                <span className="bet-amount-conatiner">
+                                    <input
+                                        name="betAmount"
+                                        className="stakepool-banner-input"
+                                        type="number"
+                                        placeholder="Enter your stake price"
+                                        value={this.props.betAmount}
+                                        onChange={(e) =>
+                                            this.props.handlePriceChange(e)
+                                        }
+                                    />
+                                    <img
+                                        src={tzIcon}
+                                        className="tz-icon"
+                                        alt=""
+                                    />
+                                </span>
                             </div>
 
                             <div className="stakepool-banner-input-wrapper">

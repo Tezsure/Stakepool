@@ -45,7 +45,7 @@ input[type='number'] {
     --text-font: 'Poppins', sans-serif;
 }
 * {
-    font-family: sans-serif !important;
+    font-family: 'Open Sans', sans-serif !important;
 }
 .into-text {
     font-weight: inherit;

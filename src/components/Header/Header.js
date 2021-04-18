@@ -70,6 +70,7 @@ export default class Header extends Component {
                                 style={{
                                     color: '#fff',
                                     border: '#fff',
+                                    fontWeight: '600',
                                 }}
                             >
                                 Stats
@@ -109,6 +110,7 @@ export default class Header extends Component {
                         <Link
                             className="site-menu-item-link"
                             to="staking-orders"
+                            style={{ fontWeight: '600' }}
                         >
                             Staking-orders
                         </Link>
@@ -119,6 +121,7 @@ export default class Header extends Component {
                             className="site-menu-item-link"
                             rel="noopener noreferrer"
                             target="_blank"
+                            style={{ fontWeight: '600' }}
                         >
                             Github
                         </a>
@@ -128,7 +131,11 @@ export default class Header extends Component {
                             className="faq-link"
                             to={'/faq'}
                             replace
-                            style={{ color: '#fff', textDecoration: 'none' }}
+                            style={{
+                                color: '#fff',
+                                textDecoration: 'none',
+                                fontWeight: '600',
+                            }}
                         >
                             FAQ
                         </Link>
@@ -137,6 +144,7 @@ export default class Header extends Component {
                         <button
                             className="contact-btn"
                             onClick={() => this.handleScolling('contact', 1000)}
+                            style={{ fontWeight: '600' }}
                         >
                             Get in Touch
                         </button>

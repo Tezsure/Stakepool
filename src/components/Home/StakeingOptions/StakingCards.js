@@ -68,22 +68,22 @@ export default class StakingCards extends Component {
                 let elem = currentPriceRanges[network][i];
                 let innerText;
                 if (elem.low !== elem.high) {
-                    innerText = `Price prediction between $ ${(
+                    innerText = `Price prediction between $${(
                         (currentXTZPrice * 100 + elem.low / 100) /
                         100
-                    ).toFixed(2)} - $ ${(
+                    ).toFixed(2)} - $${(
                         (currentXTZPrice * 100 + elem.high / 100) /
                         100
                     ).toFixed(2)}`;
                 }
                 if (elem.low === elem.high && elem.low < 0) {
-                    innerText = `Price prediction below $ ${(
+                    innerText = `Price prediction below $${(
                         (currentXTZPrice * 100 + elem.low / 100) /
                         100
                     ).toFixed(2)}`;
                 }
                 if (elem.low === elem.high && elem.low > 0) {
-                    innerText = `Price prediction above $ ${(
+                    innerText = `Price prediction above $${(
                         (currentXTZPrice * 100 + elem.low / 100) /
                         100
                     ).toFixed(2)}`;

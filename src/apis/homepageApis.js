@@ -96,18 +96,35 @@ export const getReferencePriceAndRanges = async (currentCycle, network) => {
     try {
         let data = {};
         let ranges = [];
-        let cycle = currentCycle;
+        let cycle = currentCycle + 2;
         const tezos = new TezosToolkit(CONFIG.RPC_NODES[network]);
         tezos.setRpcProvider(CONFIG.RPC_NODES[network]);
         const contract = await tezos.contract.at(CONFIG.CONTRACT[network]);
         const storage = await contract.storage();
         const cycleData = await storage.cycleData.get('' + cycle);
+        const totalAmount = cycleData.totalAmount;
+        const roi = cycleData.roi['4'].c[0] / cycleData.roi['5'].c[0];
+        let totalRewardWon = roi * totalAmount;
+        totalRewardWon = totalRewardWon * 0.98;
+        const rangeBasedRoi = [];
+
         cycleData.amountByRange.keyMap.forEach((element) => {
             ranges.push({
                 low: element['0'].c[0] * element['0'].s,
                 high: element['1'].c[0] * element['1'].s,
             });
+            let low = element['0'].c[0] * element['0'].s;
+            let high = element['1'].c[0] * element['1'].s;
+            let amountInRange = cycleData.amountByRange.get(element);
+            let estimatedRoi = (totalRewardWon / amountInRange) * 100;
+            rangeBasedRoi.push({
+                amountInRange: amountInRange.c[0],
+                estimatedRoi: isFinite(estimatedRoi) ? estimatedRoi : 0,
+                low,
+                high,
+            });
         });
+        data.rangeBasedRoi = rangeBasedRoi;
         data.referencePrice = cycleData.referencePrice.c[0];
         data.ranges = ranges;
         return {
