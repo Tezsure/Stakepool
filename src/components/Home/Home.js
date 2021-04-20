@@ -34,9 +34,27 @@ export default class Home extends Component {
         };
     }
     handleAlertShow = () => {
-        this.setState({
-            alertShow: true,
-        });
+        const { stakedPriceRange, betAmount } = this.state;
+        if (stakedPriceRange === '0') {
+            swal({
+                title: 'Cannot place bet',
+                text: 'Please select predicted price range from the dropdown',
+                icon: 'error',
+                button: 'Okay',
+            });
+        } else if (parseInt(betAmount, 10) === 0) {
+            swal({
+                title: 'Cannot place bet',
+                text:
+                    'Invalid bet amount please enter amount greater than zero',
+                icon: 'error',
+                button: 'Okay',
+            });
+        } else {
+            this.setState({
+                alertShow: true,
+            });
+        }
     };
     handleStakingOptionsSelect = (stakedPriceRange) => {
         this.setState({ stakedPriceRange });
