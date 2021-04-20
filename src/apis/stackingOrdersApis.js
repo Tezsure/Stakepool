@@ -9,20 +9,26 @@ export const getBetsByBettor = async (address, network) => {
         const contract = await tezos.contract.at(CONFIG.CONTRACT[network]);
         const storage = await contract.storage();
         const betByCycle = await storage.bettors.get(address);
-        betByCycle.keyMap.forEach(async (element) => {
-            let cycleValue = await betByCycle.get(element);
-            bets.push({
-                cycle: parseInt(element),
-                stakedAt: cycleValue.stakedAt.c[0],
-                stakedAmount: cycleValue.amount.c[0],
-                withdrawn: cycleValue.withdrawn,
-                withdrawnAmount: cycleValue.withdrawnAmount.c[0],
-                range: {
-                    low: cycleValue.range['1'].c[0] * cycleValue.range['1'].s,
-                    high: cycleValue.range['2'].c[0] * cycleValue.range['2'].s,
-                },
+        if (betByCycle) {
+            betByCycle.keyMap.forEach(async (element) => {
+                let cycleValue = await betByCycle.get(element);
+                bets.push({
+                    cycle: parseInt(element),
+                    stakedAt: cycleValue.stakedAt.c[0],
+                    stakedAmount: cycleValue.amount.c[0],
+                    withdrawn: cycleValue.withdrawn,
+                    withdrawnAmount: cycleValue.withdrawnAmount.c[0],
+                    range: {
+                        low:
+                            cycleValue.range['1'].c[0] *
+                            cycleValue.range['1'].s,
+                        high:
+                            cycleValue.range['2'].c[0] *
+                            cycleValue.range['2'].s,
+                    },
+                });
             });
-        });
+        }
         return {
             sucess: true,
             bets,

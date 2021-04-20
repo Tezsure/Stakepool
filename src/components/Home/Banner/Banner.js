@@ -34,22 +34,22 @@ export default class Banner extends Component {
                 range = `In the range of $${(
                     (currentXTZPrice * 100 + elem.low / 100) /
                     100
-                ).toFixed(2)} - $${(
+                ).toFixed(3)} - $${(
                     (currentXTZPrice * 100 + elem.high / 100) /
                     100
-                ).toFixed(2)}`;
+                ).toFixed(3)}`;
             }
             if (elem.low === elem.high && elem.low < 0) {
                 range = `Below $${(
                     (currentXTZPrice * 100 + elem.low / 100) /
                     100
-                ).toFixed(2)}`;
+                ).toFixed(3)}`;
             }
             if (elem.low === elem.high && elem.low > 0) {
                 range = `Above $${(
                     (currentXTZPrice * 100 + elem.low / 100) /
                     100
-                ).toFixed(2)}`;
+                ).toFixed(3)}`;
             }
             return (
                 <option
@@ -232,7 +232,9 @@ export default class Banner extends Component {
                                             fetchingCurrentPriceRanges ||
                                             onGoingBet
                                         }
-                                        onClick={() => this.props.placeBet()}
+                                        onClick={() =>
+                                            this.props.handleAlertShow()
+                                        }
                                     >
                                         {onGoingBet ? (
                                             <>
