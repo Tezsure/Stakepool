@@ -71,22 +71,22 @@ export default class StakingCards extends Component {
                     innerText = `Price prediction between $${(
                         (currentXTZPrice * 100 + elem.low / 100) /
                         100
-                    ).toFixed(2)} - $${(
+                    ).toFixed(3)} - $${(
                         (currentXTZPrice * 100 + elem.high / 100) /
                         100
-                    ).toFixed(2)}`;
+                    ).toFixed(3)}`;
                 }
                 if (elem.low === elem.high && elem.low < 0) {
                     innerText = `Price prediction below $${(
                         (currentXTZPrice * 100 + elem.low / 100) /
                         100
-                    ).toFixed(2)}`;
+                    ).toFixed(3)}`;
                 }
                 if (elem.low === elem.high && elem.low > 0) {
                     innerText = `Price prediction above $${(
                         (currentXTZPrice * 100 + elem.low / 100) /
                         100
-                    ).toFixed(2)}`;
+                    ).toFixed(3)}`;
                 }
                 const cycleEndDate = new Date(
                     currentCycle[network].cycletime
@@ -188,6 +188,17 @@ export default class StakingCards extends Component {
                                         (plus the winning rewards if applicable)
                                         at the conclusion of cycle{' '}
                                         {currentCycle[network].currentCycle + 2}
+                                    </li>
+                                    <li
+                                        style={{
+                                            paddingBottom: '1vmax',
+                                        }}
+                                    >
+                                        The expected ROI for the given price
+                                        range is{' '}
+                                        {elem.rangeBasedRoi.estimatedRoi.toFixed(
+                                            3
+                                        )}
                                     </li>
                                     <div align="center">
                                         <button

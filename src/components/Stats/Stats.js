@@ -60,19 +60,13 @@ export default class Stats extends Component {
                 totalPoolRewardWon,
                 aggregateROIPercent,
             } = API_RESPONSE.data;
-            const staking_start_range = (
-                (currentXTZPrice * 100 + lowPrice / 100) /
-                100
-            ).toFixed(2);
-            const staking_end_range = (
-                (currentXTZPrice * 100 + highPrice / 100) /
-                100
-            ).toFixed(2);
+            const staking_start_range = (lowPrice / 1000).toFixed(3);
+            const staking_end_range = (highPrice / 1000).toFixed(3);
             const total_bet_amount = totalBetAmount / Math.pow(10, 6);
             const total_amount_in_winning_range =
                 totalAmountInWinningRange / Math.pow(10, 6);
             const total_pool_rewards_won = totalPoolRewardWon / Math.pow(10, 6);
-            const winners_roi = aggregateROIPercent.toFixed(2);
+            const winners_roi = aggregateROIPercent.toFixed(3);
             return this.setState({
                 staking_start_range,
                 staking_end_range,
@@ -137,10 +131,10 @@ export default class Stats extends Component {
                                     Previous Staking Period <br />
                                     Cycle{' '}
                                     {currentCycleData[network].currentCycle -
-                                        2 || 0}{' '}
+                                        3 || 0}{' '}
                                     -{' '}
-                                    {currentCycleData[network].currentCycle ||
-                                        0}
+                                    {currentCycleData[network].currentCycle -
+                                        1 || 0}
                                 </h1>
                                 <div className="stakepool-banner-form-container stats-container">
                                     <div className="row">

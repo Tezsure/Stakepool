@@ -85,7 +85,7 @@ export default class Header extends Component {
                             >
                                 <Link
                                     className="dropdown-item"
-                                    to={`/testnet-stats`}
+                                    to={`/mainnet-stats`}
                                     onClick={() =>
                                         this.toggleStatsDropdownStats()
                                     }
@@ -182,7 +182,7 @@ export default class Header extends Component {
                             >
                                 <a
                                     className="dropdown-item"
-                                    href="/"
+                                    href="/mainnet"
                                     onClick={() =>
                                         this.toggleSettingsDropdown()
                                     }
