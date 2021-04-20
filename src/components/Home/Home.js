@@ -68,7 +68,7 @@ export default class Home extends Component {
         }
     };
     placeBet = async () => {
-        this.setState({ onGoingBet: true });
+        this.setState({ onGoingBet: true, alertShow: false });
         const { stakedPriceRange, network, betAmount } = this.state;
         if (stakedPriceRange === '0') {
             swal({
@@ -205,7 +205,9 @@ export default class Home extends Component {
                                         >
                                             Staking period:{' '}
                                             {currentCycle[network].currentCycle}{' '}
-                                            -{currentCycle[network].endCycle}
+                                            -
+                                            {currentCycle[network]
+                                                .currentCycle + 2}
                                         </li>
                                         <li
                                             style={{
@@ -214,7 +216,8 @@ export default class Home extends Component {
                                             }}
                                         >
                                             Reward Return Cycle:{' '}
-                                            {currentCycle[network].endCycle}{' '}
+                                            {currentCycle[network]
+                                                .currentCycle + 2}{' '}
                                             Cycle
                                         </li>
                                         <li
@@ -224,7 +227,7 @@ export default class Home extends Component {
                                             }}
                                         >
                                             Platform Usage Fee: 2% of the
-                                            winning returns
+                                            winning total reward pool
                                         </li>
                                         <li
                                             style={{

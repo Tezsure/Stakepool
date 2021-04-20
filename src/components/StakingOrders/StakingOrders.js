@@ -98,7 +98,7 @@ export default class Stats extends Component {
         }
     };
 
-    GetStakingData = async () => {
+    GetStakingData = () => {
         const {
             accountAddress,
             activeTab,
@@ -107,26 +107,27 @@ export default class Stats extends Component {
             currentCycle,
         } = this.state;
         buttonSpinnerState[activeTab] = true;
-        this.setState({ buttonSpinnerState });
-        const API_RESPONSE = await Promise.all([
-            getBetsByBettor(accountAddress.testnet, activeTab),
-            getReferencePriceAndRanges(currentCycle[activeTab], activeTab),
-        ]);
-        const getBetsResponse = API_RESPONSE[0];
-        buttonSpinnerState[activeTab] = false;
-        if (API_RESPONSE[0].sucess && API_RESPONSE[1].sucess) {
-            stakingOrders[activeTab] = getBetsResponse.bets;
-            const currentXTZPrice =
-                API_RESPONSE[1].data.referencePrice / Math.pow(10, 3);
-            this.setState({
-                stakingOrders,
-                buttonSpinnerState,
-                currentXTZPrice,
-            });
-        } else {
-            stakingOrders[activeTab] = [];
-            this.setState({ buttonSpinnerState, stakingOrders });
-        }
+        this.setState({ buttonSpinnerState }, async () => {
+            const API_RESPONSE = await Promise.all([
+                getBetsByBettor(accountAddress[activeTab], activeTab),
+                getReferencePriceAndRanges(currentCycle[activeTab], activeTab),
+            ]);
+            const getBetsResponse = API_RESPONSE[0];
+            buttonSpinnerState[activeTab] = false;
+            if (API_RESPONSE[0].sucess && API_RESPONSE[1].sucess) {
+                stakingOrders[activeTab] = getBetsResponse.bets;
+                const currentXTZPrice =
+                    API_RESPONSE[1].data.referencePrice / Math.pow(10, 3);
+                this.setState({
+                    stakingOrders,
+                    buttonSpinnerState,
+                    currentXTZPrice,
+                });
+            } else {
+                stakingOrders[activeTab] = [];
+                this.setState({ buttonSpinnerState, stakingOrders });
+            }
+        });
     };
 
     async ConnectWallet() {
