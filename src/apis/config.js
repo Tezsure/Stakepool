@@ -10,7 +10,7 @@ module.exports = {
     },
     CONTRACT: {
         testnet: 'KT1DDnjzQhA25Vjm3AwqVWGFskzoW3QARKsE',
-        mainnet: '',
+        mainnet: 'KT1Bm199TejasANYQQCAKQoXH8NppPn9jR3x',
     },
     COINGECKO_API: `https://api.coingecko.com/api/v3/coins/tezos?localization=false&tickers=false&community_data=false&developer_data=false&sparkline=false`,
 };

@@ -3,12 +3,14 @@ import Banner from './Banner/Banner';
 import StackeingOptions from './StakeingOptions/StakeingOptions';
 import Footer from '../Footer/Footer';
 import swal from 'sweetalert';
+import SweetAlert from 'react-bootstrap-sweetalert';
 import {
     placeBetAPI,
     doScrolling,
     getCurrentCycle,
     getReferencePriceAndRanges,
 } from '../../apis/homepageApis';
+import { Container } from 'reactstrap';
 
 export default class Home extends Component {
     constructor(props) {
@@ -28,8 +30,14 @@ export default class Home extends Component {
             betAmount: '1',
             fetchingCurrentPriceRanges: true,
             onGoingBet: false,
+            alertShow: false,
         };
     }
+    handleAlertShow = () => {
+        this.setState({
+            alertShow: true,
+        });
+    };
     handleStakingOptionsSelect = (stakedPriceRange) => {
         this.setState({ stakedPriceRange });
     };
@@ -119,6 +127,18 @@ export default class Home extends Component {
         doScrolling(element, duration);
     };
     render() {
+        const {
+            stakedPriceRange,
+            network,
+            betAmount,
+            currentCycle,
+            currentPriceRanges,
+        } = this.state;
+        const low = parseInt(stakedPriceRange.split('~')[0], 10);
+        const high = parseInt(stakedPriceRange.split('~')[1], 10);
+        const betRange = currentPriceRanges[network].filter(
+            (elem) => elem.low === low && elem.high === high
+        );
         return (
             <Fragment>
                 <div className="main-page-container">
@@ -129,6 +149,7 @@ export default class Home extends Component {
                         handleScolling={this.handleScolling}
                         getCurrentCycle={this.getCurrentCycle}
                         placeBet={this.placeBet}
+                        handleAlertShow={this.handleAlertShow}
                     />
                     <StackeingOptions
                         {...this.props}
@@ -138,6 +159,93 @@ export default class Home extends Component {
                         }
                     />
                     <Footer {...this.props} />
+                    {this.state.alertShow && (
+                        <SweetAlert
+                            info
+                            showCancel
+                            confirmBtnText="Confirm"
+                            confirmBtnBsStyle="primary"
+                            cancelBtnBsStyle="light"
+                            title={'Staking Order Review!'}
+                            onConfirm={() => this.placeBet()}
+                            onCancel={() => {
+                                this.setState({
+                                    alertShow: false,
+                                });
+                            }}
+                            dependencies={[
+                                betRange,
+                                currentCycle,
+                                betAmount,
+                                network,
+                            ]}
+                        >
+                            {() => (
+                                <Container
+                                    style={{ margin: '35px 0px 0px 0px' }}
+                                >
+                                    <ul
+                                        style={{
+                                            color: '#748093',
+                                        }}
+                                    >
+                                        <li
+                                            style={{
+                                                paddingBottom: '1vmax',
+                                                textAlign: 'left',
+                                            }}
+                                        >
+                                            Staked Amount: {betAmount || 0} XTZ
+                                        </li>
+                                        <li
+                                            style={{
+                                                paddingBottom: '1vmax',
+                                                textAlign: 'left',
+                                            }}
+                                        >
+                                            Staking period:{' '}
+                                            {currentCycle[network].currentCycle}{' '}
+                                            -{currentCycle[network].endCycle}
+                                        </li>
+                                        <li
+                                            style={{
+                                                paddingBottom: '1vmax',
+                                                textAlign: 'left',
+                                            }}
+                                        >
+                                            Reward Return Cycle:{' '}
+                                            {currentCycle[network].endCycle}{' '}
+                                            Cycle
+                                        </li>
+                                        <li
+                                            style={{
+                                                paddingBottom: '1vmax',
+                                                textAlign: 'left',
+                                            }}
+                                        >
+                                            Platform Usage Fee: 2% of the
+                                            winning returns
+                                        </li>
+                                        <li
+                                            style={{
+                                                paddingBottom: '1vmax',
+                                                textAlign: 'left',
+                                            }}
+                                        >
+                                            Expected Min ROI as per current
+                                            active bets*:{' '}
+                                            {betRange[0].rangeBasedRoi.estimatedRoi.toFixed(
+                                                3
+                                            )}
+                                            %. *The mentioned ROI is only
+                                            applicable if your prediction is
+                                            right.Else your ROI would be 0%.
+                                        </li>
+                                    </ul>
+                                </Container>
+                            )}
+                        </SweetAlert>
+                    )}
                 </div>
             </Fragment>
         );
