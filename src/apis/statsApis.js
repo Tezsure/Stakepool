@@ -5,7 +5,7 @@ export const getLastCycleStats = async (currentCycle, network) => {
     try {
         const data = {};
         let cycle = currentCycle - 1;
-
+        
         const tezos = new TezosToolkit(CONFIG.RPC_NODES[network]);
         tezos.setRpcProvider(CONFIG.RPC_NODES[network]);
         const contract = await tezos.contract.at(CONFIG.CONTRACT[network]);
@@ -24,7 +24,8 @@ export const getLastCycleStats = async (currentCycle, network) => {
         totalPoolRewardWon = 0.98 * totalPoolRewardWon;
 
         data.totalPoolRewardWon = totalPoolRewardWon;
-
+        data.referencePrice = referencePrice;
+        data.endingPrice = endingPrice;
         let changePercent = (endingPrice - referencePrice) / referencePrice;
         changePercent = changePercent * 10000;
         changePercent = Math.floor(changePercent);
@@ -37,10 +38,10 @@ export const getLastCycleStats = async (currentCycle, network) => {
                     let valueByRange = await cycleData.amountByRange.get(
                         element
                     );
-                    let lowPrice =
-                        referencePrice + (referencePrice * (low / 100)) / 100;
-                    let highPrice =
-                        referencePrice + (referencePrice * (high / 100)) / 100;
+                    
+                    let lowPrice = referencePrice + (referencePrice  * (low / 10000))
+                    let highPrice = referencePrice +  (referencePrice * (high / 10000))
+
                     data.winningPriceRange = { lowPrice, highPrice };
                     data.totalAmountInWinningRange = valueByRange.c[0];
                     let aggregateROIPercent =
@@ -54,10 +55,8 @@ export const getLastCycleStats = async (currentCycle, network) => {
                     let valueByRange = await cycleData.amountByRange.get(
                         element
                     );
-                    let lowPrice =
-                        referencePrice + (referencePrice * (low / 100)) / 100;
-                    let highPrice =
-                        referencePrice + (referencePrice * (high / 100)) / 100;
+                    let lowPrice = referencePrice + (referencePrice  * (low / 10000))
+                    let highPrice = referencePrice +  (referencePrice * (high / 10000))
                     data.winningPriceRange = { lowPrice, highPrice };
                     data.totalAmountInWinningRange = valueByRange.c[0];
                     let aggregateROIPercent =
@@ -69,10 +68,8 @@ export const getLastCycleStats = async (currentCycle, network) => {
                     let valueByRange = await cycleData.amountByRange.get(
                         element
                     );
-                    let lowPrice =
-                        referencePrice + (referencePrice * (low / 100)) / 100;
-                    let highPrice =
-                        referencePrice + (referencePrice * (high / 100)) / 100;
+                    let lowPrice = referencePrice + (referencePrice  * (low / 10000))
+                    let highPrice = referencePrice +  (referencePrice * (high / 10000))
                     data.winningPriceRange = { lowPrice, highPrice };
                     data.totalAmountInWinningRange = valueByRange.c[0];
                     let aggregateROIPercent =
