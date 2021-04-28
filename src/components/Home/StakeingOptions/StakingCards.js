@@ -68,24 +68,20 @@ export default class StakingCards extends Component {
                 let elem = currentPriceRanges[network][i];
                 let innerText;
                 if (elem.low !== elem.high) {
-                    innerText = `Price prediction between $${(
-                        (currentXTZPrice * 100 + elem.low / 100) /
-                        100
-                    ).toFixed(3)} - $${(
-                        (currentXTZPrice * 100 + elem.high / 100) /
-                        100
+                    innerText = `Between $${
+                        (currentXTZPrice + (currentXTZPrice * (elem.low / 100)/ 100)
+                    ).toFixed(3)} - $${
+                        (currentXTZPrice + (currentXTZPrice * (elem.high / 100)/ 100)
                     ).toFixed(3)}`;
                 }
                 if (elem.low === elem.high && elem.low < 0) {
-                    innerText = `Price prediction below $${(
-                        (currentXTZPrice * 100 + elem.low / 100) /
-                        100
-                    ).toFixed(3)}`;
+                    innerText = `Below $${(
+                        currentXTZPrice + (currentXTZPrice * (elem.low / 100)/ 100)
+                    ).toFixed(3)}`;;
                 }
                 if (elem.low === elem.high && elem.low > 0) {
-                    innerText = `Price prediction above $${(
-                        (currentXTZPrice * 100 + elem.low / 100) /
-                        100
+                    innerText = `Above $${(
+                        currentXTZPrice + (currentXTZPrice * (elem.high / 100)/ 100)
                     ).toFixed(3)}`;
                 }
                 const cycleEndDate = new Date(

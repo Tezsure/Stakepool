@@ -31,24 +31,20 @@ export default class Banner extends Component {
         const ranges = currentPriceRanges[network].map((elem) => {
             let range;
             if (elem.low !== elem.high) {
-                range = `In the range of $${(
-                    (currentXTZPrice * 100 + elem.low / 100) /
-                    100
-                ).toFixed(3)} - $${(
-                    (currentXTZPrice * 100 + elem.high / 100) /
-                    100
+                range = `In the range of $${
+                    (currentXTZPrice + (currentXTZPrice * (elem.low / 100)/ 100)
+                ).toFixed(3)} - $${
+                    (currentXTZPrice + (currentXTZPrice * (elem.high / 100)/ 100)
                 ).toFixed(3)}`;
             }
             if (elem.low === elem.high && elem.low < 0) {
                 range = `Below $${(
-                    (currentXTZPrice * 100 + elem.low / 100) /
-                    100
+                    currentXTZPrice + (currentXTZPrice * (elem.low / 100)/ 100)
                 ).toFixed(3)}`;
             }
             if (elem.low === elem.high && elem.low > 0) {
                 range = `Above $${(
-                    (currentXTZPrice * 100 + elem.low / 100) /
-                    100
+                    currentXTZPrice + (currentXTZPrice * (elem.high / 100)/ 100)
                 ).toFixed(3)}`;
             }
             return (
