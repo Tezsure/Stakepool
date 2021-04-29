@@ -31,21 +31,50 @@ export default class Banner extends Component {
         const ranges = currentPriceRanges[network].map((elem) => {
             let range;
             if (elem.low !== elem.high) {
-                range = `In the range of $${
-                    (currentXTZPrice + (currentXTZPrice * (elem.low / 100)/ 100)
-                ).toFixed(3)} - $${
-                    (currentXTZPrice + (currentXTZPrice * (elem.high / 100)/ 100)
-                ).toFixed(3)}`;
+                if(elem.high < 0 || elem.low < 0)
+                    {
+                        if(elem.high === 0 )
+                        {
+                            range = `Down to ${
+                                (-1 * elem.low/100
+                            ).toFixed(2)}%`;
+                        }
+                        else
+                        {
+                            range = `Down ${(
+                                -1 * elem.high /100
+                            ).toFixed(2)}% - ${
+                                (-1 * elem.low/100
+                            ).toFixed(2)}%`;
+                        }
+                    }
+                    else
+                    {
+                        if(elem.low === 0 )
+                        {
+                            range = `Up to ${
+                                (elem.high/100
+                            ).toFixed(2)}%`;
+                        }
+                        else
+                        {
+                            range = `Up ${(
+                                elem.low /100
+                            ).toFixed(2)}% - ${
+                                (elem.high/100
+                            ).toFixed(2)}%`;
+                        }
+                    }
             }
             if (elem.low === elem.high && elem.low < 0) {
-                range = `Below $${(
-                    currentXTZPrice + (currentXTZPrice * (elem.low / 100)/ 100)
-                ).toFixed(3)}`;
+                range = `Down ${(
+                    -1 * elem.low/100
+                ).toFixed(2)}% or More`;
             }
             if (elem.low === elem.high && elem.low > 0) {
-                range = `Above $${(
-                    currentXTZPrice + (currentXTZPrice * (elem.high / 100)/ 100)
-                ).toFixed(3)}`;
+                range = `Up ${(
+                    elem.high/100
+                ).toFixed(2)}% or More`;;
             }
             return (
                 <option

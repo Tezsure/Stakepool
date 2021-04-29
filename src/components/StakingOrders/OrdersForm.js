@@ -5,22 +5,50 @@ export default class OrdersForm extends Component {
         const { currentXTZPrice } = this.props;
         let range;
         if (elem.low !== elem.high) {
-            range = `In the range of ${(
-                ( elem.low / 100)
-                
-            ).toFixed(2)}% to ${(
-                ( elem.high / 100) 
-            ).toFixed(2)} %`;
+            if(elem.high < 0 || elem.low < 0)
+                {
+                    if(elem.high === 0 )
+                    {
+                        range = `Down to ${
+                            (-1 * elem.low/100
+                        ).toFixed(2)}%`;
+                    }
+                    else
+                    {
+                        range = `Down ${(
+                            -1 * elem.high /100
+                        ).toFixed(2)}% - ${
+                            (-1 * elem.low/100
+                        ).toFixed(2)}%`;
+                    }
+                }
+                else
+                {
+                    if(elem.low === 0 )
+                    {
+                        range = `Up to ${
+                            (elem.high/100
+                        ).toFixed(2)}%`;
+                    }
+                    else
+                    {
+                        range = `Up ${(
+                            elem.low /100
+                        ).toFixed(2)}% - ${
+                            (elem.high/100
+                        ).toFixed(2)}%`;
+                    }
+                }
         }
         if (elem.low === elem.high && elem.low < 0) {
-            range = `Below ${(
-                ( elem.low / 100) 
-            ).toFixed(2)}%`;
+            range = `Down ${(
+                -1 * elem.low/100
+            ).toFixed(2)}% or More`;
         }
         if (elem.low === elem.high && elem.low > 0) {
-            range = `Above ${(
-                ( elem.low / 100) 
-            ).toFixed(2)}%`;
+            range = `Up ${(
+                elem.high/100
+            ).toFixed(2)}% or More`;;
         }
         return range;
     };
