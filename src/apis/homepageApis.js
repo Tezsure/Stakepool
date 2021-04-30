@@ -112,7 +112,7 @@ export const getReferencePriceAndRanges = async (currentCycle, network) => {
             let estimatedRoi = (totalRewardWon / amountInRange) * 100;
             const rangeBasedRoi = {
                 amountInRange: amountInRange.c[0],
-                estimatedRoi: isFinite(estimatedRoi) ? estimatedRoi : 0,
+                estimatedRoi: isFinite(estimatedRoi) ? estimatedRoi : (roi * 0.98 * 100),
             };
             ranges.push({
                 low: element['0'].c[0] * element['0'].s,

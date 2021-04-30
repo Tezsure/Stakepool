@@ -229,10 +229,10 @@ export default class Home extends Component {
                                             }}
                                         >
                                             Staking period:{' '}
-                                            {currentCycle[network].currentCycle}{' '}
-                                            -
+                                            {currentCycle[network].currentCycle}{' Cycle '}
+                                            -{' '}
                                             {currentCycle[network]
-                                                .currentCycle + 2}
+                                                .currentCycle + 2}{' Cycle '}
                                         </li>
                                         <li
                                             style={{
