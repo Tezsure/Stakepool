@@ -25,10 +25,6 @@
     }
 }
 
-.dropdown-toggle::after {
-    content: none !important;
-}
-
 button:focus {
     outline: 0;
 }
@@ -94,7 +90,17 @@ button:focus {
     margin-top: 15px;
 }
 .footer-icons {
-    width: 18px;
+    width: 45px;
+    border-radius: 5px;
+}
+.container-social {
+    width: 100%;
+    height: 80px;
+    background: aliceblue;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 }
 .footer-image-conatiner {
     padding-right: 10px;

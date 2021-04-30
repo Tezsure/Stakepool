@@ -125,7 +125,7 @@ export default class Stats extends Component {
                 <div className="main-page-container">
                     <div className="banner">
                         <div className="container">
-                            <Header />
+                            <Header {...this.props} />
                             <div className="banner-content-container">
                                 <h1 className="banner-heading">
                                     Previous Staking Period <br />

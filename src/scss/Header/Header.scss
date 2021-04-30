@@ -1,6 +1,6 @@
 .site-header {
     width: 100%;
-    padding: 26px 0;
+    padding: 15px 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -34,4 +34,15 @@
     background-color: transparent;
     font-size: 14px;
     cursor: pointer;
+}
+.network-dropdown {
+    .contact-btn {
+        color: #fff !important;
+        padding: 12px 22px !important;
+        border: 1px solid #ffffff !important;
+        border-radius: 4px !important;
+        background-color: transparent !important;
+        font-size: 14px !important;
+        cursor: pointer !important;
+    }
 }

@@ -156,3 +156,17 @@ span.bet-amount-conatiner {
         margin-right: 40px;
     }
 }
+.banner {
+    .caution-banner.alert.alert-warning.alert-dismissible.fade.show {
+        padding: 0.25rem 6.25rem !important;
+    }
+    .caution-banner.alert-dismissible .close {
+        padding: 0.25rem 1.25rem !important;
+    }
+}
+.dropdown-setting-icon::after {
+    display: none;
+}
+.stats-button::after {
+    display: none;
+}
