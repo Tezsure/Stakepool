@@ -11,7 +11,7 @@ import {
     getReferencePriceAndRanges,
 } from '../../apis/homepageApis';
 import { Container } from 'reactstrap';
-const { TZSTATS } = require('../../apis/config');
+const { TZSTATS_DASHBOARD } = require('../../apis/config');
 
 export default class Home extends Component {
     constructor(props) {
@@ -113,13 +113,12 @@ export default class Home extends Component {
                 stakedPriceRange
             );
             if (API_RESPONSE.sucess) {
+                const URL = `${TZSTATS_DASHBOARD[network]}/${API_RESPONSE.operationId}`;
+                const htmlContent = document.createElement('div');
+                htmlContent.innerHTML = `Operation id: <a href='${URL}' style='word-break: break-all' target='_blank'>${API_RESPONSE.operationId}</a>`;
                 swal({
                     title: 'Bet placed sucessfully',
-                    text: (
-                        <a href={TZSTATS[network] + API_RESPONSE.operationId}>
-                            `Operation id: ${API_RESPONSE.operationId}`
-                        </a>
-                    ),
+                    content: htmlContent,
                     icon: 'success',
                     button: 'Okay',
                 });
@@ -229,10 +228,11 @@ export default class Home extends Component {
                                             }}
                                         >
                                             Staking period:{' '}
-                                            {currentCycle[network].currentCycle}{' Cycle '}
-                                            -{' '}
+                                            {currentCycle[network].currentCycle}
+                                            {' Cycle '}-{' '}
                                             {currentCycle[network]
-                                                .currentCycle + 2}{' Cycle '}
+                                                .currentCycle + 2}
+                                            {' Cycle '}
                                         </li>
                                         <li
                                             style={{

@@ -4,6 +4,10 @@ module.exports = {
         testnet: 'https://api.edo.tzstats.com',
         mainnet: 'https://api.tzstats.com',
     },
+    TZSTATS_DASHBOARD: {
+        testnet: 'https://edo.tzstats.com',
+        mainnet: 'https://www.tzstats.com',
+    },
     RPC_NODES: {
         testnet: 'https://testnet.tezster.tech',
         mainnet: 'https://mainnet.tezster.tech',

@@ -42,7 +42,7 @@ export default class Banner extends Component {
             return (
                 <Alert
                     color="success"
-                    isOpen={!onGoingBet}
+                    isOpen={onGoingBet}
                     style={{ width: '100%', marginTop: '-35px' }}
                 >
                     <span
