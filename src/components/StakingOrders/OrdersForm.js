@@ -85,9 +85,9 @@ export default class OrdersForm extends Component {
                     </td>
                     <td className="staked-amount">
                         {(elem.withdrawnAmount === 0
-                            ? elem.stakedAmount
-                            : elem.withdrawnAmount) / Math.pow(10, 6)}{' '}
-                        ꜩ
+                            ? "NA"
+                            : (elem.withdrawnAmount/ Math.pow(10, 6)).toString() + `ꜩ` )  }{' '}
+                        
                     </td>
                     <td>
                         <span
