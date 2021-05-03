@@ -74,7 +74,6 @@ export default class Stats extends Component {
                             <Header {...this.props} />
                             <div className="banner-content-container">
                                 <h1 className="banner-heading">
-                                    Previous Staking Period <br />
                                     Cycle {minValue || 0} - {maxValue || 0}
                                 </h1>
                                 <div className="stakepool-banner-form-container stats-container">

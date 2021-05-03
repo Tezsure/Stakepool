@@ -1,9 +1,8 @@
 /* eslint-disable no-restricted-globals */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import logo from '../../assets/images/Group 35964@2x.png';
-import settingsLogo from '../../assets/images/setting.46141fb1.png';
 import { doScrolling } from '../../apis/homepageApis';
 import NetworkDropDown from './NetworkDropDown';
 
@@ -48,7 +47,7 @@ export default class Header extends Component {
         });
     };
     render() {
-        const { displayDropdownStats, displayDropdownSetting } = this.state;
+        const { displayDropdownStats } = this.state;
         return (
             <header className="site-header">
                 <div className="site-logo">
@@ -60,10 +59,19 @@ export default class Header extends Component {
                     <li className="site-menu-item">
                         <Link
                             className="site-menu-item-link"
+                            to={'/faq'}
+                            style={{ fontWeight: '600' }}
+                        >
+                            FAQ
+                        </Link>
+                    </li>
+                    <li className="site-menu-item">
+                        <Link
+                            className="site-menu-item-link"
                             to="staking-orders"
                             style={{ fontWeight: '600' }}
                         >
-                            Staking-orders
+                            Staking orders
                         </Link>
                     </li>
                     <li className="site-menu-item">
@@ -118,61 +126,6 @@ export default class Header extends Component {
                         </div>
                     </li>
                     <NetworkDropDown {...this.props} />
-                    <li className="site-menu-item">
-                        <span className="dropdown">
-                            <NavLink
-                                to="#"
-                                className="dropdown-toggle dropdown-setting-icon"
-                                role="button"
-                                id="dropdownMenuLink"
-                                onClick={() => {
-                                    this.setState({
-                                        displayDropdownSetting: !displayDropdownSetting,
-                                    });
-                                }}
-                            >
-                                <img
-                                    src={settingsLogo}
-                                    className="settings-logo"
-                                    alt="settings"
-                                    style={{ width: '35px', cursor: 'pointer' }}
-                                    title="settings"
-                                />
-                            </NavLink>
-                            <div
-                                className="dropdown-menu"
-                                aria-labelledby="dropdownMenuLink"
-                                style={{
-                                    display: displayDropdownSetting
-                                        ? 'block'
-                                        : 'none',
-                                    margin: '1.125rem 0px 0',
-                                }}
-                            >
-                                <Link className="dropdown-item" to={'/faq'}>
-                                    FAQ
-                                </Link>
-                                <a
-                                    href="https://github.com/Tezsure/Stakepool-Contracts/tree/development/stakepool-contract"
-                                    className="dropdown-item"
-                                    rel="noopener noreferrer"
-                                    target="_blank"
-                                >
-                                    Contribute
-                                </a>
-                                <a
-                                    className="dropdown-item"
-                                    href="#"
-                                    rel="noopener noreferrer"
-                                    onClick={() =>
-                                        this.handleScolling('contact', 1000)
-                                    }
-                                >
-                                    Connect with us
-                                </a>
-                            </div>
-                        </span>
-                    </li>
                 </ul>
             </header>
         );
