@@ -2,53 +2,32 @@ import React, { Component } from 'react';
 
 export default class OrdersForm extends Component {
     calculateRange = (elem) => {
-        const { currentXTZPrice } = this.props;
         let range;
         if (elem.low !== elem.high) {
-            if(elem.high < 0 || elem.low < 0)
-                {
-                    if(elem.high === 0 )
-                    {
-                        range = `Down to ${
-                            (-1 * elem.low/100
-                        ).toFixed(2)}%`;
-                    }
-                    else
-                    {
-                        range = `Down ${(
-                            -1 * elem.high /100
-                        ).toFixed(2)}% - ${
-                            (-1 * elem.low/100
-                        ).toFixed(2)}%`;
-                    }
+            if (elem.high < 0 || elem.low < 0) {
+                if (elem.high === 0) {
+                    range = `Down to ${((-1 * elem.low) / 100).toFixed(2)}%`;
+                } else {
+                    range = `Down ${((-1 * elem.high) / 100).toFixed(2)}% - ${(
+                        (-1 * elem.low) /
+                        100
+                    ).toFixed(2)}%`;
                 }
-                else
-                {
-                    if(elem.low === 0 )
-                    {
-                        range = `Up to ${
-                            (elem.high/100
-                        ).toFixed(2)}%`;
-                    }
-                    else
-                    {
-                        range = `Up ${(
-                            elem.low /100
-                        ).toFixed(2)}% - ${
-                            (elem.high/100
-                        ).toFixed(2)}%`;
-                    }
+            } else {
+                if (elem.low === 0) {
+                    range = `Up to ${(elem.high / 100).toFixed(2)}%`;
+                } else {
+                    range = `Up ${(elem.low / 100).toFixed(2)}% - ${(
+                        elem.high / 100
+                    ).toFixed(2)}%`;
                 }
+            }
         }
         if (elem.low === elem.high && elem.low < 0) {
-            range = `Down ${(
-                -1 * elem.low/100
-            ).toFixed(2)}% or More`;
+            range = `Down ${((-1 * elem.low) / 100).toFixed(2)}% or More`;
         }
         if (elem.low === elem.high && elem.low > 0) {
-            range = `Up ${(
-                elem.high/100
-            ).toFixed(2)}% or More`;;
+            range = `Up ${(elem.high / 100).toFixed(2)}% or More`;
         }
         return range;
     };
@@ -84,10 +63,11 @@ export default class OrdersForm extends Component {
                         {elem.stakedAmount / Math.pow(10, 6)} ꜩ
                     </td>
                     <td className="staked-amount">
-                        {(elem.withdrawnAmount === 0
-                            ? "NA"
-                            : (elem.withdrawnAmount/ Math.pow(10, 6)).toString() + `ꜩ` )  }{' '}
-                        
+                        {currentCycle[activeTab] <= elem.cycle
+                            ? 'N/A'
+                            : (
+                                  elem.withdrawnAmount / Math.pow(10, 6)
+                              ).toString() + `ꜩ`}{' '}
                     </td>
                     <td>
                         <span
