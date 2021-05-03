@@ -139,7 +139,7 @@ export default class Banner extends Component {
         return (
             <div className="banner">
                 <Alert
-                    color="warning"
+                    color="danger"
                     isOpen={showWarningAlert}
                     toggle={() => {
                         this.setState({ showWarningAlert: false });
