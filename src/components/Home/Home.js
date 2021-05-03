@@ -242,7 +242,7 @@ export default class Home extends Component {
                                         >
                                             Reward Return Cycle:{' '}
                                             {currentCycle[network]
-                                                .currentCycle + 2}{' '}
+                                                .currentCycle + 3}{' '}
                                             Cycle
                                         </li>
                                         <li
