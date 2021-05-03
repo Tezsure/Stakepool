@@ -20,7 +20,7 @@ export default class Faq extends Component {
                 <div className="main-page-container">
                     <div className="banner">
                         <div className="container">
-                            <Header />
+                            <Header {...this.props} />
                             <div className="stakepool-banner-form-container">
                                 <div className="container">
                                     <div

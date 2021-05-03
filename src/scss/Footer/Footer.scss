@@ -52,3 +52,26 @@
     font-size: 18px;
     text-align: center;
 }
+.container-footer {
+    height: 250px;
+    background: #2d7bf7;
+    border-radius: 12px;
+    align-items: center;
+}
+a.footer-image-conatiner {
+    background: white;
+    border-radius: 5px;
+    padding: 10px 25px 10px 25px;
+    margin: 30px;
+}
+p.subtext-of-footer {
+    color: white;
+}
+.footer-heading {
+    text-align: center;
+    letter-spacing: 0.2px;
+    color: #000000;
+    font-size: 35px;
+    font-family: leelawadee !important;
+    padding-bottom: 10px;
+}

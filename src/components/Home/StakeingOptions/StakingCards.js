@@ -68,25 +68,39 @@ export default class StakingCards extends Component {
                 let elem = currentPriceRanges[network][i];
                 let innerText;
                 if (elem.low !== elem.high) {
-                    innerText = `Price prediction between $${(
-                        (currentXTZPrice * 100 + elem.low / 100) /
-                        100
-                    ).toFixed(3)} - $${(
-                        (currentXTZPrice * 100 + elem.high / 100) /
-                        100
-                    ).toFixed(3)}`;
+                    if (elem.high < 0 || elem.low < 0) {
+                        if (elem.high === 0) {
+                            innerText = `Down to ${(
+                                (-1 * elem.low) /
+                                100
+                            ).toFixed(2)}%`;
+                        } else {
+                            innerText = `Down ${(
+                                (-1 * elem.high) /
+                                100
+                            ).toFixed(2)}% - ${((-1 * elem.low) / 100).toFixed(
+                                2
+                            )}%`;
+                        }
+                    } else {
+                        if (elem.low === 0) {
+                            innerText = `Up to ${(elem.high / 100).toFixed(
+                                2
+                            )}%`;
+                        } else {
+                            innerText = `Up ${(elem.low / 100).toFixed(
+                                2
+                            )}% - ${(elem.high / 100).toFixed(2)}%`;
+                        }
+                    }
                 }
                 if (elem.low === elem.high && elem.low < 0) {
-                    innerText = `Price prediction below $${(
-                        (currentXTZPrice * 100 + elem.low / 100) /
-                        100
-                    ).toFixed(3)}`;
+                    innerText = `Down ${((-1 * elem.low) / 100).toFixed(
+                        2
+                    )}% or More`;
                 }
                 if (elem.low === elem.high && elem.low > 0) {
-                    innerText = `Price prediction above $${(
-                        (currentXTZPrice * 100 + elem.low / 100) /
-                        100
-                    ).toFixed(3)}`;
+                    innerText = `Up ${(elem.high / 100).toFixed(2)}% or More`;
                 }
                 const cycleEndDate = new Date(
                     currentCycle[network].cycletime

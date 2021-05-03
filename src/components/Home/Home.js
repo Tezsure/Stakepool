@@ -11,6 +11,7 @@ import {
     getReferencePriceAndRanges,
 } from '../../apis/homepageApis';
 import { Container } from 'reactstrap';
+const { TZSTATS } = require('../../apis/config');
 
 export default class Home extends Component {
     constructor(props) {
@@ -31,6 +32,8 @@ export default class Home extends Component {
             fetchingCurrentPriceRanges: true,
             onGoingBet: false,
             alertShow: false,
+            errorMsg: '',
+            showError: false,
         };
     }
     handleAlertShow = () => {
@@ -112,7 +115,11 @@ export default class Home extends Component {
             if (API_RESPONSE.sucess) {
                 swal({
                     title: 'Bet placed sucessfully',
-                    text: 'Operation id: \n' + API_RESPONSE.operationId,
+                    text: (
+                        <a href={TZSTATS[network] + API_RESPONSE.operationId}>
+                            `Operation id: ${API_RESPONSE.operationId}`
+                        </a>
+                    ),
                     icon: 'success',
                     button: 'Okay',
                 });
