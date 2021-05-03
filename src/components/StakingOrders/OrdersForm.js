@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/accessible-emoji */
 import React, { Component } from 'react';
 
 export default class OrdersForm extends Component {
@@ -47,14 +48,37 @@ export default class OrdersForm extends Component {
             const range = this.calculateRange(elem.range);
             let rewadsText = 'Withdraw';
             let buttonStatusDisabled = false;
+            let status = (document.createElement('span').innerHTML = (
+                <span title="Awaiting result">N/A &#128683;</span>
+            ));
+            if (
+                currentCycle[activeTab] >= elem.cycle &&
+                (elem.withdrawnAmount === elem.stakedAmount ||
+                    elem.withdrawnAmount === 0)
+            ) {
+                status = document.createElement('span').innerHTML = (
+                    <span>nay &#128078;</span>
+                );
+            }
+            if (
+                currentCycle[activeTab] >= elem.cycle &&
+                elem.withdrawnAmount > elem.stakedAmount
+            ) {
+                status = document.createElement('span').innerHTML = (
+                    <span>yay &#x1F44D;</span>
+                );
+            }
+            console.log(elem.withdrawnAmount);
+
             if (currentCycle[activeTab] <= elem.cycle) {
                 buttonStatusDisabled = true;
                 rewadsText = 'Pending';
             }
             if (elem.withdrawn || ongoingWithdraw === index) {
                 buttonStatusDisabled = true;
-                rewadsText = 'Withdawn';
+                rewadsText = 'Withdrawn';
             }
+
             return (
                 <tr key={stakingPeriod}>
                     <td className="staking-period">{stakingPeriod}</td>
@@ -118,6 +142,7 @@ export default class OrdersForm extends Component {
                             )}
                         </button>
                     </td>
+                    <td>{status}</td>
                 </tr>
             );
         });
@@ -184,6 +209,7 @@ export default class OrdersForm extends Component {
                             <th scope="col">Withdraw amount</th>
                             <th scope="col">Staked reward status</th>
                             <th scope="col">Action</th>
+                            <th scope="col">Winning status</th>
                         </tr>
                     </thead>
                     {stakingOrdersJSX.length > 0 ? (
@@ -191,7 +217,7 @@ export default class OrdersForm extends Component {
                     ) : (
                         <tbody>
                             <tr>
-                                <td colSpan="6">No data available</td>
+                                <td colSpan="7">No data available</td>
                             </tr>
                         </tbody>
                     )}
