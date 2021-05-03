@@ -95,9 +95,10 @@ export default class Header extends Component {
                                 <Link
                                     className="dropdown-item"
                                     to={`/mainnet-stats`}
-                                    onClick={() =>
-                                        this.toggleStatsDropdownStats()
-                                    }
+                                    onClick={() => {
+                                        this.toggleStatsDropdownStats();
+                                        window.location.href = 'mainnet-stats';
+                                    }}
                                     replace
                                 >
                                     Mainnet stats
@@ -105,9 +106,10 @@ export default class Header extends Component {
                                 <Link
                                     className="dropdown-item"
                                     to={'/testnet-stats'}
-                                    onClick={() =>
-                                        this.toggleStatsDropdownStats()
-                                    }
+                                    onClick={() => {
+                                        this.toggleStatsDropdownStats();
+                                        window.location.href = 'testnet-stats';
+                                    }}
                                     replace
                                 >
                                     Testnet stats

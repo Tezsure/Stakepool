@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Stats from './components/Stats/Stats';
-// import Stats from './components/Stats/stats-new';
 import Home from './components/Home/Home';
 import StakingOrders from './components/StakingOrders/StakingOrders';
 import FAQ from './components/FAQ/Faq';

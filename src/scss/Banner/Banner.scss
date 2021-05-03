@@ -170,3 +170,10 @@ span.bet-amount-conatiner {
 .stats-button::after {
     display: none;
 }
+
+td.google-visualization-table-td {
+    text-align: center;
+}
+td.google-visualization-table-type-number.google-visualization-table-td {
+    text-align: center;
+}

@@ -13,8 +13,8 @@ export default function StakepoolChart(props) {
     if (statsResponse.length !== 0)
         tableData.push([
             { type: 'string', label: 'Cycle' },
-            { type: 'string', label: 'Total bet' },
-            { type: 'string', label: 'ROI' },
+            { type: 'string', label: 'Total bet placed' },
+            { type: 'number', label: 'ROI' },
         ]);
     statsResponse.forEach((elem) => {
         if (elem.success) {

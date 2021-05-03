@@ -68,8 +68,20 @@ export default class Banner extends Component {
                         this.setState({ templeWalletError: false });
                     }}
                 >
-                    Error: &nbsp;Temple wallet not detected, please install
-                    temple wallet.
+                    Error: &nbsp;Temple wallet not detected, please
+                    install&nbsp;
+                    <a
+                        href="https://templewallet.com/download"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                        style={{
+                            color: '#721c24',
+                            textDecoration: 'underline',
+                        }}
+                    >
+                        temple wallet
+                    </a>
+                    .
                 </Alert>
             );
         } else return [];
@@ -88,50 +100,31 @@ export default class Banner extends Component {
         const ranges = currentPriceRanges[network].map((elem) => {
             let range;
             if (elem.low !== elem.high) {
-                if(elem.high < 0 || elem.low < 0)
-                    {
-                        if(elem.high === 0 )
-                        {
-                            range = `Down to ${
-                                (-1 * elem.low/100
-                            ).toFixed(2)}%`;
-                        }
-                        else
-                        {
-                            range = `Down ${(
-                                -1 * elem.high /100
-                            ).toFixed(2)}% - ${
-                                (-1 * elem.low/100
-                            ).toFixed(2)}%`;
-                        }
+                if (elem.high < 0 || elem.low < 0) {
+                    if (elem.high === 0) {
+                        range = `Down to ${((-1 * elem.low) / 100).toFixed(
+                            2
+                        )}%`;
+                    } else {
+                        range = `Down ${((-1 * elem.high) / 100).toFixed(
+                            2
+                        )}% - ${((-1 * elem.low) / 100).toFixed(2)}%`;
                     }
-                    else
-                    {
-                        if(elem.low === 0 )
-                        {
-                            range = `Up to ${
-                                (elem.high/100
-                            ).toFixed(2)}%`;
-                        }
-                        else
-                        {
-                            range = `Up ${(
-                                elem.low /100
-                            ).toFixed(2)}% - ${
-                                (elem.high/100
-                            ).toFixed(2)}%`;
-                        }
+                } else {
+                    if (elem.low === 0) {
+                        range = `Up to ${(elem.high / 100).toFixed(2)}%`;
+                    } else {
+                        range = `Up ${(elem.low / 100).toFixed(2)}% - ${(
+                            elem.high / 100
+                        ).toFixed(2)}%`;
                     }
+                }
             }
             if (elem.low === elem.high && elem.low < 0) {
-                range = `Down ${(
-                    -1 * elem.low/100
-                ).toFixed(2)}% or More`;
+                range = `Down ${((-1 * elem.low) / 100).toFixed(2)}% or More`;
             }
             if (elem.low === elem.high && elem.low > 0) {
-                range = `Up ${(
-                    elem.high/100
-                ).toFixed(2)}% or More`;;
+                range = `Up ${(elem.high / 100).toFixed(2)}% or More`;
             }
             return (
                 <option
