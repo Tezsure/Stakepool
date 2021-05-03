@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import Header from '../../Header/Header';
 import Countdown from 'react-countdown-now';
-import { Tooltip } from 'reactstrap';
+import { TempleWallet } from '@temple-wallet/dapp';
+import { Tooltip, Alert } from 'reactstrap';
+
 const tzIcon = require('../../../assets/images/Path 453@2x.png');
 
 const Title =
@@ -11,12 +14,77 @@ export default class Banner extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            tooltipOpen: false,
+            refPriceTooltipOpen: false,
+            showWarningAlert: true,
+            stakeAmtTooltipOpen: false,
+            templeWalletError: false,
         };
     }
-    toggleTooltip = () => {
-        const { tooltipOpen } = this.state;
-        this.setState({ tooltipOpen: !tooltipOpen });
+    componentDidMount() {
+        this.checkTempleWallet();
+    }
+    checkTempleWallet = async () => {
+        const available = await TempleWallet.isAvailable();
+        if (!available) {
+            this.setState({
+                templeWalletError: true,
+            });
+        }
+    };
+    toggleTooltip = (StateName) => {
+        const tooltipValue = !this.state[StateName];
+        this.setState({ [StateName]: tooltipValue });
+    };
+    fetchBannerMessage = () => {
+        const { onGoingBet } = this.props;
+        const { templeWalletError } = this.state;
+        if (onGoingBet) {
+            return (
+                <Alert
+                    color="success"
+                    isOpen={!onGoingBet}
+                    style={{ width: '100%', marginTop: '-35px' }}
+                >
+                    <span
+                        className="spinner-grow spinner-grow-sm"
+                        role="status"
+                        aria-hidden="true"
+                        style={{
+                            verticalAlign: 'baseline',
+                        }}
+                    />
+                    &nbsp;&nbsp;Please wait while the transaction is confirmed.
+                </Alert>
+            );
+        }
+        if (templeWalletError) {
+            return (
+                <Alert
+                    color="danger"
+                    isOpen={templeWalletError}
+                    style={{ width: '100%', marginTop: '-35px' }}
+                    toggle={() => {
+                        console.log(templeWalletError);
+                        this.setState({ templeWalletError: false });
+                    }}
+                >
+                    Error: &nbsp;Temple wallet not detected, please
+                    install&nbsp;
+                    <a
+                        href="https://templewallet.com/download"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                        style={{
+                            color: '#721c24',
+                            textDecoration: 'underline',
+                        }}
+                    >
+                        temple wallet
+                    </a>
+                    .
+                </Alert>
+            );
+        } else return [];
     };
     render() {
         const {
@@ -28,28 +96,35 @@ export default class Banner extends Component {
             stakedPriceRange,
             fetchingCurrentPriceRanges,
         } = this.props;
+        const { showWarningAlert, templeWalletError } = this.state;
         const ranges = currentPriceRanges[network].map((elem) => {
             let range;
             if (elem.low !== elem.high) {
-                range = `In the range of $${(
-                    (currentXTZPrice * 100 + elem.low / 100) /
-                    100
-                ).toFixed(3)} - $${(
-                    (currentXTZPrice * 100 + elem.high / 100) /
-                    100
-                ).toFixed(3)}`;
+                if (elem.high < 0 || elem.low < 0) {
+                    if (elem.high === 0) {
+                        range = `Down to ${((-1 * elem.low) / 100).toFixed(
+                            2
+                        )}%`;
+                    } else {
+                        range = `Down ${((-1 * elem.high) / 100).toFixed(
+                            2
+                        )}% - ${((-1 * elem.low) / 100).toFixed(2)}%`;
+                    }
+                } else {
+                    if (elem.low === 0) {
+                        range = `Up to ${(elem.high / 100).toFixed(2)}%`;
+                    } else {
+                        range = `Up ${(elem.low / 100).toFixed(2)}% - ${(
+                            elem.high / 100
+                        ).toFixed(2)}%`;
+                    }
+                }
             }
             if (elem.low === elem.high && elem.low < 0) {
-                range = `Below $${(
-                    (currentXTZPrice * 100 + elem.low / 100) /
-                    100
-                ).toFixed(3)}`;
+                range = `Down ${((-1 * elem.low) / 100).toFixed(2)}% or More`;
             }
             if (elem.low === elem.high && elem.low > 0) {
-                range = `Above $${(
-                    (currentXTZPrice * 100 + elem.low / 100) /
-                    100
-                ).toFixed(3)}`;
+                range = `Up ${(elem.high / 100).toFixed(2)}% or More`;
             }
             return (
                 <option
@@ -63,8 +138,22 @@ export default class Banner extends Component {
         });
         return (
             <div className="banner">
+                <Alert
+                    color="warning"
+                    isOpen={showWarningAlert}
+                    toggle={() => {
+                        this.setState({ showWarningAlert: false });
+                    }}
+                    className="caution-banner"
+                    style={{
+                        borderRadius: '0px',
+                    }}
+                >
+                    *Caution: Underlying smart-contracts have not been audited
+                    by a third party.
+                </Alert>
                 <div className="container">
-                    <Header />
+                    <Header {...this.props} />
                     <div className="banner-content-container">
                         <h1
                             className="banner-heading"
@@ -73,25 +162,8 @@ export default class Banner extends Component {
                             Predict and win great rewards <br /> without losing
                             your tez
                         </h1>
-                        <div className="stakepool-banner-form-container ">
-                            <div className="network-container">
-                                <div
-                                    className="network-tab "
-                                    style={{ textAlign: 'center' }}
-                                >
-                                    <span
-                                        className={
-                                            network === 'mainnet'
-                                                ? 'sucess-badge'
-                                                : 'warning-badge'
-                                        }
-                                    />
-                                    &nbsp; Current network:{' '}
-                                    <span className="network-name">
-                                        {network}
-                                    </span>
-                                </div>
-                            </div>
+                        <div className="stakepool-banner-form-container">
+                            {this.fetchBannerMessage()}
                             <div className="stakepool-banner-input-wrapper">
                                 <label className="stakepool-banner-input-label">
                                     The current cycle{' '}
@@ -135,9 +207,13 @@ export default class Banner extends Component {
                                     </span>
                                     <Tooltip
                                         placement="bottom"
-                                        isOpen={this.state.tooltipOpen}
+                                        isOpen={this.state.refPriceTooltipOpen}
                                         target="info-icon-tooltip"
-                                        toggle={() => this.toggleTooltip()}
+                                        toggle={() =>
+                                            this.toggleTooltip(
+                                                'refPriceTooltipOpen'
+                                            )
+                                        }
                                     >
                                         {Title}
                                     </Tooltip>
@@ -153,7 +229,27 @@ export default class Banner extends Component {
 
                             <div className="stakepool-banner-input-wrapper">
                                 <label className="stakepool-banner-input-label">
-                                    I want to stake:
+                                    <span
+                                        className="info-icon"
+                                        style={{ cursor: 'pointer' }}
+                                        id={'stake-amt-icon-tooltip'}
+                                    >
+                                        &#9432;
+                                    </span>
+                                    <Tooltip
+                                        placement="bottom"
+                                        isOpen={this.state.stakeAmtTooltipOpen}
+                                        target="stake-amt-icon-tooltip"
+                                        toggle={() =>
+                                            this.toggleTooltip(
+                                                'stakeAmtTooltipOpen'
+                                            )
+                                        }
+                                    >
+                                        Maximum allowed limit to stake is 10 tz
+                                    </Tooltip>
+                                    &nbsp;&nbsp;Enter the amount you want to
+                                    stake:
                                 </label>
                                 <span className="bet-amount-conatiner">
                                     <input
@@ -162,6 +258,7 @@ export default class Banner extends Component {
                                         type="number"
                                         placeholder="Enter your stake price"
                                         value={this.props.betAmount}
+                                        max={10}
                                         onChange={(e) =>
                                             this.props.handlePriceChange(e)
                                         }
@@ -198,14 +295,6 @@ export default class Banner extends Component {
                                     {ranges}
                                 </select>
                             </div>
-
-                            <span className="banner-footer-container">
-                                <p className="form-footer-text">
-                                    *Caution: Underlying smart-contracts have
-                                    not been audited by a third party.
-                                </p>
-                            </span>
-
                             <div className="row" style={{ width: '100%' }}>
                                 <div
                                     className="col-md-6 "
@@ -230,7 +319,8 @@ export default class Banner extends Component {
                                         className="btn btn-primary btn-lg banner-button"
                                         disabled={
                                             fetchingCurrentPriceRanges ||
-                                            onGoingBet
+                                            onGoingBet ||
+                                            templeWalletError
                                         }
                                         onClick={() =>
                                             this.props.handleAlertShow()

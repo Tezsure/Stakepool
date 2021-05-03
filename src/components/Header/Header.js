@@ -5,6 +5,7 @@ import { Link, NavLink } from 'react-router-dom';
 import logo from '../../assets/images/Group 35964@2x.png';
 import settingsLogo from '../../assets/images/setting.46141fb1.png';
 import { doScrolling } from '../../apis/homepageApis';
+import NetworkDropDown from './NetworkDropDown';
 
 export default class Header extends Component {
     constructor(props) {
@@ -48,7 +49,6 @@ export default class Header extends Component {
     };
     render() {
         const { displayDropdownStats, displayDropdownSetting } = this.state;
-
         return (
             <header className="site-header">
                 <div className="site-logo">
@@ -57,6 +57,15 @@ export default class Header extends Component {
                     </a>
                 </div>
                 <ul className="site-menu-wrapper">
+                    <li className="site-menu-item">
+                        <Link
+                            className="site-menu-item-link"
+                            to="staking-orders"
+                            style={{ fontWeight: '600' }}
+                        >
+                            Staking-orders
+                        </Link>
+                    </li>
                     <li className="site-menu-item">
                         <div className="btn-group">
                             <button
@@ -73,7 +82,7 @@ export default class Header extends Component {
                                     fontWeight: '600',
                                 }}
                             >
-                                Stats
+                                Statistics
                             </button>
                             <div
                                 className="dropdown-menu"
@@ -86,9 +95,10 @@ export default class Header extends Component {
                                 <Link
                                     className="dropdown-item"
                                     to={`/mainnet-stats`}
-                                    onClick={() =>
-                                        this.toggleStatsDropdownStats()
-                                    }
+                                    onClick={() => {
+                                        this.toggleStatsDropdownStats();
+                                        window.location.href = 'mainnet-stats';
+                                    }}
                                     replace
                                 >
                                     Mainnet stats
@@ -96,9 +106,10 @@ export default class Header extends Component {
                                 <Link
                                     className="dropdown-item"
                                     to={'/testnet-stats'}
-                                    onClick={() =>
-                                        this.toggleStatsDropdownStats()
-                                    }
+                                    onClick={() => {
+                                        this.toggleStatsDropdownStats();
+                                        window.location.href = 'testnet-stats';
+                                    }}
                                     replace
                                 >
                                     Testnet stats
@@ -106,54 +117,12 @@ export default class Header extends Component {
                             </div>
                         </div>
                     </li>
-                    <li className="site-menu-item">
-                        <Link
-                            className="site-menu-item-link"
-                            to="staking-orders"
-                            style={{ fontWeight: '600' }}
-                        >
-                            Staking-orders
-                        </Link>
-                    </li>
-                    <li className="site-menu-item">
-                        <a
-                            href="https://github.com/Tezsure/Stakepool-Contracts/tree/development/stakepool-contract"
-                            className="site-menu-item-link"
-                            rel="noopener noreferrer"
-                            target="_blank"
-                            style={{ fontWeight: '600' }}
-                        >
-                            Github
-                        </a>
-                    </li>
-                    <li className="site-menu-item">
-                        <Link
-                            className="faq-link"
-                            to={'/faq'}
-                            replace
-                            style={{
-                                color: '#fff',
-                                textDecoration: 'none',
-                                fontWeight: '600',
-                            }}
-                        >
-                            FAQ
-                        </Link>
-                    </li>
-                    <li className="site-menu-item">
-                        <button
-                            className="contact-btn"
-                            onClick={() => this.handleScolling('contact', 1000)}
-                            style={{ fontWeight: '600' }}
-                        >
-                            Get in Touch
-                        </button>
-                    </li>
+                    <NetworkDropDown {...this.props} />
                     <li className="site-menu-item">
                         <span className="dropdown">
                             <NavLink
                                 to="#"
-                                className="dropdown-toggle"
+                                className="dropdown-toggle dropdown-setting-icon"
                                 role="button"
                                 id="dropdownMenuLink"
                                 onClick={() => {
@@ -180,23 +149,26 @@ export default class Header extends Component {
                                     margin: '1.125rem 0px 0',
                                 }}
                             >
+                                <Link className="dropdown-item" to={'/faq'}>
+                                    FAQ
+                                </Link>
                                 <a
+                                    href="https://github.com/Tezsure/Stakepool-Contracts/tree/development/stakepool-contract"
                                     className="dropdown-item"
-                                    href="/mainnet"
-                                    onClick={() =>
-                                        this.toggleSettingsDropdown()
-                                    }
+                                    rel="noopener noreferrer"
+                                    target="_blank"
                                 >
-                                    Mainnet
+                                    Contribute
                                 </a>
                                 <a
                                     className="dropdown-item"
-                                    href="/"
+                                    href="#"
+                                    rel="noopener noreferrer"
                                     onClick={() =>
-                                        this.toggleSettingsDropdown()
+                                        this.handleScolling('contact', 1000)
                                     }
                                 >
-                                    Testnet
+                                    Connect with us
                                 </a>
                             </div>
                         </span>
