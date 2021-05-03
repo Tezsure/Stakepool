@@ -3,17 +3,15 @@ import React from 'react';
 
 export default function StakepoolChart(props) {
     const { statsResponse } = props;
-    // const minValue = currentCycleData[network].currentCycle - 10;
-    // const maxValue = currentCycleData[network].currentCycle - 1;
     const chartData = [];
     const tableData = [];
 
-    chartData.push(['x', 'Total bet', 'ROI']);
+    chartData.push(['x', 'Total bet amount', 'ROI']);
     if (statsResponse.length === 0) chartData.push([0, 0, 0]);
     if (statsResponse.length !== 0)
         tableData.push([
             { type: 'string', label: 'Cycle' },
-            { type: 'string', label: 'Total bet placed' },
+            { type: 'string', label: 'Total bet amount' },
             { type: 'number', label: 'ROI' },
         ]);
     statsResponse.forEach((elem) => {
@@ -36,14 +34,13 @@ export default function StakepoolChart(props) {
             <Chart
                 height={'500px'}
                 chartType="LineChart"
-                loader={<div>Loading Chart</div>}
                 data={chartData}
                 options={{
                     hAxis: {
                         title: 'Cycle',
                     },
                     vAxis: {
-                        title: 'Total bet',
+                        title: 'Total bet amount',
                     },
                     series: {
                         1: {
@@ -60,9 +57,7 @@ export default function StakepoolChart(props) {
                 rootProps={{ 'data-testid': '2' }}
             />
             <Chart
-                height={'300px'}
                 chartType="Table"
-                loader={<div>Loading Chart</div>}
                 data={tableData}
                 options={{
                     width: '100%',
