@@ -6,7 +6,7 @@ module.exports = {
     },
     TZSTATS_DASHBOARD: {
         testnet: 'https://edo.tzstats.com',
-        mainnet: 'https://www.tzstats.com',
+        mainnet: 'https://tzstats.com',
     },
     RPC_NODES: {
         testnet: 'https://testnet.tezster.tech',
