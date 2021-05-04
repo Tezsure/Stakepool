@@ -12,7 +12,7 @@ export default class Footer extends Component {
                 <footer
                     className="site-footer"
                     id="contact"
-                    style={{ marginTop: '5%' }}
+                    style={{ marginTop: '22px' }}
                 >
                     <div
                         className="container-footer shadow-lg"
