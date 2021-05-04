@@ -76,7 +76,7 @@ export default class Stats extends Component {
                                 <h1 className="banner-heading">
                                     Cycle {minValue || 0} - {maxValue || 0}
                                 </h1>
-                                <div className="stakepool-banner-form-container stats-container">
+                                <div className="stakepool-banner-form-container stats-container shadow-lg">
                                     <div className="row">
                                         <div className="col-sm-12 info-cards-stats">
                                             {fetchingData ? (
