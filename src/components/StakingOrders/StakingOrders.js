@@ -171,7 +171,7 @@ export default class Stats extends Component {
                                     Your staking orders
                                 </h1>
                                 <div
-                                    className="staking-orders-container"
+                                    className="staking-orders-container shadow-lg"
                                     style={{ flexDirection: 'column' }}
                                 >
                                     <div className="row main-row">

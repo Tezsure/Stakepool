@@ -162,7 +162,7 @@ export default class Banner extends Component {
                             Predict and win great rewards <br /> without losing
                             your tez
                         </h1>
-                        <div className="stakepool-banner-form-container">
+                        <div className="stakepool-banner-form-container shadow-lg">
                             {this.fetchBannerMessage()}
                             <div className="stakepool-banner-input-wrapper">
                                 <label className="stakepool-banner-input-label">
