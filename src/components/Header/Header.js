@@ -59,15 +59,6 @@ export default class Header extends Component {
                     <li className="site-menu-item">
                         <Link
                             className="site-menu-item-link"
-                            to={'/faq'}
-                            style={{ fontWeight: '600' }}
-                        >
-                            FAQ
-                        </Link>
-                    </li>
-                    <li className="site-menu-item">
-                        <Link
-                            className="site-menu-item-link"
                             to="staking-orders"
                             style={{ fontWeight: '600' }}
                         >
@@ -124,6 +115,15 @@ export default class Header extends Component {
                                 </Link>
                             </div>
                         </div>
+                    </li>
+                    <li className="site-menu-item">
+                        <Link
+                            className="site-menu-item-link"
+                            to={'/faq'}
+                            style={{ fontWeight: '600' }}
+                        >
+                            FAQ
+                        </Link>
                     </li>
                     <NetworkDropDown {...this.props} />
                 </ul>
