@@ -59,7 +59,7 @@ export default class Footer extends Component {
                                 />
                             </a>
                             <a
-                                href="https://discord.gg/fJEpBQef"
+                                href="https://discord.gg/DWFnm77qDw"
                                 className={'footer-image-conatiner shadow-lg'}
                                 rel="noopener noreferrer"
                                 target="_blank"
