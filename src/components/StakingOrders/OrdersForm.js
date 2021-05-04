@@ -7,28 +7,28 @@ export default class OrdersForm extends Component {
         if (elem.low !== elem.high) {
             if (elem.high < 0 || elem.low < 0) {
                 if (elem.high === 0) {
-                    range = `Down to ${((-1 * elem.low) / 100).toFixed(2)}%`;
+                    range = `Down to ${(-1 * elem.low) / 100}%`;
                 } else {
-                    range = `Down ${((-1 * elem.high) / 100).toFixed(2)}% - ${(
+                    range = `Down ${(-1 * elem.high) / 100}% - ${(
                         (-1 * elem.low) /
                         100
                     ).toFixed(2)}%`;
                 }
             } else {
                 if (elem.low === 0) {
-                    range = `Up to ${(elem.high / 100).toFixed(2)}%`;
+                    range = `Up to ${elem.high / 100}%`;
                 } else {
-                    range = `Up ${(elem.low / 100).toFixed(2)}% - ${(
+                    range = `Up ${elem.low / 100}% - ${(
                         elem.high / 100
                     ).toFixed(2)}%`;
                 }
             }
         }
         if (elem.low === elem.high && elem.low < 0) {
-            range = `Down ${((-1 * elem.low) / 100).toFixed(2)}% or More`;
+            range = `Down ${(-1 * elem.low) / 100}% or More`;
         }
         if (elem.low === elem.high && elem.low > 0) {
-            range = `Up ${(elem.high / 100).toFixed(2)}% or More`;
+            range = `Up ${elem.high / 100}% or More`;
         }
         return range;
     };

@@ -54,7 +54,6 @@ export default class StakingCards extends Component {
         const {
             network,
             currentCycle,
-            currentXTZPrice,
             currentPriceRanges,
             fetchingCurrentPriceRanges,
         } = this.props;
@@ -70,37 +69,27 @@ export default class StakingCards extends Component {
                 if (elem.low !== elem.high) {
                     if (elem.high < 0 || elem.low < 0) {
                         if (elem.high === 0) {
-                            innerText = `Down to ${(
-                                (-1 * elem.low) /
-                                100
-                            ).toFixed(2)}%`;
+                            innerText = `Down to ${(-1 * elem.low) / 100}%`;
                         } else {
-                            innerText = `Down ${(
-                                (-1 * elem.high) /
-                                100
-                            ).toFixed(2)}% - ${((-1 * elem.low) / 100).toFixed(
-                                2
-                            )}%`;
+                            innerText = `Down ${(-1 * elem.high) / 100}% - ${
+                                (-1 * elem.low) / 100
+                            }%`;
                         }
                     } else {
                         if (elem.low === 0) {
-                            innerText = `Up to ${(elem.high / 100).toFixed(
-                                2
-                            )}%`;
+                            innerText = `Up to ${elem.high / 100}%`;
                         } else {
-                            innerText = `Up ${(elem.low / 100).toFixed(
-                                2
-                            )}% - ${(elem.high / 100).toFixed(2)}%`;
+                            innerText = `Up ${elem.low / 100}% - ${
+                                elem.high / 100
+                            }%`;
                         }
                     }
                 }
                 if (elem.low === elem.high && elem.low < 0) {
-                    innerText = `Down ${((-1 * elem.low) / 100).toFixed(
-                        2
-                    )}% or More`;
+                    innerText = `Down ${(-1 * elem.low) / 100}% or More`;
                 }
                 if (elem.low === elem.high && elem.low > 0) {
-                    innerText = `Up ${(elem.high / 100).toFixed(2)}% or More`;
+                    innerText = `Up ${elem.high / 100}% or More`;
                 }
                 const cycleEndDate = new Date(
                     currentCycle[network].cycletime

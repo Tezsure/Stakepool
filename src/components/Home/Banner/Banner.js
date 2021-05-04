@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import Header from '../../Header/Header';
 import Countdown from 'react-countdown-now';
 import { TempleWallet } from '@temple-wallet/dapp';
 import { Tooltip, Alert } from 'reactstrap';
-
-const tzIcon = require('../../../assets/images/Path 453@2x.png');
 
 const Title =
     'Reference price is the price of xtz in USD deduced at the starting of each cycle and all bets are placed against this reference price';
@@ -102,29 +99,25 @@ export default class Banner extends Component {
             if (elem.low !== elem.high) {
                 if (elem.high < 0 || elem.low < 0) {
                     if (elem.high === 0) {
-                        range = `Down to ${((-1 * elem.low) / 100).toFixed(
-                            2
-                        )}%`;
+                        range = `Down to ${(-1 * elem.low) / 100}%`;
                     } else {
-                        range = `Down ${((-1 * elem.high) / 100).toFixed(
-                            2
-                        )}% - ${((-1 * elem.low) / 100).toFixed(2)}%`;
+                        range = `Down ${(-1 * elem.high) / 100}% - ${
+                            (-1 * elem.low) / 100
+                        }%`;
                     }
                 } else {
                     if (elem.low === 0) {
-                        range = `Up to ${(elem.high / 100).toFixed(2)}%`;
+                        range = `Up to ${elem.high / 100}%`;
                     } else {
-                        range = `Up ${(elem.low / 100).toFixed(2)}% - ${(
-                            elem.high / 100
-                        ).toFixed(2)}%`;
+                        range = `Up ${elem.low / 100}% - ${elem.high / 100}%`;
                     }
                 }
             }
             if (elem.low === elem.high && elem.low < 0) {
-                range = `Down ${((-1 * elem.low) / 100).toFixed(2)}% or More`;
+                range = `Down ${(-1 * elem.low) / 100}% or More`;
             }
             if (elem.low === elem.high && elem.low > 0) {
-                range = `Up ${(elem.high / 100).toFixed(2)}% or More`;
+                range = `Up ${elem.high / 100}% or More`;
             }
             return (
                 <option
@@ -246,27 +239,25 @@ export default class Banner extends Component {
                                             )
                                         }
                                     >
-                                        Maximum allowed limit to stake is 10 tz
+                                        Maximum allowed limit to stake is 10 tez
                                     </Tooltip>
                                     &nbsp;&nbsp;Enter the amount you want to
                                     stake:
                                 </label>
                                 <span className="bet-amount-conatiner">
+                                    <span className="tz-icon-container">
+                                        ꜩ{' '}
+                                    </span>
                                     <input
                                         name="betAmount"
                                         className="stakepool-banner-input"
                                         type="number"
-                                        placeholder="Enter your stake price"
+                                        placeholder="Enter amount you want to stake"
                                         value={this.props.betAmount}
                                         max={10}
                                         onChange={(e) =>
                                             this.props.handlePriceChange(e)
                                         }
-                                    />
-                                    <img
-                                        src={tzIcon}
-                                        className="tz-icon"
-                                        alt=""
                                     />
                                 </span>
                             </div>
