@@ -2,6 +2,11 @@ import React, { Component } from 'react';
 import staking from '../../../assets/images/stakeing.png';
 import dropdown from '../../../assets/images/down.jpeg';
 import Skeleton from 'react-loading-skeleton';
+import Slider from 'react-slick';
+
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+
 import { PopoverHeader, PopoverBody, UncontrolledPopover } from 'reactstrap';
 
 export default class StakingCards extends Component {
@@ -59,11 +64,15 @@ export default class StakingCards extends Component {
         } = this.props;
         let cards = [];
         let i = 0;
+        const settings = {
+            dots: true,
+            infinite: true,
+            speed: 500,
+            slidesToShow: 4,
+            slidesToScroll: 1,
+        };
         if (!fetchingCurrentPriceRanges) {
-            while (
-                i < currentPriceRanges[network].length &&
-                i < this.props.showOptions
-            ) {
+            while (i < currentPriceRanges[network].length) {
                 let elem = currentPriceRanges[network][i];
                 let innerText;
                 if (elem.low !== elem.high) {
@@ -238,23 +247,25 @@ export default class StakingCards extends Component {
                 ++i;
             }
         } else {
-            while (i < this.props.showOptions) {
+            while (i < 4) {
                 cards.push(
-                    <li className="stakeing-option-item" key={i}>
-                        <div
-                            className="stakeing-option shadow-sm bg-white rounded"
-                            style={{ height: '100%' }}
-                        >
-                            <div className="stakeing-option-img-container">
-                                <Skeleton />
+                    <Slider>
+                        <li className="stakeing-option-item" key={i}>
+                            <div
+                                className="stakeing-option shadow-sm bg-white rounded"
+                                style={{ height: '100%' }}
+                            >
+                                <div className="stakeing-option-img-container">
+                                    <Skeleton />
+                                </div>
+                                <Skeleton count={5} />
                             </div>
-                            <Skeleton count={5} />
-                        </div>
-                    </li>
+                        </li>
+                    </Slider>
                 );
                 ++i;
             }
         }
-        return cards;
+        return <Slider {...settings}>{cards}</Slider>;
     }
 }

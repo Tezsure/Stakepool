@@ -166,3 +166,23 @@ td.google-visualization-table-td {
 td.google-visualization-table-type-number.google-visualization-table-td {
     text-align: center;
 }
+.stakeing-options-list {
+    .slick-slider {
+        &.slick-initialized {
+            width: 100%;
+        }
+    }
+}
+.slick-prev:before,
+.slick-next:before {
+    font-family: 'slick';
+    font-size: 35px !important;
+    line-height: 0 !important;
+    opacity: unset !important;
+    color: #3b5afb;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+.slick-prev {
+    left: -40px !important;
+}

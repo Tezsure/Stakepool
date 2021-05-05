@@ -264,7 +264,9 @@ export default class Banner extends Component {
 
                             <div className="stakepool-banner-input-wrapper">
                                 <label className="stakepool-banner-input-label">
-                                    I predict the price of XTZ to be:
+                                    I predict the price of XTZ in cycle{' '}
+                                    {currentCycle[network].currentCycle + 3} to
+                                    be:
                                 </label>
                                 <select
                                     name="stakedPriceRange"
