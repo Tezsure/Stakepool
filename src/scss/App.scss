@@ -145,3 +145,10 @@ h4.faq-header {
     margin-top: 0px;
     margin-bottom: 0px;
 }
+.stakeing-options-list {
+    .slick-slider {
+        &.slick-initialized {
+            width: 100%;
+        }
+    }
+}

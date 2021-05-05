@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import StakingCards from './StakingCards';
 
+
 export default class StakeingOptions extends Component {
     constructor(props) {
         super(props);

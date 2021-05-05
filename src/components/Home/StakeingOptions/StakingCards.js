@@ -2,6 +2,11 @@ import React, { Component } from 'react';
 import staking from '../../../assets/images/stakeing.png';
 import dropdown from '../../../assets/images/down.jpeg';
 import Skeleton from 'react-loading-skeleton';
+import Slider from "react-slick";
+
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
 import { PopoverHeader, PopoverBody, UncontrolledPopover } from 'reactstrap';
 
 export default class StakingCards extends Component {
@@ -59,6 +64,13 @@ export default class StakingCards extends Component {
         } = this.props;
         let cards = [];
         let i = 0;
+        var settings = {
+            dots: true,
+            infinite: true,
+            speed: 500,
+            slidesToShow: 4,
+            slidesToScroll: 1
+          };
         if (!fetchingCurrentPriceRanges) {
             while (
                 i < currentPriceRanges[network].length &&
@@ -240,7 +252,8 @@ export default class StakingCards extends Component {
         } else {
             while (i < this.props.showOptions) {
                 cards.push(
-                    <li className="stakeing-option-item" key={i}>
+                    <Slider>
+                        <li className="stakeing-option-item" key={i}>
                         <div
                             className="stakeing-option shadow-sm bg-white rounded"
                             style={{ height: '100%' }}
@@ -251,10 +264,16 @@ export default class StakingCards extends Component {
                             <Skeleton count={5} />
                         </div>
                     </li>
+                    </Slider>
+                    
                 );
                 ++i;
             }
         }
-        return cards;
+        return (
+            <Slider {...settings}>
+                { cards }
+            </Slider>
+        )
     }
 }
