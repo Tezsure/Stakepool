@@ -1,16 +1,12 @@
 # Stakepool
 
-<img  src="https://tezster.s3-ap-southeast-1.amazonaws.com/TEZSTER_GUI/1_jDB5enULQVo2UfeiwD32qA.png"  alt="tezster GUI banner" align="center" />
+**A price prediction experiment without losers**
 
-<br />
+With Stakepool you can earn bonus staking rewards by predicting the future Tez price range in USD value. You win if you correctly predict the XTZ price range at the completion of the 2 cycles that come after the cycle in which you placed your bet. All baking rewards accrued in the smart contract are distributed among the winners as weighted averages of the total staked amount. If your prediction is wrong, your staked XTZ is returned but you miss out on your staking rewards for the respective cycles. A fee of 2% for use of the platform is charged on the prize pool and therefore only paid by the winners.
 
-# Stakepool - A price prediction experiment without losers
+[Try Stakepool](https://beta.tezster.tech/)
 
-With Stakepool you can earn bonus staking rewards by predicting the future tez price range in USD value. You win if you correctly predict the tez price range at the completion of the 2 cycles that come after the cycle in which you placed your bet. All baking rewards accrued in the smart contract are distributed among the winners as weighted averages of the total staked amount. If your prediction is wrong, your staked tez is returned but you miss out on your staking rewards for the respective cycles. A fee of 2% for use of the platform is charged on the prize pool and therefore only paid by the winners. To try stakepool now visit [link](https://beta.tezster.tech/)
-
-<br/>
-
-\*For detailed documentation visit [link](https://www.notion.so/Stakepool-A-no-loss-price-prediction-experiment-38bc2c0e0fe540aaaa1bc91ebcdcf5c4)
+[Documentation](https://www.notion.so/Stakepool-A-no-loss-price-prediction-experiment-38bc2c0e0fe540aaaa1bc91ebcdcf5c4)
 
 ## Below are the link to our smart contract`s
 
