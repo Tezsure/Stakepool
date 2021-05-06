@@ -1,46 +1,39 @@
 # Stakepool
 
-
-<br />
-
-<strong>A price prediction experiment without losers
-</strong>
+**A price prediction experiment without losers**
 
 With Stakepool you can earn bonus staking rewards by predicting the future Tez price range in USD value. You win if you correctly predict the XTZ price range at the completion of the 2 cycles that come after the cycle in which you placed your bet. All baking rewards accrued in the smart contract are distributed among the winners as weighted averages of the total staked amount. If your prediction is wrong, your staked XTZ is returned but you miss out on your staking rewards for the respective cycles. A fee of 2% for use of the platform is charged on the prize pool and therefore only paid by the winners.
-
 
 [Try Stakepool](https://beta.tezster.tech/)
 
 [Documentation](https://www.notion.so/Stakepool-A-no-loss-price-prediction-experiment-38bc2c0e0fe540aaaa1bc91ebcdcf5c4)
 
-## Available Scripts
+## Below are the link to our smart contract`s
 
-In the project directory, you can run:
+**[Testnet smart contract](https://github.com/Tezsure/Stakepool-Contracts/blob/main/stakepool-contract/Testnet/BetMarket.py 'Testnet smart contract')**
 
-### `yarn start`
+Deployed address: [KT1DDnjzQhA25Vjm3AwqVWGFskzoW3QARKsE](https://better-call.dev/edo2net/KT1DDnjzQhA25Vjm3AwqVWGFskzoW3QARKsE/code 'Testnet smart contract')
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+**[Mainnet Smart contract](https://github.com/Tezsure/Stakepool-Contracts/blob/main/stakepool-contract/Mainnet/BetMarket.py 'Mainnet')**
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+Deployed address: [KT1Bm199TejasANYQQCAKQoXH8NppPn9jR3x](https://better-call.dev/mainnet/KT1Bm199TejasANYQQCAKQoXH8NppPn9jR3x/code 'Mainnet smart contract')
 
-### `yarn build`
+## Contribution
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Stakepool UI & Smart-contracts are open source and we love to receive contributions from whosoever passionate with the technology.
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+There are many ways to contribute, from writing tutorials or blog posts, improving the documentation, bug reports and feature requests or writing code. We certainly welcome pull requests as well.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Reporting bugs, Support or Feature request
 
-### `yarn eject`
+To report bugs, please create an issue on [issue](https://github.com/Tezsure/Stakepool/issues ' issue') page of github
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+You can get in touch with us for any open discussion and 24\*7 support over [Telegram](https://telegram.me/tezster 'Telegram') or [Discord](https://discord.gg/DWFnm77qDwhttp:// 'Discord')
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Extra
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+We're building a lot of exciting features which will be released soon, So stay tuned with our updates and releases!
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+🎊 keep developing 🎊
+
+---
