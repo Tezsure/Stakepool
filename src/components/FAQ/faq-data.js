@@ -7,14 +7,12 @@ module.exports = [
     {
         question: 'How does it work',
         answer:
-            'Let\'s give an example: We are currently in cycle 1. Alice and Bob think that they know which price Tezos will be after the coming staking period (2 cycles). They both place a bet on Stakepool. Bob is bullish and Alice is bearish.\n Alice and Bob wait for 2 cycles. Plenty of time to attract more friends to stakepool and increase potential juicy rewards for future predictions.\nCycle 4 starts and the price is up! Bob has won! He can withdraw his staked XTZ and of course his juicy stakepool bonus. Alice is wrong this time, she can withdraw her staked Tez to give it another try. Unfortunately no staking rewards for Alice this time. 
-',
+            "Let's give an example: We are currently in cycle 1. Alice and Bob think that they know which price Tezos will be after the coming staking period (2 cycles). They both place a bet on Stakepool. Bob is bullish and Alice is bearish.\n Alice and Bob wait for 2 cycles. Plenty of time to attract more friends to stakepool and increase potential juicy rewards for future predictions.\nCycle 4 starts and the price is up! Bob has won! He can withdraw his staked XTZ and of course his juicy stakepool bonus. Alice is wrong this time, she can withdraw her staked Tez to give it another try. Unfortunately no staking rewards for Alice this time.",
     },
     {
         question: 'How do I get Started',
         answer:
             'Connect your Temple wallet to stakepool and use your gut feeling to stake on a price range that you believe XTZ will be at the end of the designated cycle.',
-    
     },
     {
         question: 'How is Stakepool different from other prediction markets',
@@ -25,7 +23,6 @@ module.exports = [
         question: 'For how long is my stake delegated to a baker',
         answer:
             'Stakes are delegated two cycles after the cycle you placed your bet (so starting at cycle 150 means your stake is delegated until cycle 152). We are calling this the staking period',
-    
     },
     {
         question: 'Is my money safe',
@@ -38,7 +35,7 @@ module.exports = [
         answer:
             'You can use any browser that is compatible with Temple wallet, such as Chrome or Firefox.',
     },
-  
+
     {
         question: 'How much profit can I expect from Stakepool',
         answer:

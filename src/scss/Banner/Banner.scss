@@ -166,3 +166,61 @@ td.google-visualization-table-td {
 td.google-visualization-table-type-number.google-visualization-table-td {
     text-align: center;
 }
+.stakeing-options-list {
+    .slick-slider {
+        &.slick-initialized {
+            width: 100%;
+        }
+    }
+}
+.slick-prev:before,
+.slick-next:before {
+    font-family: 'slick';
+    font-size: 35px !important;
+    line-height: 0 !important;
+    opacity: unset !important;
+    color: #027bfe;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+.slick-prev {
+    left: -40px !important;
+}
+
+.stakeing-cards-text {
+    color: #6d93b3;
+    font-size: 16px;
+    font-family: 'Open Sans', sans-serif !important;
+}
+.staking-cards-container {
+    text-align: justify;
+}
+.footer-card {
+    .btn-primary {
+        padding: 5px 28px 5px 28px;
+    }
+    padding-top: unset;
+    text-align: center;
+}
+.stakeing-option-item {
+    .staking-cards-container {
+        padding-left: 25px;
+        padding-right: 5px;
+    }
+    .card {
+        border: 1px solid #eff5ff;
+    }
+    .card-header {
+        padding: 0.75rem 1.25rem;
+        margin-bottom: 0;
+        background-color: #eff5ff;
+        border-bottom: 1px solid #eff5ff;
+    }
+}
+.rc-tooltip {
+    opacity: unset;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+}
+.rc-tooltip-inner {
+    border: 1px solid #ffffff;
+}

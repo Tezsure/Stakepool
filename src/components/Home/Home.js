@@ -36,6 +36,7 @@ export default class Home extends Component {
             showError: false,
         };
     }
+
     handleAlertShow = () => {
         const { stakedPriceRange, betAmount } = this.state;
         if (stakedPriceRange === '0') {
@@ -59,17 +60,21 @@ export default class Home extends Component {
             });
         }
     };
+
     handleStakingOptionsSelect = (stakedPriceRange) => {
         this.setState({ stakedPriceRange });
     };
+
     handlePriceChange = (event) => {
         this.setState({ [event.target.name]: event.target.value });
     };
+
     setNetwork = () => {
         const path = this.props.location.pathname;
         const network = path === '/mainnet' ? 'mainnet' : 'testnet';
         return network;
     };
+
     getReferencePriceAndRanges = async () => {
         const { currentCycle, network, currentPriceRanges } = this.state;
         this.setState({ fetchingCurrentPriceRanges: true });
@@ -88,6 +93,7 @@ export default class Home extends Component {
             });
         }
     };
+
     placeBet = async () => {
         this.setState({ onGoingBet: true, alertShow: false });
         const { stakedPriceRange, network, betAmount } = this.state;
@@ -133,6 +139,7 @@ export default class Home extends Component {
         }
         this.setState({ onGoingBet: false });
     };
+
     getCurrentCycle = async (network) => {
         const { currentCycle } = this.state;
         const API_RESPONSE = await getCurrentCycle(network);
@@ -143,13 +150,16 @@ export default class Home extends Component {
             );
         }
     };
+
     componentDidMount() {
         const { network } = this.state;
         this.getCurrentCycle(network);
     }
+
     handleScolling = (element, duration) => {
         doScrolling(element, duration);
     };
+
     render() {
         const {
             stakedPriceRange,
@@ -219,7 +229,7 @@ export default class Home extends Component {
                                                 textAlign: 'left',
                                             }}
                                         >
-                                            Staked Amount: {betAmount || 0} XTZ
+                                            Staked Amount: {betAmount || 0} ꜩ
                                         </li>
                                         <li
                                             style={{
@@ -267,7 +277,7 @@ export default class Home extends Component {
                                             )}
                                             %. *The mentioned ROI is only
                                             applicable if your prediction is
-                                            right.Else your ROI would be 0%.
+                                            right. Else your ROI would be 0%.
                                         </li>
                                     </ul>
                                 </Container>
