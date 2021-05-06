@@ -5,7 +5,7 @@ import { TempleWallet } from '@temple-wallet/dapp';
 import { Tooltip, Alert } from 'reactstrap';
 
 const Title =
-    'Reference price is the price of xtz in USD deduced at the starting of each cycle and all bets are placed against this reference price';
+    'The reference price is the USD value of XTZ at the start of each cycle and is determined via an oracle. All betting options are based on this reference price.';
 
 export default class Banner extends Component {
     constructor(props) {
@@ -142,8 +142,8 @@ export default class Banner extends Component {
                         borderRadius: '0px',
                     }}
                 >
-                    *Caution: Underlying smart-contracts have not been audited
-                    by a third party.
+                    Caution: the smart contracts of Stakepool have not been
+                    audited by a third party.
                 </Alert>
                 <div className="container">
                     <Header {...this.props} />

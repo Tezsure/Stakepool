@@ -54,10 +54,7 @@ input[type='number'] {
     font-family: none !important;
     padding-top: 5% !important;
 }
-.card-body {
-    padding-top: 5% !important;
-    padding-bottom: 5% !important;
-}
+
 .staking-options {
     font-family: none !important;
     color: rgb(24, 59, 86);
