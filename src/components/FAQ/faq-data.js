@@ -2,59 +2,48 @@ module.exports = [
     {
         question: 'What is Stakepool',
         answer:
-            'Stakepool is a price prediction platform which can help you earn more than delegating your tokens to a baker, if your prediction is correct.',
+            'With Stakepool you can earn bonus staking rewards by predicting the future Tez price range in USD value. You win if you correctly predict the Tez price range at the completion of the 2 cycles that come after the cycle in which you placed your bet. All baking rewards accrued in the smart contract are distributed among the winners as weighted averages of the total staked amount. If your prediction is wrong, your staked Tez is returned but you miss out on your staking rewards for the respective cycles.',
+    },
+    {
+        question: 'How does it work',
+        answer:
+            "Let's give an example: We are currently in cycle 1. Alice and Bob think that they know which price Tezos will be after the coming staking period (2 cycles). They both place a bet on Stakepool. Bob is bullish and Alice is bearish.\n Alice and Bob wait for 2 cycles. Plenty of time to attract more friends to stakepool and increase potential juicy rewards for future predictions.\nCycle 4 starts and the price is up! Bob has won! He can withdraw his staked XTZ and of course his juicy stakepool bonus. Alice is wrong this time, she can withdraw her staked Tez to give it another try. Unfortunately no staking rewards for Alice this time.",
     },
     {
         question: 'How do I get Started',
         answer:
-            'Connect your Thanos wallet with stakepool and utilize your instincts to stake on a range which you think XTZ will reach in the designated cycle',
+            'Connect your Temple wallet to stakepool and use your gut feeling to stake on a price range that you believe XTZ will be at the end of the designated cycle.',
     },
     {
-        question: 'On which systems Stakepool is supported',
+        question: 'How is Stakepool different from other prediction markets',
         answer:
-            'You can use any system on which you can install Thanos wallet upon Chrome or Firefox.',
+            'In other prediction markets you lose your bet if your prediction turns out to be wrong, here in Stakepool you get your bet back. If you win then you get rewards just like any other prediction market.',
     },
     {
-        question:
-            'Which range should I choose if my predicted value is at extremes of two ranges',
+        question: 'For how long is my stake delegated to a baker',
         answer:
-            'Lower extreme of each range is included. Higher extreme of each range is excluded.',
-    },
-    {
-        question:
-            'For what duration of period is my stake delegated to a baker',
-        answer:
-            'Suppose you have submitted your stake and its associated prediction bettorsDetailsails at cycle 150, then your stake will be delegated for the period of cycle 151-152',
-    },
-    {
-        question:
-            'When and how is a winner of a particular staking period chosen',
-        answer:
-            'Considering the above scenario, at the beginning of cycle at the beggining of 153rd cycle once we update the winning price of last cycle is updated to our contract, bettors can then withdraw there rewards but invoking a particular entry point.',
-    },
-    {
-        question: 'How to use stakepool',
-        answer:
-            'You can connect your Thanos wallet with our Dapp and start betting on the ranges you think where the XTZ amount will lay after particular cycles.',
-    },
-    {
-        question: 'How is Stakepool different from other betting platforms',
-        answer:
-            'In other betting platform you loose your bet amount if your prediction turns out be wrong, here in Stakepool you get your bet amount back.If you win then you get rewards just like any other betting platform.',
+            'Stakes are delegated two cycles after the cycle you placed your bet (so starting at cycle 150 means your stake is delegated until cycle 152). We are calling this the staking period',
     },
     {
         question: 'Is my money safe',
         answer:
-            'Absolutely ! Only you can withdraw your money back. We suggest you to go through our smart contract to better understand about our authorization checks.',
+            'Absolutely! Only you can withdraw your stake. We suggest you go through our smart contract to better understand our authorization checks.',
     },
+
+    {
+        question: 'On which browsers is Stakepool supported',
+        answer:
+            'You can use any browser that is compatible with Temple wallet, such as Chrome or Firefox.',
+    },
+
     {
         question: 'How much profit can I expect from Stakepool',
         answer:
-            'Well, there is no fixed ROI, your rewards are directly proportional to the amount staked on a particular cycle, so if you want to earn more rewards then invite your friends on stakepool.',
+            'Well, there is no fixed ROI, your rewards are directly proportional to the amount staked on a particular cycle, so if you want to earn more rewards invite your friends on stakepool.',
     },
     {
-        question: 'From where can I learn more about Stakepool',
+        question: 'Where can I learn more about Stakepool',
         answer:
-            'You can go through our code base on Github, you can also read our documentation at Notion.',
+            'You can go through our code base on Github, you can also read our documentation on Notion.',
     },
 ];
