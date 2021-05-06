@@ -88,10 +88,7 @@ export default class Cards extends Component {
         );
         return (
             <Tooltip
-                visible={this.state.visible}
                 animation="zoom"
-                onVisibleChange={this.onVisibleChange}
-                trigger="click"
                 overlay={htmlComponent}
                 placement="bottom"
             >
