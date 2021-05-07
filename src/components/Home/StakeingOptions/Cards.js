@@ -40,8 +40,8 @@ export default class Cards extends Component {
                     }}
                 >
                     <li className="stakeing-cards-text">
-                        The staking rewards are calculated for the cycles $
-                        {currentCycle[network].currentCycle}- $
+                        The staking rewards are calculated for the cycles{' '}
+                        {currentCycle[network].currentCycle} -{' '}
                         {currentCycle[network].currentCycle + 2}.
                     </li>
                     <li className="stakeing-cards-text">
@@ -50,7 +50,7 @@ export default class Cards extends Component {
                     </li>
                     <li className="stakeing-cards-text">
                         If the price of XTZ is in this range at the end of your
-                        staking period on ${cycleEndDate}, you will receive your
+                        staking period on {cycleEndDate}, you will receive your
                         staking amount and a profit. If not, you only get back
                         your staking amount.
                     </li>
@@ -59,7 +59,7 @@ export default class Cards extends Component {
                         {currentCycle[network].currentCycle + 2}
                     </li>
                     <li className="stakeing-cards-text">
-                        The expected ROI for the given price range is $
+                        The expected ROI for the given price range is{' '}
                         {rangeBasedRoi.estimatedRoi.toFixed(3)} ꜩ
                     </li>
                 </ul>
