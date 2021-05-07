@@ -6,8 +6,9 @@ import StakingOrders from './components/StakingOrders/StakingOrders';
 import FAQ from './components/FAQ/Faq';
 
 import Error from './components/Error';
-
 import './scss/App.scss';
+
+require('polyfill');
 
 export default function Root() {
     return (

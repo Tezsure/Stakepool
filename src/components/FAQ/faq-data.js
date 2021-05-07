@@ -2,12 +2,12 @@ module.exports = [
     {
         question: 'What is Stakepool',
         answer:
-            'With Stakepool you can earn bonus staking rewards by predicting the future Tez price range in USD value. You win if you correctly predict the Tez price range at the completion of the 2 cycles that come after the cycle in which you placed your bet. All baking rewards accrued in the smart contract are distributed among the winners as weighted averages of the total staked amount. If your prediction is wrong, your staked Tez is returned but you miss out on your staking rewards for the respective cycles.',
+            'With Stakepool you can earn bonus staking rewards by predicting the future tez price range in USD value. You win if you correctly predict the tez price range at the completion of the 2 cycles that come after the cycle in which you placed your bet. All baking rewards accrued in the smart contract are distributed among the winners as weighted averages of the total staked amount. If your prediction is wrong, your staked tez is returned but you miss out on your staking rewards for the respective cycles.',
     },
     {
         question: 'How does it work',
         answer:
-            "Let's give an example: We are currently in cycle 1. Alice and Bob think that they know which price Tezos will be after the coming staking period (2 cycles). They both place a bet on Stakepool. Bob is bullish and Alice is bearish.\n Alice and Bob wait for 2 cycles. Plenty of time to attract more friends to stakepool and increase potential juicy rewards for future predictions.\nCycle 4 starts and the price is up! Bob has won! He can withdraw his staked XTZ and of course his juicy stakepool bonus. Alice is wrong this time, she can withdraw her staked Tez to give it another try. Unfortunately no staking rewards for Alice this time.",
+            "Let's give an example: We are currently in cycle 1. Alice and Bob think that they know which price Tezos will be after the coming staking period (2 cycles). They both place a bet on Stakepool. Bob is bullish and Alice is bearish. Alice and Bob wait for 2 cycles. Plenty of time to attract more friends to stakepool and increase potential juicy rewards for future predictions. Cycle 4 starts and the price is up! Bob has won! He can withdraw his staked tez and of course his juicy stakepool bonus. Alice is wrong this time, she can withdraw her staked tez to give it another try. Unfortunately no staking rewards for Alice this time.",
     },
     {
         question: 'How do I get Started',
