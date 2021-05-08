@@ -56,11 +56,11 @@ export default class Cards extends Component {
                     </li>
                     <li className="stakeing-cards-text">
                         Payout occurs at the end of cycle{' '}
-                        {currentCycle[network].currentCycle + 2}
+                        {currentCycle[network].currentCycle + 2}.
                     </li>
                     <li className="stakeing-cards-text">
                         The expected ROI for the given price range is ꜩ{' '}
-                        {rangeBasedRoi.estimatedRoi.toFixed(3)}
+                        {rangeBasedRoi.estimatedRoi.toFixed(3)}.
                     </li>
                 </ul>
                 <div
