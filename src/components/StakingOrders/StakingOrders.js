@@ -11,6 +11,7 @@ import {
     getReferencePriceAndRanges,
 } from '../../apis/homepageApis';
 import swal from 'sweetalert';
+const { TZSTATS_DASHBOARD } = require('../../apis/config');
 
 const CONFIG = require('../../apis/config');
 
@@ -57,10 +58,13 @@ export default class Stats extends Component {
                 wallet
             );
             if (withdrawAmountResponse.sucess) {
+                const URL = `${TZSTATS_DASHBOARD[network]}/${withdrawAmountResponse.operationId}`;
+                const htmlContent = document.createElement('div');
+                htmlContent.innerHTML = `Operation id: <a href='${URL}' style='word-break: break-all' target='_blank'>${withdrawAmountResponse.operationId}</a>`;
+
                 swal({
-                    title: 'Amount withdrawal sucessfull',
-                    text:
-                        'Operation id: \n' + withdrawAmountResponse.operationId,
+                    title: 'Amount withdrawal successfull',
+                    content: htmlContent,
                     icon: 'success',
                     button: 'Okay',
                 });

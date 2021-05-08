@@ -59,8 +59,8 @@ export default class Cards extends Component {
                         {currentCycle[network].currentCycle + 2}
                     </li>
                     <li className="stakeing-cards-text">
-                        The expected ROI for the given price range is{' '}
-                        {rangeBasedRoi.estimatedRoi.toFixed(3)} ꜩ
+                        The expected ROI for the given price range is ꜩ{' '}
+                        {rangeBasedRoi.estimatedRoi.toFixed(3)}
                     </li>
                 </ul>
                 <div
