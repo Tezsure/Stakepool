@@ -6,13 +6,28 @@ export default function StakepoolChart(props) {
     const chartData = [];
     const tableData = [];
 
+    const validateDecimal = (val) => {
+        try {
+            const str = `${val}`;
+            const regex = /^[-+]?[0-9]+\.[0-9]+$/;
+            const isDecimal = str.match(regex);
+            if (isDecimal) {
+                return val.toFixed(3);
+            }
+            return val;
+        } catch (error) {
+            console.log(error);
+            return 0;
+        }
+    };
+
     chartData.push(['x', 'Total bet amount', 'ROI']);
     if (statsResponse.length === 0) chartData.push([0, 0, 0]);
     if (statsResponse.length !== 0)
         tableData.push([
             { type: 'string', label: 'Cycle' },
             { type: 'string', label: 'Total bet amount' },
-            { type: 'number', label: 'ROI' },
+            { type: 'string', label: 'ROI' },
         ]);
     statsResponse.forEach((elem) => {
         if (elem.success) {
@@ -24,7 +39,7 @@ export default function StakepoolChart(props) {
             tableData.push([
                 elem.data.cycle,
                 elem.data.totalBetAmount / Math.pow(10, 6),
-                elem.data.aggregateROIPercent,
+                `${validateDecimal(elem.data.aggregateROIPercent)} %`,
             ]);
         }
     });
