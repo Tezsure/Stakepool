@@ -200,7 +200,7 @@ export default class Home extends Component {
                             confirmBtnText="Confirm"
                             confirmBtnBsStyle="primary"
                             cancelBtnBsStyle="light"
-                            title={'Prediction Summary !'}
+                            title={'Prediction Summary'}
                             onConfirm={() => this.placeBet()}
                             onCancel={() => {
                                 this.setState({
@@ -229,7 +229,7 @@ export default class Home extends Component {
                                                 textAlign: 'left',
                                             }}
                                         >
-                                            Stake: {betAmount || 0} ꜩ
+                                            Stake: ꜩ {betAmount || 0}.
                                         </li>
                                         <li
                                             style={{
@@ -242,7 +242,7 @@ export default class Home extends Component {
                                             {' Cycle '}-{' '}
                                             {currentCycle[network]
                                                 .currentCycle + 2}
-                                            {' Cycle '}
+                                            {' Cycle '}.
                                         </li>
                                         <li
                                             style={{
@@ -253,7 +253,7 @@ export default class Home extends Component {
                                             Stake unlocks:{' '}
                                             {currentCycle[network]
                                                 .currentCycle + 3}{' '}
-                                            Cycle
+                                            Cycle.
                                         </li>
                                         <li
                                             style={{
@@ -262,7 +262,7 @@ export default class Home extends Component {
                                             }}
                                         >
                                             Platform fee: 2% of the staking
-                                            rewards
+                                            rewards.
                                         </li>
                                         <li
                                             style={{
@@ -270,14 +270,11 @@ export default class Home extends Component {
                                                 textAlign: 'left',
                                             }}
                                         >
-                                            Minimal ROI for winners:*:{' '}
+                                            Minimal ROI for winners: ꜩ{' '}
                                             {betRange[0].rangeBasedRoi.estimatedRoi.toFixed(
                                                 3
                                             )}
-                                            %. <br />
-                                            *The mentioned ROI is only
-                                            applicable if your prediction is
-                                            right. Else your ROI would be 0%.
+                                            .
                                         </li>
                                     </ul>
                                 </Container>
