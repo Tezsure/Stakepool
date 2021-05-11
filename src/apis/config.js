@@ -10,7 +10,7 @@ module.exports = {
     },
     RPC_NODES: {
         testnet: 'https://testnet.tezster.tech',
-        mainnet: 'https://mainnet.tezster.tech',
+        mainnet: 'https://mainnet-tezos.giganode.io/',
     },
     CONTRACT: {
         testnet: 'KT1DDnjzQhA25Vjm3AwqVWGFskzoW3QARKsE',
