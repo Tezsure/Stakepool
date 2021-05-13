@@ -9,8 +9,8 @@ module.exports = {
         mainnet: 'https://tzstats.com',
     },
     RPC_NODES: {
-        testnet: 'https://testnet.tezster.tech',
-        mainnet: 'https://mainnet-tezos.giganode.io/',
+        testnet: 'https://edonet.tezster.tech',
+        mainnet: 'https://mainnet-tezos.giganode.io',
     },
     CONTRACT: {
         testnet: 'KT1DDnjzQhA25Vjm3AwqVWGFskzoW3QARKsE',
