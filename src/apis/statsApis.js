@@ -13,12 +13,12 @@ const getCycleStats = async (cycle, network) => {
         if (cycleData.concluded === false) {
             throw new Error('Cycle has not concluded yet.');
         }
-        data.totalBetAmount = cycleData.totalAmount.c[0];
-        let referencePrice = cycleData.referencePrice.c[0];
-        let endingPrice = cycleData.endingPrice.c[0];
+        data.totalBetAmount = cycleData.totalAmount.toNumber();
+        let referencePrice = cycleData.referencePrice.toNumber();
+        let endingPrice = cycleData.endingPrice.toNumber();
         data.referencePrice = referencePrice;
         data.endingPrice = endingPrice;
-        let roi = cycleData.roi['4'].c[0] / cycleData.roi['5'].c[0];
+        let roi = cycleData.roi['4'].toNumber() / cycleData.roi['5'].toNumber();
 
         let totalPoolRewardWon = roi * data.totalBetAmount;
         totalPoolRewardWon = 0.98 * totalPoolRewardWon;
@@ -28,8 +28,8 @@ const getCycleStats = async (cycle, network) => {
         changePercent = changePercent * 10000;
         changePercent = Math.floor(changePercent);
         cycleData.amountByRange.keyMap.forEach(async (element) => {
-            let low = element['0'].c[0] * element['0'].s;
-            let high = element['1'].c[0] * element['1'].s;
+            let low = element['0'].toNumber();
+            let high = element['1'].toNumber();
             if (low !== high) {
                 if (low <= changePercent && changePercent < high) {
                     let valueByRange = await cycleData.amountByRange.get(
@@ -40,7 +40,7 @@ const getCycleStats = async (cycle, network) => {
                     let highPrice =
                         referencePrice + referencePrice * (high / 10000);
                     data.winningPriceRange = { lowPrice, highPrice };
-                    data.totalAmountInWinningRange = valueByRange.c[0];
+                    data.totalAmountInWinningRange = valueByRange.toNumber();
                     let aggregateROIPercent =
                         (data.totalPoolRewardWon /
                             data.totalAmountInWinningRange) *
@@ -61,7 +61,7 @@ const getCycleStats = async (cycle, network) => {
                     let highPrice =
                         referencePrice + referencePrice * (high / 10000);
                     data.winningPriceRange = { lowPrice, highPrice };
-                    data.totalAmountInWinningRange = valueByRange.c[0];
+                    data.totalAmountInWinningRange = valueByRange.toNumber();
                     let aggregateROIPercent =
                         (data.totalPoolRewardWon /
                             data.totalAmountInWinningRange) *
@@ -80,7 +80,7 @@ const getCycleStats = async (cycle, network) => {
                     let highPrice =
                         referencePrice + referencePrice * (high / 10000);
                     data.winningPriceRange = { lowPrice, highPrice };
-                    data.totalAmountInWinningRange = valueByRange.c[0];
+                    data.totalAmountInWinningRange = valueByRange.toNumber();
                     let aggregateROIPercent =
                         (data.totalPoolRewardWon /
                             data.totalAmountInWinningRange) *

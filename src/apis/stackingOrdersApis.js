@@ -14,17 +14,15 @@ export const getBetsByBettor = async (address, network) => {
                 let cycleValue = await betByCycle.get(element);
                 bets.push({
                     cycle: parseInt(element),
-                    stakedAt: cycleValue.stakedAt.c[0],
-                    stakedAmount: cycleValue.amount.c[0],
+                    stakedAt: cycleValue.stakedAt.toNumber(),
+                    stakedAmount: cycleValue.amount.toNumber(),
                     withdrawn: cycleValue.withdrawn,
-                    withdrawnAmount: cycleValue.withdrawnAmount.c[0],
+                    withdrawnAmount: cycleValue.withdrawnAmount.toNumber(),
                     range: {
                         low:
-                            cycleValue.range['1'].c[0] *
-                            cycleValue.range['1'].s,
+                            cycleValue.range['1'].toNumber(),
                         high:
-                            cycleValue.range['2'].c[0] *
-                            cycleValue.range['2'].s,
+                            cycleValue.range['2'].toNumber()
                     },
                 });
             });
@@ -50,8 +48,8 @@ export const getCycleData = async (cycle, network) => {
         const storage = await contract.storage();
         const cycleData = await storage.cycleData.get('' + cycle);
         cycleDetails.concluded = cycleData.concluded;
-        cycleDetails.endingPrice = cycleData.endingPrice.c[0];
-        cycleDetails.referencePrice = cycleData.referencePrice.c[0];
+        cycleDetails.endingPrice = cycleData.endingPrice.toNumber();
+        cycleDetails.referencePrice = cycleData.referencePrice.toNumber();
         return {
             sucess: true,
             cycleDetails,
@@ -101,12 +99,12 @@ export const calculateRewards = async (
         const storage = await contract.storage();
         const cycleData = await storage.cycleData.get('' + cycle);
         cycleDetails.concluded = cycleData.concluded;
-        cycleDetails.endingPrice = cycleData.endingPrice.c[0];
-        cycleDetails.referencePrice = cycleData.referencePrice.c[0];
-        cycleDetails.totalAmount = cycleData.totalAmount.c[0];
+        cycleDetails.endingPrice = cycleData.endingPrice.toNumber();
+        cycleDetails.referencePrice = cycleData.referencePrice.toNumber();
+        cycleDetails.totalAmount = cycleData.totalAmount.toNumber();
         let totalRewards =
-            (cycleData.roi['4'].c[0] * cycleDetails.totalAmount) /
-            cycleData.roi['5'].c[0];
+            (cycleData.roi['4'].toNumber() * cycleDetails.totalAmount) /
+            cycleData.roi['5'].toNumber();
         totalRewards = totalRewards * 0.98;
         cycleDetails.totalRewards = totalRewards;
         if (cycleDetails.concluded === false) {
@@ -123,8 +121,8 @@ export const calculateRewards = async (
                 if (low < 0 && cycleDetails.endingPrice < lowAmount) {
                     cycleData.amountByRange.keyMap.forEach(async (element) => {
                         if (
-                            low === element['0'].c[0] * element['0'].s &&
-                            high === element['1'].c[0] * element['1'].s
+                            low === element['0'].toNumber() &&
+                            high === element['1'].toNumber()
                         ) {
                             const valueByRange = await cycleData.amountByRange.get(
                                 element
@@ -139,8 +137,8 @@ export const calculateRewards = async (
                 } else if (low > 0 && cycleDetails.endingPrice > lowAmount) {
                     cycleData.amountByRange.keyMap.forEach(async (element) => {
                         if (
-                            low === element['0'].c[0] * element['0'].s &&
-                            high === element['1'].c[0] * element['1'].s
+                            low === element['0'].toNumber() &&
+                            high === element['1'].toNumber()
                         ) {
                             const valueByRange = await cycleData.amountByRange.get(
                                 element
@@ -163,15 +161,15 @@ export const calculateRewards = async (
                 ) {
                     cycleData.amountByRange.keyMap.forEach(async (element) => {
                         if (
-                            low === element['0'].c[0] * element['0'].s &&
-                            high === element['1'].c[0] * element['1'].s
+                            low === element['0'].toNumber() &&
+                            high === element['1'].toNumber()
                         ) {
                             const valueByRange = await cycleData.amountByRange.get(
                                 element
                             );
                             let rewardWon =
                                 (stakedAmount * cycleDetails.totalRewards) /
-                                valueByRange.c[0];
+                                valueByRange.toNumber();
                             conclusion.rewardWon = rewardWon;
                             conclusion.status = 'Won';
                         }

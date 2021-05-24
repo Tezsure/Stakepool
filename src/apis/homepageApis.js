@@ -103,7 +103,7 @@ export const getReferencePriceAndRanges = async (currentCycle, network) => {
         const storage = await contract.storage();
         const cycleData = await storage.cycleData.get('' + cycle);
         const totalAmount = cycleData.totalAmount;
-        const roi = cycleData.roi['4'].c[0] / cycleData.roi['5'].c[0];
+        const roi = cycleData.roi['4'].toNumber() / cycleData.roi['5'].toNumber();
         let totalRewardWon = roi * totalAmount;
         totalRewardWon = totalRewardWon * 0.98;
 
@@ -111,12 +111,12 @@ export const getReferencePriceAndRanges = async (currentCycle, network) => {
             let amountInRange = cycleData.amountByRange.get(element);
             let estimatedRoi = (totalRewardWon / amountInRange) * 100;
             const rangeBasedRoi = {
-                amountInRange: amountInRange.c[0],
+                amountInRange: amountInRange.toNumber(),
                 estimatedRoi: isFinite(estimatedRoi) ? estimatedRoi : (roi * 0.98 * 100),
             };
             ranges.push({
-                low: element['0'].c[0] * element['0'].s,
-                high: element['1'].c[0] * element['1'].s,
+                low: element['0'].toNumber(),
+                high: element['1'].toNumber(),
                 rangeBasedRoi,
             });
         });
